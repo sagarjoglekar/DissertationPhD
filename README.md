@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CUED PhD Thesis Template
 ========================
 > A PhD thesis LaTeX template for Cambridge University Engineering Department.
@@ -498,3 +499,8 @@ If you are generating a separate abstract for your thesis submission, ignore thi
 *   Steven Kaneti - code concepts
 
 *   Tina Schwamb - testing and bug reports
+=======
+
+
+# DissertationPhD: The dissertation uses this repo for the Thesis document of Sagar Joglekar
+A repo to maintain Dissertaion for my Ph.D.
