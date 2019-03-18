@@ -4,7 +4,8 @@ CUED PhD Thesis Template
 > A PhD thesis LaTeX template for Cambridge University Engineering Department.
 
 ## Author(s)
-*   Krishna Kumar
+* Sagar Joglekar
+* Template : Krishna Kumar
 
 ## License
 
