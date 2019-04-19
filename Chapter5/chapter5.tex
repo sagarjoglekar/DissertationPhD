@@ -1,8 +1,9 @@
 \chapter{Perceptions in real spaces}
+\label{chap:quant_perception}
 
 % **************************** Define Graphics Path **************************
 
-\graphicspath{{Chapter5/plots/} {Chapter5/plots/examples/}}
+\graphicspath{{Chapter5/plots/} {Chapter5/plots/examples/} {Chapter5/plots/GAN_examples/}}
     
 There has been an explosive growth of deep learning technologies and their competency in the recent years, resulting in cross disciplinary use cases of deep learning enabled tools. In the area of computer vision and urban informatics, deep learning techniques have recently been used to predict whether urban scenes are likely to be considered beautiful, and it turns out that these techniques do so quite accurately. However, the technology falls short when it comes to generating actionable insights for AI assisted urban design. To support urban interventions, one needs to go beyond \emph{predicting} beauty, and tackle the challenge of \emph{recreating} beauty and \emph{explaining} the predictors of beauty.  Unfortunately, deep learning techniques have not been designed with that challenge in mind. Given their ``black-box nature'', they cannot even explain why a scene has been predicted to be beautiful. To partly fix that, we propose a deep learning framework (which we name  FaceLift) that is able to both \emph{beautify} existing Google Street views and \emph{explain} which urban elements make those transformed scenes beautiful. To quantitatively evaluate our framework, we cannot resort to any existing metric (as the research problem at hand has never been faced before) and need to  formulate new ones. These new metrics should ideally capture the presence (or absence) of elements that make urban spaces great. Upon a review of the urban planning literature, we identify four main metrics: walkability, green, openness, and visual complexity.  For all the four metrics, the beautified scenes meet the expectations set by the literature on what great spaces tend to be made of. The transformations and their explanations are also found to be very helpful in understanding interventions for beautification, which we validate using a 20-participant expert survey. These results suggest that, in the future, as our framework's components are further researched and become better and more sophisticated, it is not hard to imagine technologies that will be able to accurately and efficiently support architects and planners in the design of the spaces we intuitively love.
 
@@ -13,26 +14,18 @@ There has been an explosive growth of deep learning technologies and their compe
 Whether a street is considered beautiful is subjective, yet research has shown that there are specific urban elements that are universally considered beautiful: from greenery, to small streets, to memorable spaces~\cite{alexander1977pattern, quercia2014aesthetic,salesses2013collaborative}. These elements are those that contribute to the creation of what the urban sociologist Jane Jacobs called `urban vitality'~\cite{jacobs1961death}. 
 
 
-Given that, it comes as no surprise that computer vision techniques can automatically analyse pictures of urban scenes and accurately determine the extent to which these scenes are, \emph{on average}, considered beautiful.  Deep learning has greatly contributed to increase these techniques' accuracy~\cite{dubey2016deep}.
+Given that, it comes as no surprise that computer vision techniques can automatically analyse pictures of urban scenes and accurately determine the extent to which these scenes are considered, \emph{on average}, beautiful.  Deep learning has greatly contributed to increase these techniques' accuracy~\cite{dubey2016deep}.
 
-However, urban planners and architects are interested in urban interventions and, as such, they wish to go beyond technologies that are only able to predict beauty scores. These interests stem from the fact that the spaces we live in can be linked with several aspects of human life such as mental health\cite{seresinhe2015quantifying}, inequality \cite{salesses2013collaborative} or cultural shifts \cite{10.3389/fphy.2018.00027}. They often called for technologies that would make easier to recreate beauty in urban design~\cite{de2008architecture}. Deep learning, by itself, is not fit for purpose. It is not meant to recreate beautiful scenes, not least because it cannot provide any explanation on why a scene is beautiful. 
+However, urban planners and architects are interested in urban interventions and, as such, they wish to go beyond technologies that are only able to predict beauty scores. They have often called for technologies that would make easier to recreate beauty in urban design~\cite{de2008architecture}. Deep learning, by itself, is not fit for purpose. It is not meant to recreate beautiful scenes, not least because it cannot provide any explanation on why a scene is deemed beautiful, or which urban elements are predictors of beauty.
 
 
-To partly fix that, we propose a deep learning framework (which we name  FaceLift) that is able to both \emph{generate} a beautiful scene (or, better, \emph{beautify} an existing scene) and \emph{explain} why that scene is beautiful. This opens up a possibility of using technology in urban planning efforts like decision making based of subjective opinions, participatory urban planning and promotion of restorative urban design such as green spaces and walkable areas.  Through this work, we make two main contributions:
+To partly fix that, we propose a deep learning framework (which we name  FaceLift) that is able to both \emph{generate} a beautiful scene (or, better, \emph{beautify} an existing scene) and \emph{explain} why that scene is beautiful. In so doing, we make two main contributions:
 
 \begin{itemize}
-    \item We propose a deep learning framework that is able to learn whether Google Street views are beautiful or not, and that, based on that training, is able to both \emph{beautify} existing views and \emph{explain} which urban elements  make these views beautiful (Section~\ref{sec:framework}). 
+    \item We propose a deep learning framework that is able to learn whether a particular set of Google Street Views (urban scenes) are beautiful or not, and based on that training, the framework is then able to both \emph{beautify} existing views and \emph{explain} which urban elements  make them beautiful (Section~\ref{sec:framework}). These explanations are automatically extracted with computer vision tools. 
     
-    \item We quantitatively evaluate whether the framework is able to actually produce beautified scenes (Section~\ref{sec:evaluation}). We do so by proposing a family of four urban design metrics that we have formulated based on a thorough review of the literature in urban planning. For all these four metrics, the framework passes with flying colors: with minimal interventions, beautified scenes are twice as walkable as the original scenes, for example. Also, after building an interactive tool with ``FaceLifted'' scenes in Boston and presenting it to twenty experts in architecture,  we found that the majority of them agreed on three main areas of our work's impact: decision making, participatory urbanism, and promotion of restorative spaces among the general public. 
-    
-    %\item We find that a vast majority of participants see a general potential for the technology: 85\% of expert participants stated that it was probably better than existing tools used for \textit{``Participatory approaches on urban planning''}. 70\% expressed the  same opinions about its utilization for \textit{``decision making''}, also 70\% saw potential in its ability to \textit{``promote green cities''}.  
+    \item We quantitatively evaluate whether the framework is able to actually produce beautified scenes (Section~\ref{sec:evaluation}). We do so by proposing a family of five urban design metrics that we have formulated based on a thorough review of the literature in urban planning. For all these five metrics, the framework passes with flying colors: with minimal interventions, beautified scenes are twice as walkable as the original scenes, for example. Also, after building an interactive tool with ``FaceLifted'' scenes in Boston and presenting it to twenty experts in architecture,  we found that the majority of them agreed on three main areas of our work's impact: decision making, participatory urbanism, and the promotion of restorative spaces.
 \end{itemize}
-For sake of brevity, we will use the term 'Urban Scene` through out the paper to address an arbitrary Google Street View image. The image is fetched from a particular latitude and longitude point on the map. 
-In the rest of the paper we explore related literature across various tracks of urban perceptions and urban beauty in Section \ref{sec:related}. We then describe in detail the Facelift framework in Section \ref{sec:framework}. The evaluation of the framework is described in detail in Section \ref{sec:evaluation} We conclude by pointing out some limitations and biases that might well guide future work (Section~\ref{sec:discussion}).
-
-
-
-
 
 
 \section{Related Work}
@@ -40,20 +33,29 @@ In the rest of the paper we explore related literature across various tracks of 
 %\ns{This needs more work.}
 Previous work has focused on collecting ground truth data about how people perceive urban spaces, on predicting urban qualities from visual data, and on generating synthetic images that enhance a given quality (e.g., beauty). 
 
+%\mbox{}\\
+\vspace{4pt}\noindent
+\textbf{Perception of physical spaces.} From Jane Jacobs's seminal work on urban vitality~\cite{jacobs1961death} to Christopher Alexander's cataloging of typical ``patterns'' of good urban design~\cite{alexander1977pattern}, there has been a continuous effort to understand what makes our cities livable and enjoyable.  In the fields of psychology, environmental design and behavioral sciences, research has studied the relationship between urban aesthetics~\cite{real2000classification} and a variety of objective measures  (e.g.,  scene complexity~\cite{kaplan1972rated}, presence of nature~\cite{kaplan1989experience}) and subjective ones (e.g., people's affective responses~\cite{ulrich1983aesthetic}).  
 
-\mbox{}\\
-\noindent
-\textbf{Ground truth of urban perceptions.} So far the most detailed studies of perceptions of urban environments and their visual appearance have relied on personal interviews and observation of city streets: for example, some researchers relied on annotations of video recordings by experts~\cite{sampson04seeing}, while others have used participant ratings of simulated (rather than existing) street scenes~\cite{lindal2012}. The web has recently been used to survey a large number of individuals. Place Pulse is a website that asks a series of binary perception questions (such as `Which place looks safer [between the two]?') across a large number of geo-tagged images~\cite{salesses2013collaborative}. In a similar way, Quercia \emph{et al.} collected pairwise judgments about the extent to which urban scenes are considered quiet, beautiful and happy~\cite{quercia2014aesthetic}. They were then able to analyze the scenes together with their ratings using image-processing tools, and found that the amount of greenery in any given scene was associated with all three attributes and that cars and fortress-like buildings were associated with sadness. Taken all together, their results pointed in the same direction: urban elements that hinder social interactions were undesirable, while elements that increase interactions were the ones that should be integrated by urban planners to retrofit cities for greater happiness. 
+%All this work showed that human perceptions of urban spaces are predictable, and that had made it possible to study cities at scale with modern statistical tools. 
+%\mbox{}\\
 
-\mbox{}\\
-\noindent
-\textbf{Deep learning and the city.} Computer vision techniques have increasingly become more sophisticated. Deep learning techniques, in particular, have been recently used to accurately predict urban beauty~\cite{dubey2016deep,seresinhe2017using}, urban change~\cite{naik2017computer}, and even crime~\cite{DeNadai16}. These works also did some interesting analysis of the data to understand how safety, depression, beauty and other such dimensions are perceived across urban spaces.  \cite{dubey2016deep} also utilized deep learning methods to train models capable of comparing two urban images for their perception values in terms of beauty et.al. However even these works did not dive into the reasoning aspect of these models.
+%\mbox{}\\
+\vspace{4pt}\noindent
+\textbf{Ground truth of urban perceptions.} So far, the most detailed studies of perceptions of urban environments and their visual appearance have relied on personal interviews and the observation of city streets: for example, some researchers relied on annotations of video recordings by experts~\cite{sampson04seeing}, while others have used participant ratings of simulated (rather than existing) street scenes~\cite{lindal2012}. The Web has recently been used to survey a large number of individuals. Place Pulse is a website that asks a series of binary perception questions (such as `Which place looks safer [between the two]?') across a large number of geo-tagged images~\cite{salesses2013collaborative}. In a similar way, Quercia \emph{et al.} collected pairwise judgments about the extent to which urban scenes are considered quiet, beautiful and happy~\cite{quercia2014aesthetic} to then recommend pleasant paths in the city~\cite{quercia2014shortest}. They were then able to analyze the scenes together with their ratings using image-processing tools, and found that the amount of greenery in any given scene was associated with all three attributes and that cars and fortress-like buildings were associated with sadness. Taken all together, their results pointed in the same direction: urban elements that hinder social interactions were undesirable, while elements that increase interactions were the ones that should be integrated by urban planners to retrofit cities for happiness. Urban perceptions translate in concrete outcomes. Based on 3.3k self-reported survey responses,  Ball et al.~\cite{ball2001perceived} found that urban scenes with positive aesthetics properties  not only are visually  pleasurable but also promote walkability. Similar findings were obtained by Giles et al. \cite{giles2005increasing}.
+%\mbox{}\\
 
-\mbox{}\\
-\noindent
-\textbf{Generative models.} Deep learning has recently been used not only to analyze existing images but also to generate new ones. n the past couple of years, there have been papers which exploit generative version of neural nets to delve into the aspects of explainability. Nguyen \emph{et al.}~\cite{nguyen2016synthesizing} used generative networks to create a natural-looking image that maximizes a specific neuron. In theory, the resulting image is the one that ``best activates'' the neuron under consideration (e.g., that associated with urban beauty). In practice, it is still a synthetic template that needs further processing to look realistic. \mbox{} \\
+\vspace{4pt}\noindent
+\textbf{Deep learning and the city.} Computer vision techniques have increasingly become more sophisticated. Deep learning techniques, in particular, have been recently used to accurately predict urban beauty~\cite{dubey2016deep,seresinhe2017using}, urban change~\cite{naik2017computer}, and even crime~\cite{DeNadai16,arietta2014city}.  Recent works have also showed the utility of deep learning techniques in predicting house prices from urban frontages~\cite{frontage}, and from a combination of satellite data and street view images~\cite{law2018take}.
+%\mbox{}\\
 
-\mbox{}
+%\mbox{}\\
+\vspace{4pt}\noindent
+\textbf{Generative models.} Since the introduction of Generative Adversarial Networks (GANs)~\cite{goodfellow2014generative}, deep learning has been used not only to analyze existing images but also to generate new ones altogether. This family of deep networks has evolved into various forms, from super resolution image generators~\cite{ledig2017photo} to fine-grained in-painting technologies~\cite{pathak2016context}. Recent approaches have been used to generate images conditioned on specific visual attributes~\cite{yan2015attribute2image}, and these images range from faces~\cite{taigman2016unsupervised} to people~\cite{ma2018disentangled}. In a similar vein, Nguyen \emph{et al.}~\cite{nguyen2016synthesizing} used generative networks to create a natural-looking image that maximizes a specific neuron. This method was used to bring out the latent representation of an image, that maximizes its probability of a particular class. In theory, the resulting image is the one that ``best activates'' the neuron under consideration. In practice, it is still a synthetic template that needs further processing to look realistic.   Finally, with the recent advancement in Augmented Reality, the application of GANs to generate urban objects in simulated urban scenes have also been successfully shown~\cite{alhaija2018augmented}. 
+%\mbox{}\\
+
+%\mbox{}
+\vspace{4pt}
 To sum up, a lot of work has gone into collecting ground truth data about how people tend to perceive urban spaces, and into building accurate predictions models of urban qualities. However,  little work has gone into models that generate realistic urban scenes and that offer human-interpretable explanations of what they generate. 
 
 
@@ -91,34 +93,35 @@ To sum up, a lot of work has gone into collecting ground truth data about how pe
 \begin{figure*}[ht]
     \centering
     \includegraphics[width=\linewidth]{facelift-pipeline-2x.png}
-    \caption{A simplistic end to end illustration of the FaceLift framework.}
+    \caption{An illustration of the FaceLift framework.}
     \label{fig:framework}
 \end{figure*}
 
 %****************************************
-The goal of FaceLift is to take as input a geo-located urban scene and give as output its transformed (beautified) version. 
-To that end, it performs in five steps: 
-\begin{itemize}
-    \item \textbf{Curating urban scenes} It is common knowledge that deep learning systems need immense amount of data. In this first step we try to develop a sound framework for curating and augmenting annotated images, on which the model could be trained.
-    \item \textbf{ Training a beauty classifier} To generate beauty, you first need a reliable model that could learn the representation of beauty. To achieve this, we train a deep learning model that could distinguish beautiful urban scenes from non-beautiful urban scenes. 
-    \item \textbf{Generating a synthetic beautified scene} Based on the learned representation of beauty, we train a Generative model which could augment the beauty of an input urban scene. 
-    \item \textbf{Retrieving a realistic beautified scene} as showcased in Figure \ref{fig:framework}, the generated images are representations of beautified input urban scene in a latent space. This latent representation needs to be transformed back to a realistic looking image, using retrieval.
-    \item \textbf{Identifying the urban elements characterizing the beautified scene} In the final step, the framework explains changes introduced in the transformation process in terms of literature-driven urban design metrics, and quantifies these changes as metrics for urban beauty.
-\end{itemize}
+The main goal of FaceLift is to beautify an existing urban scene. To meet that goal, it performs five steps: 
+\begin{description}
+    \item \textbf{Step 1 Curating urban scenes.} Deep learning systems need considerable amounts of training data. To augment our initial set of data, we develop a new way of curating and augmenting the number of annotated images.  
+    \item \textbf{Step 2 Training a beauty classifier.} We design and train a deep learning model that is able to distinguish beautiful urban scenes from non-beautiful ones. 
+    \item \textbf{Step 3 Generating a synthetic beautified scene.} Based on our classifier's learned representation of beauty, we train a generative model that is able to generate a  beautified version 
+    of an urban scene in input. 
+    \item \textbf{Step 4 Retrieving a realistic beautified scene.} The generated image has a ``synthetic look'' and, as such, does not look realistic (Figure\ref{fig:framework}). To fix that, we retrieve the image in our set  most similar to the generated image. 
+    \item \textbf{Step 5 Identifying the urban elements characterizing the beautified scene.} In the final step, the framework explains changes introduced in the transformation process in terms of addition and removal of specific urban elements. 
+\end{description}
 %1) curating urban scenes; 2) training a beauty classifier; 3) generating a synthetic beautified scene; 4) returning a realistic beautified scene; and 5) identifying the urban elements characterizing the beautified scene. 
 %\ns{You need a bit more detail here. First sentence says what you are going to achieve. But you need to motivate why these specific five steps will achieve this goal.}
 
 
 %****************************************
 \subsection*{Step 1 Curating Urban Scenes}
-To begin with, we need highly curated training data with labels reflecting urban beauty. We start with the  Place Pulse dataset that contains 100k Google Street Views across 56 cities around the world~\cite{dubey2016deep}. These scenes are labeled in terms of whether the corresponding places are likely to be perceived beautiful, depressing, rich, and safe. We focus only on those scenes that are labeled in terms of beauty and that have at least three judgments. This leave us with roughly  20,000 scenes. To transform judgments into beauty scores, we use the TrueSkill algorithm~\cite{herbrich2007trueskill}, which gives us a way of partitioning the scenes into two sets (Figure \ref{fig:Trueskill}): one containing beautiful scenes, and the other containing ugly scenes. The resulting set of scenes is too small for training any deep learning module without avoiding over-fitting though. As such, we need to augment such a set. 
+\label{Sec:dataset}
+To begin with, we need highly curated training data with labels reflecting urban beauty. We start with the  Place Pulse dataset that contains 100k Google Street Views across 56 cities around the world~\cite{dubey2016deep}. These scenes are labeled in terms of whether the corresponding places are likely to be perceived beautiful, depressing, rich, and safe. We focus only on those scenes that are labeled in terms of beauty and that have at least three judgments. This leave us with roughly  20,000 scenes. To transform judgments into beauty scores, we use the TrueSkill algorithm~\cite{herbrich2007trueskill}, which gives us a way of partitioning the scenes into two sets (Figure \ref{fig:Trueskill}): one containing beautiful scenes, and the other containing ugly scenes. The resulting set of scenes is too small for training any deep learning model without avoiding over-fitting though. As such, we need to augment such a set. 
 
-We do so in two ways. First, we feed each scene's location into the Google Streetview API to obtain  the snapshots of the same location at different camera angles (i.e., at $\theta \in {-30^{\circ}, -15^{\circ} , 15^{\circ} , 30^{\circ} }$). However, the resulting dataset is still too small for robust training. Therefore, again, we feed each scene's location into the Google Streetview API, but now we do so to obtain other scenes at  distance $d \in \{10,20,40,60\}$ meters.  This will greatly expand our set of scenes, but it might do so at the price of introducing scenes whose beauty scores have little to do with the original scene's. To fix that, we take only the scenes that are \emph{similar} to the original one (we call this way of augmenting ``conservative translation''). To compute the similarity between a pair of scenes, we represent the two scenes with visual features derived from the FC7 layer of PlacesNet and compute the similarity between the two corresponding feature vectors~\cite{zhou2014learning}. For all scenes at increasing distance $d \in \{10,20,40,60\}$ meters,  we take only those whose similarity scores with the original scene is above a threshold. In a conservative fashion, we choose that threshold to be the median similarity between rotated and original scenes (those of the first augmentation step). 
+We do so in two ways. First, we feed each scene's location into the Google Streetview API to obtain  the snapshots of the same location at different camera angles (i.e., at $\theta \in {-30^{\circ}, -15^{\circ} , 15^{\circ} , 30^{\circ} }$). However, the resulting dataset is still too small for robust training. Therefore, again, we feed each scene's location into the Google Streetview API, but we now do so to obtain other scenes at  distance $d \in \{10,20,40,60\}$ meters.  This will greatly expand our set of scenes, but it might do so at the price of introducing scenes whose beauty scores have little to do with the original scene's. To fix that, we take only the scenes that are \emph{similar} to the original one (we call this way of augmenting ``conservative translation''). To compute the similarity between a pair of scenes, we represent the two scenes with visual features derived from the FC7 layer of PlacesNet and compute the similarity between the two corresponding feature vectors~\cite{zhou2014learning}. For all scenes at increasing distance $d \in \{10,20,40,60\}$ meters,  we take only those whose similarity scores with the original scene is above a threshold. In a conservative fashion, we choose that threshold to be the median similarity between rotated and original scenes (those of the first augmentation step). 
 
-To make sure this additional augmentation has not introduced any unwanted noise, we consider  two sets of scenes: one containing those that have been taken during this last step, i.e. the one with high similarity to the original scenes (\emph{taken-set}), and the other containing those that have been filtered away (\emph{filtered-set}). Each scene is then scored with PlacesNet~\cite{zhou2014learning} and is represented with the five most confident scene labels. We then aggregate labels at set level, by computing each label's frequency on the \emph{taken-set} %minus that on the 
+To make sure this additional augmentation has not introduced any unwanted noise, we consider  two sets of scenes: one containing those that have been taken during this last step, i.e., the one with high similarity to the original scenes (\emph{taken-set}), and the other containing those that have been filtered away (\emph{filtered-set}). Each scene is then scored with PlacesNet~\cite{zhou2014learning} and is represented with the five most confident scene labels. We then aggregate labels at set level by computing each label's frequency on the \emph{taken-set} %minus that on the 
 and on the \emph{filtered-set}. Finally, we characterize each label's propensity to be correctly augmented as: 
 $ \textrm{prone}(label)= fr(label,\textrm{\emph{taken-set}}) - fr(label,\textrm{\emph{filtered-set}}).$
-This reflects the extent to which a scene with a given label is prone to be augmented or not. From Figure~\ref{fig:augmentationSimilarity}, we find that, as one would expect, scenes that contain highways, fields and bridges can be augmented at increasing distances while still showing resemblances to the original scene; by contrast, scenes that contain gardens, residential neighborhoods , plazas, and skyscrapers cannot be easily augmented, as they are often found in high density parts of the city, where there is tremendous diversity within short distances. 
+This reflects the extent to which a scene with a given label is prone to be augmented or not. From Figure~\ref{fig:augmentationSimilarity}, we find that, as one would expect, scenes that contain highways, fields and bridges can be augmented at increasing distances while still showing resemblances to the original scene; by contrast, scenes that contain gardens, residential neighborhoods, plazas, and skyscrapers cannot be easily augmented, as they are often found in high density parts of the city in which diversity within short distances might well be experienced. 
 
 %\ns{You probably want to reword this: It is amenable to augmentation, not prone to. Also why is this being done at a set level? If you always find bridges next to viaducts and viaducts next to bridges, and if your translation step moves from one to another, then the set-level score will not detect this. If instead you check whether the placesnet\_label of the translated image is the same as that of the original, then you are OK, as long as placesnet\_label can be be believed.}
 
@@ -181,7 +184,13 @@ This reflects the extent to which a scene with a given label is prone to be augm
 
 %****************************************
 \subsection*{Step 2 Training a beauty classifier}
-Having this highly curated set of labeled urban scenes, we are now ready to train classifier $C$ with labels reflecting our beauty assessments. We use the CaffeNet architecture, a modified version of AlexNet~\cite{krizhevsky2012imagenet,szegedy2015going}. The training is done on a 70\% split of the data, and the testing on the remaining 30\%. All this is done on increasingly augmented sets of data. We start from our 20k images and progressively augment them with  the snapshots obtained with the 5-angle camera rotations, and then with the exploration of scenes at increasing distance $d \in \{10,20,40,60\}$ meters. The idea behind data augmentation is that accuracy would increase with it. Indeed it does (Table~\ref{tab:classifier}): it goes from 63\% on the set of original scenes to as much as 73.5\% on the set of fully augmented scenes, which is a notable increase in accuracy for such classes of classification tasks. As a baseline, we compare with the models trained by Dubey et.al in \cite{dubey2016deep} on the same seed data that we use for our pipeline. They report that their models perform at 70\% accuracy in the task of picking a beautiful image amongst any two given images. Albeit the set-up of our model is not to compare two images but just to classify a particular image in a binary class, this baseline shows that our model is showing a comparable performance in beauty classification. 
+\label{Sec:Classifier}
+Having this highly curated set of labeled urban scenes, we are now ready to train classifier $C$ with labels reflecting our beauty assessments. 
+
+As for classifier $C$, we use the CaffeNet architecture, a modified version of AlexNet~\cite{krizhevsky2012imagenet,szegedy2015going}. This has a conventional architecture with 5 convolutional layers; interleaved with  max pooling and normalization layers; and terminated by: \emph{(i)} two 4096 dimensional fully connected layers interleaved with dropout layers~\cite{srivastava2014dropout} (the dropout ratio is set to 0.5 to prevent over-fitting), and \emph{(ii)} by a Softmax layer that classifies the input image into one of two classes of beautiful(1) and ugly(0).  
+
+Having $C$ at hand, we now turn to training it. The training is done on a 70\% split of the data, and the testing on the remaining 30\%. All this is done on increasingly augmented sets of data. We start from our 20k images and progressively augment them with  the snapshots obtained with the 5-angle camera rotations, and then with the exploration of scenes at increasing distance $d \in \{10,20,40,60\}$ meters. The idea behind this data augmentation is that the model's accuracy should increase with increasing levels of augmentation. Indeed it does (Table~\ref{tab:classifier}): it goes from 63\% on the set of original scenes to a value as high as  73.5\% on the set of fully augmented scenes, which is a notable increase in accuracy for this type of classification tasks. Furthermore, our results match previous ones: for example,  Dubey et.al's~\cite{dubey2016deep}  model showed an accuracy of 70\%, which is comparable to ours. 
+
 %As a baseline, we compared with the scenic-or-not model developed by Chanuki et.al \cite{seresinhe2017using}. Their model is different than ours because of the fact that their model generates scenic scores on a scale of 10, whereas ours is a binary classifier. Still for the sake of comparison, we measure the Kendall rank correlation, which is what they use for their measurements, between predicted and actual classes. Our model performs with a Kendall rank correlation of 0.43 which is comparable to their elastic net models. In so far, the facelift pipeline is agnostic of the classifier , which can be swapped out with a better performing one or with one trained for a different use case. 
 %\ns{Can you cite a baseline comparison from state of the art? Less important but comment on why is accuracy the right metric? Why not precision for instance?}. 
 
@@ -195,10 +204,47 @@ Having this highly curated set of labeled urban scenes, we are now ready to trai
 
 
 %****************************************
-\subsection*{Step 3 Generating a synthetic beautified scene}
-Having this trained classifier at hand, we can then build a generator of synthetic beautified scenes. This is a model that, given the two classes ugly $y_i$ and beautiful $y_j$, transforms any original scene $I_i$ of class $y_i$ (e.g., ugly scene) into template scene $\hat{I_j}$ that maximizes class $y_j$ (e.g., beautified template scene). 
 
-More specifically, given an input image $I_i$ known to be of class $y_i$  (e.g., ugly), our technique outputs  $\hat{I_j}$, which is a more beautiful version of it (e.g., $I_i$ is morphed  towards the average representation of a beautiful scene) while preserving $I_i$'s details. The technique does so using the ``Deep Generator Network for Activation Maximization'' (\emph{DGN-AM}) \cite{nguyen2016synthesizing}. Given an input image $I_i$, \emph{DGN-AM} iteratively re-calculates the color of $I_i$'s pixels in  a way  the output image $\hat{I_j}$  both maximizes  the  activation of neuron $y_j$ (e.g., the ``beauty neuron'') and looks ``photo realistic'',  which is done by conditioning the maximization to an ``image prior''. This is equivalent to finding the feature vector $f$ that maximizes the following expression:
+
+\subsection*{Step 3 Generating a synthetic beautified scene}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\columnwidth]{AM_arch.pdf}
+    \caption{Architecture of the synthetic beauty generator. This consists of a generator of synthetic scenes concatenated with a beauty classifier. The green block is the beauty maximized template $\hat{I_j}$, which is subject to  forward and backward passes (red arrow) when optimizing for beauty.}
+    \label{fig:AM_arch}
+\end{figure}
+
+\begin{table}\sffamily
+    \begin{centering}
+
+
+    \begin{tabular}{l*2{C}@{}}
+        \toprule
+        & Original & Generated \\ 
+        \midrule
+        & \includegraphics[width=11em]{orig_1} & \includegraphics[width=11em]{gan_1} \\ 
+        & \includegraphics[width=11em]{orig_2} & \includegraphics[width=11em]{gan_2} \\ 
+        & \includegraphics[width=11em]{orig_3} & \includegraphics[width=11em]{gan_3} \\ 
+        
+        \bottomrule 
+    \end{tabular}
+    \caption{Examples of our generator's outputs. The original scenes and the generated ones are shown side by side.}
+    \label{fig:GanExample}
+    
+    \end{centering}
+\end{table} 
+
+
+Having this trained classifier at hand, we can then build a generator of synthetic beautified scenes. To build such a generator, we  retrain the GAN described by Dosovitskiy and Brox~\cite{dosovitskiy2016generating} on our curated urban scene dataset. This network is trained by maximizing the confusion for the discriminator between the generated images $G(f)$ and the original ones $I_f$~\cite{goodfellow2014generative}.  The resulting generator is concatenated with our beauty classifier (Figure~\ref{fig:AM_arch}). As a result, given the two classes ugly $y_i$ and beautiful $y_j$, the end-to-end model  transforms any original scene $I_i$ of class $y_i$ (e.g., ugly scene) into template scene $\hat{I_j}$ that maximizes class $y_j$ (e.g., beautified template scene). 
+
+% able to reproduce synthetic urban scenes (Figure~\ref{fig:GanExample}) 
+%to an impressive level of detail. shows a few examples of how the generator performs by comparing a real world image $I_f$, and the generated image $G(f)$. 
+%
+%
+%The second component is a concatenation of  the trained generator with the beauty classifier described in Section~\ref{Sec:Classifier}, as shown in . This results in 
+
+More specifically, given an input image $I_i$ known to be of class $y_i$  (e.g., ugly), our technique outputs  $\hat{I_j}$, which is a more beautiful version of it (e.g., $I_i$ is morphed  towards the average representation of a beautiful scene) while preserving $I_i$'s details. The technique does so using the ``Deep Generator Network for Activation Maximization'' (\emph{DGN-AM})~\cite{nguyen2016synthesizing}. Given an input image $I_i$, \emph{DGN-AM} iteratively re-calculates the color of $I_i$'s pixels in  a way  the output image $\hat{I_j}$  both maximizes  the  activation of neuron $y_j$ (e.g., the ``beauty neuron'') and looks ``photo realistic'',  which is done by conditioning the maximization to an ``image prior''. This is equivalent to finding the feature vector $f$ that maximizes the following expression:
 \begin{equation}
 \hat{I_j} =G( f ) : \underset{f}{\arg\max}(C_{j}(G(f))-\lambda||f||)
 \end{equation}
@@ -208,17 +254,22 @@ where:
     \item $C_j(G(f))$ is the activation value of neuron $y_j$ in the scene classifier $C$ (the value to be maximized);
     \item $\lambda$ is a $L_2$ regularization term.
 \end{itemize}
-Here the initialization of $f$ is key. If $f$ were to be initialized with random noise, then the resulting $G(f)$ would be the average representation of category $y_j$ (of, e.g., beauty). Instead, since $f$ is initialized with $I_i$, then the resulting $G(f)$ is $I_i$'s version ``morphed to become more beautiful''. 
-%Figure \ref{fig:BeautyExample} shows the activation maximization output in the center.
+Here the initialization of $f$ is key. If $f$ were to be initialized with random noise, the resulting $G(f)$ would be the average representation of category $y_j$ (of, e.g., beauty). Instead, since $f$ is initialized with the feature vector corresponding to $I_i$, then the resulting maximized $G(f)$ is $I_i$'s version ``morphed to become more beautiful''.
+
+The input image is also key. It makes little sense to beautify an already beautiful image, not least because such beautification process would result in a saturated template $\hat{I_j}$ in our framework. For this reason, to generate an image that maximizes the beauty neuron in the classifier $C$, we restrict the  corresponding input image to be in class $y_i$ (i.e., ugly scenes as per the divisions in Figure~\ref{fig:Trueskill}). We do the opposite when maximizing the ugly neuron. 
+
+
+
+%Maximizing beauty of an already beautiful urban scene, would yield in a saturated template $\hat{I_j}$. 
 
 %****************************************
 \subsection*{Step 4 Returning a realistic beautified scene}
-We now have template scene $\hat{I_j}$ (which is a synthetic beautified version of original scene $I_i$) and need to retrieve a realistic looking version of it. We do so by: \emph{i)} representing each of our original scenes in Step 1 (including $\hat{I_j}$) as a 4096 dimensional feature vector derived from the FC7 layer of the PlacesNet \cite{zhou2014learning}; \emph{ii)} computing the distance (as $L_2$ Norm) between $\hat{I_j}$'s feature vector and each of the original scene's feature vector; and \emph{iii)} selecting the original scene most similar (smaller distance) to $\hat{I_j}$. This results into the selection of the beautified scene $I_j$.
+We now have template scene $\hat{I_j}$ (which is a synthetic beautified version of original scene $I_i$) and need to retrieve a realistic looking version of it. We do so by: \emph{i)} representing each of our original scenes in Step 1 (including $\hat{I_j}$) as a 4096 dimensional feature vector derived from the FC7 layer of the PlacesNet~\cite{zhou2014learning}; \emph{ii)} computing the distance (as $L_2$ Norm) between $\hat{I_j}$'s feature vector and each of the original scene's feature vector; and \emph{iii)} selecting the original scene most similar (smaller distance) to $\hat{I_j}$. This results into the selection of the beautified scene $I_j$.
 
 
 %****************************************
 \subsection*{Step 5 Identifying  characterizing urban elements}
-Since original scene $I_i$ and beautified scene $I_j$ are real scenes and we make sure that they maintain the same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of SegNet's and PlacesNet's labels. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. This step required us to develop metrics inspired from urban design literature, to quantify the changes in elements. A detailed description of the characterization and evaluation would follow in Section \ref{sec:evaluation}
+Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of urban elements extracted by computer vision tools such as SegNet and PlacesNet. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. 
 
 
 %\begin{figure*}[h]
@@ -229,21 +280,26 @@ Since original scene $I_i$ and beautified scene $I_j$ are real scenes and we mak
 %\end{figure*}
 
 
-\begin{table}
+\begin{table}\sffamily
     \begin{tabular}{l*3{C}@{}}
         \toprule
         & Original ($I_i$) & Latent Beauty representation ($\hat{I_j}$) & Beautified ($I_j$) \\ 
         \midrule
-        & \includegraphics[width=11em]{u_9} & \includegraphics[width=11em]{t_9} &  \includegraphics[width=11em]{b_9} \\ 
+        & \includegraphics[width=11em]{u_9.png} & \includegraphics[width=11em]{t_9.png} &  \includegraphics[width=11em]{b_9.png} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_1} & \includegraphics[width=11em]{Plot/examples/t_1} &  \includegraphics[width=11em]{Plot/examples/b_1} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_2} & \includegraphics[width=11em]{Plot/examples/t_2} &  \includegraphics[width=11em]{Plot/examples/b_2} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_3} & \includegraphics[width=11em]{Plot/examples/t_3} &  \includegraphics[width=11em]{Plot/examples/b_3} \\ 
         & \includegraphics[width=11em]{u_4.jpeg} & \includegraphics[width=11em]{t_4.jpeg} &  \includegraphics[width=11em]{b_4.jpeg} \\ 
         & \includegraphics[width=11em]{u_5.jpeg} & \includegraphics[width=11em]{t_5.jpeg} &  \includegraphics[width=11em]{b_5.jpeg} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_6} & \includegraphics[width=11em]{Plot/examples/t_6} &  \includegraphics[width=11em]{Plot/examples/b_6} \\ 
         & \includegraphics[width=11em]{u_7.jpeg} & \includegraphics[width=11em]{t_7.jpeg} &  \includegraphics[width=11em]{b_7.jpeg} \\ 
         & \includegraphics[width=11em]{u_8.jpeg} & \includegraphics[width=11em]{t_8.jpeg} &  \includegraphics[width=11em]{b_8.jpeg} \\ 
         \bottomrule 
     \end{tabular}
-    \caption{ The table showcases examples of the``FaceLifting'' process. It is worth observing that the process of beautification prefers greenery, narrow roads and  pavements }
+    \caption{Examples of the ``FaceLifting'' process, which tends to add greenery, narrow roads, and  pavements.}
     \label{fig:BeautyExample}
 \end{table} 
+
 
 
 
@@ -253,7 +309,7 @@ Since original scene $I_i$ and beautified scene $I_j$ are real scenes and we mak
 The goal of FaceLift is to transform existing urban scenes into versions that: \emph{i)} people perceive more beautiful; \emph{ii)} contain urban elements typical of great urban spaces; \emph{iii)} are easy to interpret; and \emph{iv)} architects and urban planners find useful. To ascertain whether FaceLift meets that composite goal, we answer the following questions next: 
 
 \begin{description}
-    \item{\textbf{Q1}} Do individuals perceive``FaceLifted'' scenes to be beautiful?
+    \item{\textbf{Q1}} Do individuals perceive ``FaceLifted'' scenes to be beautiful?
     
     \item{\textbf{Q2}}  Does our framework produce scenes that possess urban elements typical of great spaces?
     
@@ -265,12 +321,10 @@ The goal of FaceLift is to transform existing urban scenes into versions that: \
 
 
 \subsection*{Q1 People's perceptions of beautified scenes}
-To ascertain whether FaceLifted scenes are perceived by individuals as they are supposed to, we run a crowd-sourcing experiment on Amazon Mechanical Turk.  We randomly select 200 scenes, 100 beautiful and 100 ugly  (taken at the bottom 10 and top 10 percentiles of the Trueskill's score distribution of Figure~\ref{fig:Trueskill}). Our framework then transforms each ugly scene into its beautified version, and each beautiful scene into its corresponding `uglified'. These scenes are arranged into pairs, each of which contains the original scene and its beautified or uglified version. On  Mechanical Turk, we only select verified masters for our crowd-sourcing workers (those with an approval rate above 90\% during the past 30 days), pay them \$0.1 per  task,  and ask each of them to choose the beautiful scene for given pairs.  We make sure to have at least 3 votes for each scene pair. Overall, our workers end up selecting the scenes that are actually beautiful 77.5\% of the times, suggesting that FaceLifted scenes are correctly perceived most of the times.
-
+To ascertain whether ``FaceLifted'' scenes are perceived by individuals as they are supposed to, we run a crowd-sourcing experiment on Amazon Mechanical Turk.  We randomly select 200 scenes, 100 beautiful and 100 ugly  (taken at the bottom 10 and top 10 percentiles of the Trueskill's score distribution of Figure~\ref{fig:Trueskill}). Our framework then transforms each ugly scene into its beautified version, and each beautiful scene into its corresponding `uglified'. These scenes are arranged into pairs, each of which contains the original scene and its beautified or uglified version. On  Mechanical Turk, we only select verified masters as our crowd-sourcing workers (those with an approval rate above 90\% during the past 30 days), pay them \$0.1 per  task,  and ask each of them to choose the most beautiful scene for each given pair.  We make sure to have at least 3 votes for each scene pair. Overall, our workers end up selecting the scenes that are actually beautiful 77.5\% of the times, suggesting that ``FaceLifted'' scenes are indeed perceived to be more beautiful by people. 
 
 \subsection*{Q2 Are beautified scenes great urban spaces?}
-To answer that question, we need to understand what makes a space great. After a careful review of the urban planning literature, we identify four factors~\cite{ewing2013measuring,alexander1977pattern} (summarized in Table~\ref{tab:Design_metrics}): great places mainly tend to be walkable, offer greenery, feel cozy, and be visually rich. 
-
+To answer that question, we need to understand what makes a space great. After reviewing the literature in urban planning, we identify four factors associated with  great places~\cite{ewing2013measuring,alexander1977pattern} (Table~\ref{tab:Design_metrics}): they mainly tend to be walkable, offer greenery, feel cozy, and be visually rich. 
 
 \begin{table*}[h]
     \centering
@@ -280,15 +334,15 @@ To answer that question, we need to understand what makes a space great. After a
             \hline
             \textbf{Metric} & \textbf{Description}\\
             \hline
-            Walkability  & Walkable streets increase the social capital of a place,  and they appeal to the exploring nature of the human psyche~\cite{ewing2013measuring,quercia15thedigital,speck12}.\\
+            Walkability  & Walkable streets support people's natural tendency to explore spaces~\cite{ewing2013measuring,quercia15thedigital,speck12}.\\
             \hline
-            Green Spaces & The presence of greenery has repeatedly been found to impact people's well being \cite{alexander1977pattern}. Under certain conditions, it could also promote social interactions~\cite{quercia2014aesthetic}. This suggest that not all greenery has to be considered in the same way though: dense forests or unkempt greens might well have a negative impact~\cite{jacobs1961death}. \\
-            %			\hline		
-            %			Landmarks & Loosing a bearing in the city is not a very pleasant experience. Hence presence of recognisable and  guiding landmarks influences the perception of an urban space \cite{ewing2013measuring}.\\
+            Green Spaces & The presence of greenery has repeatedly been found to impact people's well-being \cite{alexander1977pattern}. Under certain conditions, it could also promote social interactions~\cite{quercia2014aesthetic}. Not all types of greenery have to be considered the same though: dense forests or unkempt greens might well have a negative impact~\cite{jacobs1961death}. \\
+            \hline		
+            Landmarks & Feeling lost is not a pleasant experience, and the presence of landmarks  have been shown to contribute to the legibility and navigability of spaces~\cite{lynch1960image,quercia2014aesthetic,ewing2013measuring,quercia13maps}.\\
             \hline
-            Privacy-Openness &  A sense of privacy (as opposed to a sense of openness) impacts a place's perception~\cite{ewing2013measuring}.\\ 
+            Privacy-Openness & The sense of privacy conveyed by a place's structure (as opposed to a sense of openness) impacts its perception~\cite{ewing2013measuring}.\\ 
             \hline
-            Visual Complexity & Visual complexity is a measure of how diverse a urban scene is in terms of design materials, textures, and objects~\cite{ewing2013measuring}.  \\
+            Visual Complexity & Visual complexity is a measure of how diverse an urban scene is in terms of design materials, textures, and objects~\cite{ewing2013measuring}. The relationship between complexity and preferences generally follows an  `inverted-U' shape: we prefer places of medium complexity rather than places of low or high complexity~\cite{ulrich1983aesthetic}. \\
             \hline
     \end{tabular}}
     \caption{Urban Design Metrics}
@@ -347,7 +401,7 @@ We manually select only the PlacesNet labels that are related to greenery. These
     }
     \vspace{-0.4cm}
     \label{fig:bin_figures}
-    \caption{The percentage of scenes ($y$-axis): (a) having an increasing presence of sky (on the $x$-axis); and (b) having an increasing level of visual richness  (on the $x$-axis). The error bars represent standard errors obtained by random re-sampling of the data for 500 iterations. }
+    \caption{The percentage of beautified scenes ($y$-axis): (a) having an increasing presence of sky (on the $x$-axis); and (b) having an increasing level of visual richness  (on the $x$-axis). The error bars represent standard errors obtained by random re-sampling of the data for 500 iterations. }
     \vspace{-0.4cm}
 \end{figure*}
 
@@ -369,7 +423,7 @@ To quantify to which extent scenes are visually rich, we measure their visual co
 H(X) = -\sum p(i)\log p(i)
 \label{eq:entropy} 
 \end{equation}
-where $i$ is the $i^{th}$ Segnet's label. The total number of labels is twelve. The higher $H(X)$, the  higher the scene's entropy, that is, the higher the scene's complexity. To test hypothesis \emph{H4}, we show the percentage of scenes that fall into a complexity bin  (Figure~\ref{fig:complexity}): beautified scenes are of low to medium complexity, while uglified ones are of high complexity.
+where $i$ is the $i^{th}$ Segnet's label. The total number of labels is twelve. The higher $H(X)$, the  higher the scene's entropy, that is, the higher the scene's complexity. It has been suggested that the relationship between complexity and  pleasantness follows an `inverted U' shape~\cite{ulrich1983aesthetic}: we prefer places of medium complexity rather than places of low or high complexity. To test that, we show the percentage of beautified scenes that fall into each complexity bin  (Figure~\ref{fig:complexity}):  we do not find a strong evidence of the `inverted U' shape hypothesis, in that, beautified scenes are of low to medium complexity, while uglified ones are of high complexity.
 
 
 
@@ -409,10 +463,10 @@ To determine which urban elements are the best predictors of urban beauty and th
 Pr(\textrm{beautiful}) = logit^{-1}(\alpha + \beta_1 * V_1 + \beta_2 * V_2  + \beta_3 * V_{1}.V_{2} )
 \label{eq:regression} 
 \end{equation}
-where $V1$ is the fraction of the scene's pixels marked with one Segnet's label, say, ``buildings'' (over the total number of pixels),  and $V2$ is the fraction of the scene's pixels marked with another label, say, ``trees''. The result consists of three beta coefficients: $\beta_1$ reflects $V1$'s contribution in predicting beauty,  $\beta_2$ reflects $V2$'s contribution, and $\beta_3$ is the interaction effect, that is, it reflects the contribution of the dependency of $V1$ and $V2$ in predicting beauty. We run logistic regressions on the five factors that have been found to be most predictive of urban beauty~\cite{quercia2014aesthetic, ewing2013measuring, alexander1977pattern}, and show the results in Table~\ref{tab:regressioncoef}.
+where $V1$ is the fraction of the scene's pixels marked with one Segnet's label, say, ``buildings'' (over the total number of pixels),  and $V2$ is the fraction of the scene's pixels marked with another label, say, ``trees''. The result consists of three beta coefficients: $\beta_1$ reflects $V1$'s contribution in predicting beauty,  $\beta_2$ reflects $V2$'s contribution, and $\beta_3$ is the interaction effect, that is, it reflects the contribution of the dependency between $V1$ and $V2$ in predicting beauty. We run logistic regressions on the five factors that have been found to be most predictive of urban beauty~\cite{quercia2014aesthetic, ewing2013measuring, alexander1977pattern}, and show the results in Table~\ref{tab:regressioncoef}.
 
 
-Since we are using logistic regressions, the quantitative interpretation of the beta coefficients is eased by the ``divide by 4 rule''~\cite{vaughn2008data}: we can take $\beta$ coefficients and ``divide them by 4 to get an upper bound of the predictive difference corresponding to a unit difference'' in beauty~\cite{vaughn2008data}. For example, take the results in the first row of Table~\ref{tab:regressioncoef}. In the model $Pr(beautiful) = logit^{-1}(\alpha - 0.032 \cdot buildings + 0.084 \cdot trees + 0.005 \cdot  buildings \cdot trees)$, we can divide - 0.032/4 to get -0.008: a difference of 1 in the fraction of pixels being buildings corresponds to no more than a 0.8\% \emph{negative} difference in the probability of the scene being beautiful. In a similar way, a difference of 1 in the fraction of pixels being trees corresponds to no more than a 0.021\% \emph{positive} difference in the probability of the scene being beautiful. By considering the remaining results in Table~\ref{tab:regressioncoef}, we find that, across all pairwise comparisons, trees is the most positive element associated with beauty, while roads and buildings are the most negative ones. Since these results go in the direction one would expect, one might conclude that the scenes beautified by our framework are in line with previous literature, adding further external validity to our work. 
+Since we are using logistic regressions, the quantitative interpretation of the beta coefficients is eased by the ``divide by 4 rule''~\cite{vaughn2008data}: we can take the $\beta$ coefficients and ``divide them by 4 to get an upper bound of the predictive difference corresponding to a unit difference'' in beauty~\cite{vaughn2008data}. For example, take the results in the first row of Table~\ref{tab:regressioncoef}. In the model $Pr(beautiful) = logit^{-1}(\alpha - 0.032 \cdot buildings + 0.084 \cdot trees + 0.005 \cdot  buildings \cdot trees)$, we can divide - 0.032/4 to get -0.008: a difference of 1 in the fraction of pixels being buildings corresponds to no more than a 0.8\% \emph{negative} difference in the probability of the scene being beautiful. In a similar way, a difference of 1 in the fraction of pixels being trees corresponds to no more than a 0.021\% \emph{positive} difference in the probability of the scene being beautiful. By considering the remaining results in Table~\ref{tab:regressioncoef}, we find that, across all pairwise comparisons, trees is the most positive element associated with beauty, while roads and buildings are the most negative ones. These results match previous literature in urban design of what makes spaces great, adding further external validity to our framework's beautification. 
 
 
 
@@ -472,11 +526,7 @@ Since we are using logistic regressions, the quantitative interpretation of the 
 \end{figure}
 
 
-
-To ascertain whether practitioners find FaceLift potentially useful, we built an interactive map of the city of Boston in which, for  selected points, we showed pairs of urban scenes before/after beautification (Figure~\ref{facelift-UI}). We then sent that map along with a survey to 20 experts in architecture, urban planning, and data visualization around the world.  The experts had to complete tasks in which they rated FaceLift based on how well it supports decision making, participatory urbanism, and promotion of green spaces among the general public. The results are show in Table~\ref{tab:useCases} according to our experts, the tool can very probably supports decision making, probably support participatory urbanism, and definitely promote green spaces.  These results are  qualitatively supported by our experts' comments, which include: ``\textit{The maps reveal patterns that might not otherwise be apparent}'',  ``\textit{The tool helps focusing on parameters to identify beauty in the city while exploring it}'',  and ``\textit{The metrics are nice. It made me think more about beautiful places needing a combination of criteria, rather than a high score on one or two dimensions. It made me realize that these criteria are probably spatially correlated}''.
-
-
-
+To ascertain whether practitioners find FaceLift potentially useful, we build an interactive map of the city of Boston in which, for  selected points, we show pairs of urban scenes before/after beautification (Figure~\ref{facelift-UI}). We then send that map along with a survey to 20 experts in architecture, urban planning, and data visualization around the world. Questions were asked with a non-neutral response Likert scale (Table~\ref{tab:useCases}). That is because previous work~\cite{Agree2012,moors2008exploring} has shown that such a scale: \emph{(i)} pushes respondents to ``take a stance'', given the absence of a neutral response; and \emph{(ii)} works best if respondents are experts in the subject matter of the survey as responses of the ``I don't know'' type tend to be rare (as it is has been the case for our survey). The experts had to complete tasks in which they rated FaceLift based on how well it supports decision making, participatory urbanism, and the promotion of green spaces. According to our experts (Table~\ref{tab:useCases}), the tool can very probably supports decision making, probably support participatory urbanism, and definitely promote green spaces.  These results are  also qualitatively supported by our experts' comments, which include: ``\textit{The maps reveal patterns that might not otherwise be apparent}'',  ``\textit{The tool helps focusing on parameters to identify beauty in the city while exploring it}'',  and ``\textit{The metrics are nice. It made me think more about beautiful places needing a combination of criteria, rather than a high score on one or two dimensions. It made me realize that these criteria are probably spatially correlated}''.
 
 
 
@@ -486,11 +536,20 @@ To ascertain whether practitioners find FaceLift potentially useful, we built an
 \section{Conclusion}
 \label{sec:discussion}
 
-FaceLift is a transparent framework that beautifies existing urban scenes. This translates into two main technical advancements. First, FaceLift is able to generate realistic scenes as opposed to existing approaches based on  Generative Adversarial Networks whose final transformations are quite coarse as they still take the form of synthetic templates.  Second, it augments the deep learning black-box with a module that offers explanations on what has been transformed, making that box more transparent. 
+FaceLift is a  framework that automatically beautifies urban scenes by combining recent approaches of Generative Adversarial Networks and Deep Convolutional Networks. To make it usable by practitioners, the framework is also able to explain which urban elements have been added/removed during the beautification process. 
 
-There are still important limitations though. One is data bias. The framework is as good as its training data, and more work has to go into collecting reliable ground truth of human perceptions. This data should ideally be stratified according to the people's characteristics that  impact their perceptions. The other main limitation is that generative models are hard to control, and more work has to go into offering principled ways of fine-tuning the generative process.
+There are still important limitations though. One is data bias. The framework is as good as its training data, and more work has to go into collecting reliable ground truth data on human perceptions. This data should ideally be stratified according to the people's characteristics that  impact their perceptions. The other main limitation is that generative models are hard to control, and more work has to go into offering principled ways of fine-tuning the generative process.
 
-Despite these limitations, FaceLift has the potential to support urban interventions  in scalable  and replicable ways: it can be applied to the scale of an entire city, and that  can be replicated in other cities. The advantage of shifting the focus of research away from predictive analytics towards urban interventions is that people could be part of discussions on works of architecture  more than they are nowadays. To turn existing spaces into something more beautiful, that will still be the duty of architecture. Yet, with technologies similar to FaceLift more readily integrated in the architecture discussions, the complex job of recreating restorative spaces in an increasingly urbanized world will be greatly simplified.  After all, ``we delight in complexity to which genius have lent an appearance of simplicity.''~\cite{de2008architecture} In the context of future work, that genius is represented by the future technologies that we will contribute to build to deal with the complexity of our cities.
+Despite these limitations, FaceLift has the potential to support urban interventions  in scalable  and replicable ways: it can be applied to an entire city (scalable), across a variety of cities (replicable). To turn existing spaces into something more beautiful, that will still be the duty of architecture. Yet, with technologies similar to FaceLift more readily available, the complex job of recreating restorative spaces in an increasingly urbanized world will be greatly simplified.  
+
+
+After all, ``we delight in complexity to which genius have lent an appearance of simplicity.''~\cite{de2008architecture} In the context of future work, that genius is represented by future technologies that will help us deal with the complexity of our cities.
 
 
 
+\subsection{Limitations and biases}
+Like any supervised deep learning based framework, this work is only able to learn what is present in the data. Hence the method of acquiring annotations  for urban images can introduce huge biases in the model. The current model is trained on images acquired from the study on streetscore \cite{naik2014streetscore}. However their annotation is open to general public and there is not way we can remove biases that come with culture and location, in a highly subjective effect like beauty. Moreover because the pair wise choice is simply done by clicking one of the two images, the data might have noise introduced by non-serious participants. Such biases are bound to be picked up by the deep learning model. One can argue that the preference of our model for greenery , is a form of bias in the data. Another bias introduced because of data is the model's lack of preference to pedestrians. This bias was established well in advance because Google tries to remove most of the people from their street view images for privacy reasons. Hence people, which make up a major aspect of urban vitality, are completely missing from most dataset images and hence from the facelift transformations. 
+Another Limitation of our work is in the metric formation. The computational metrics developed to capture the real urban design metrics are designed using heuristics. There needs to be more crowd and expert validation to establish the validity of their formulation. 
+%
+\subsection{Future work}
+The framework is generalizable for geotagged and annotated images. The aim of this paper is to propose a framework with uses state of art methods in generative models to understand perception of emotions in urban images and explain them. As an extension, understanding how intervention would look like against outcome variables such as depression, safety or mental well-being in general would be very valuable.
