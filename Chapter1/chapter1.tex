@@ -54,7 +54,7 @@ The discussion on the formal definition and process of affects will continue, bu
 
 In attempt to develop metrics and pipelines, one has to reflect on one of the fundamental frameworks about operations on data, that is the \textbf{Data , Information, Knowledge and Wisdom} model\cite{rowley2007wisdom}.In this dissertation I posit and demonstrate through case studies, that for any reasoning about subjective perceptions , you need to develop frameworks that extract knowledge from data in a format that is aligned with the ontological framework of the application. In the context of this dissertation, ontology implies a set of concepts, definitions and relations between entities defined around a common set of axioms. I show that if a set of relations and definitions of concepts in the area of intervention are present, `a' solution can be reached provided that systems are designed to interpret metrics extracted from the data in relation to the ontology of the area of application. But to reach this step, the data needs to pass through the 4 layers of the DIKW pyramid model.
 
-In this model, the most foundational layer consists of the pure form raw \textbf{data or signals} that come from a source. If we are measuring subjective perceptions of humans, this source needs to be tied back to humans in some way. \red{Change this sentence} The data needs to be generated as a result of some human-human interaction or as a result of deliberate human input as response to their perception of some event. In this dissertation, I present various data sources and methods of collecting and curating data, which pertain to human-human interactions or human responses. 
+In this model, the most foundational layer consists of the pure form raw \textbf{data or signals} that come from a source. If we are measuring subjective perceptions of humans, this source needs to be tied back to humans in some way. To that extent, the data must ideally be a product of human to human interaction online. Or it needs to capture the human perceived responses, through explicit exercises like crowd sourcing or public surveys. In this dissertation, I present various data sources and methods of collecting and curating data, which pertain to human-human interactions or human responses. 
 
 The \textbf{information} layer is the result of the fact that any process done on the data is with a sense of purpose or an end goal. For example, if the goal is to understand how humans exchange messages at times of distress, you would most certainly need to express the raw information about sender and recipient of messages into some form of a networked abstraction. The abstraction preserves the organization of data, but at the same time allows information to be operated on. As a result, almost always the output of this process is some form of a data abstraction. You need to attach some meaning to the patterns in the information to extract knowledge about the fundamental processes that you want to measure.
 
@@ -86,14 +86,14 @@ For extracting knowledge, we need to first associate meanings to certain computa
 \subsection{Wisdom}
 Finally the wisdom , in definition underlies insights that come for experience. The experience could come simply from the scale of data or from cross disciplinary literature that puts forth theories of subjective experience. E.g. The theory of social support puts forth four categories of social support 1)Affective/Perceived 2)Instrumental 3)Informational 4)Appraisal. Each type has its own specific traits. My dissertation looks at these theories from the lense of computational social science, and develops processes to quantify signatures of affective support.
 
-\section{Research Thesis and Questions}
-I would like to put forth the thesis that I would like to examine through this dissertation. The overarching thesis question of interest is: 
+\section{Research Thesis and Research Questions}
+The overarching thesis question of interest that I would explore through the two case studies is:
 
-\vspace{1cm}
+\vspace{0.5cm}
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
-        How do we quantify perceived quantities from data, if the data source is human and the scale is large?    
+        How do we quantify perceived qualities from data, if the data source is human and the scale is large?    
 \end{minipage}}
-\vspace{1cm} 
+\vspace{0.5cm} 
 
 But this thesis question is quite open ended, and answering it in a generalized manner seems impractical in the scope of one Ph.D. For this reason, I need to first contextualize my work in the realm  of practical applications, by deriving more focussed research questions, such that I can acquire data and test my hypothesis in an effective time bound manner. More so, being an impact driven person, I would like to focus on applications which have the potential to have real world impact, either through interventions or through inspired interest in the field.
 
@@ -103,17 +103,17 @@ Humans are social animals in every aspect. The presence of social support system
 The investigation of these would lead me to form the following research questions 
 
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
-        \textbf{RQ1} \textsl{What are the characteristics of conversations on health support communities?}   
+        \textbf{RQ1} \textsl{How do support communities thrive?}   
 \end{minipage}}
 
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
-        \textbf{RQ2} \textsl{What is the nature of dialogue in supportive communities?}   
+        \textbf{RQ2} \textsl{How do we quantify support on these communities?}   
 \end{minipage}}
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
-        \textbf{RQ3} \textsl{Are there any discriminative macroscopic signatures in supportive conversations?}   
+        \textbf{RQ3} \textsl{Are there any macroscopic signatures of supportive conversations?}   
 \end{minipage}}
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
-        \textbf{RQ4} \textsl{Are there any discriminative local signatures in supportive conversations?}   
+        \textbf{RQ4} \textsl{Are there any mesoscopic signatures of supportive conversations?}   
 \end{minipage}}
 \vspace{1cm}
 
@@ -135,14 +135,14 @@ In the next part of my dissertation, I aim at using the scale of the internet to
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
         \textbf{RQ7} \textsl{Do humans and practitioners find these interventions worth the effort?}   
 \end{minipage}}
-\vspace{1cm}
+\vspace{0.5cm}
 
 Crowdsourcing is a method through which one could get inputs, subjective or otherwise, about a particular set of questions from a large number of real humans using the internet. In return the participants could be offered a tangible compensation, or in some cases, a gamified incentive. 
 The \textbf{RQ5} motivates me to investigate if we can use crowdsourcing to quantify how people perceive urban spaces. Research has shown that if a large number of people could vote on a set of images, regarding their aesthetic quality, a trend emerges that favours some objective metrics of beauty\cite{datta2008algorithmic,612644,quercia2014aesthetic}. Can we link these metrics to urban elements? For this reason we work with google streetview images, where real people vote on aesthetic value of images through a large scale crowdsourced study. After evaluating for statistical trends in preference of aesthetic urban images amongst the voters, we answer \textbf{RQ5} by training a deep convolutional neural network model, which can discern between an aesthetically pleasing and unpleasant urban scene with a high degree of accuracy. Once we have a model that could ``detect'' beauty in urban scences, we could then use machine learning and deep learning techniques to understand how different urban elements relate to the notion of beauty (\textbf{RQ6}). I further try to build a tool, which could use the quantified notion of beauty in urban spaces, to hint practitioners about possible actions to beautify any given urban space. These hints are given in the form of suggested changes in different popular urban design metrics, which makes the whole process legible to practitioners in the field. In the pursuit of answering the \textbf{RQ6} and  \textbf{RQ7}, I propose deep neural network and generative adversarial network models to make an end-to-end pipeline which can be then used to visualize how different urban elements affect the perception of beauty in the real world.
 
 
 \section{Thesis overview and original contributions}
-In Chapter 2, I examine how supportive communities evolve and sustain over a long period of time. I show presence of an anti-rich club effect on these support groups, which implies that experienced users are more interested in helping new comers rather than forming a clique of their own. I define a quantitative metric for ``expertise'' and show that as one becomes adept, one becomes more willing to help. All these original insights point towards answers for \textbf{RQ1} and \textbf{RQ2}. In Chapter 3, I look at global and local structures of supportive conversations. I show that mapping the conversation exchanges onto a topological structure exhibits keen preference for local supportive structures, which I call ``anchored motifs''. I discuss the utility of such a model of support conversation and draw parallels with the offline model of community support(Chapter 4) as per the mandate of \textbf{RQ3} and \textbf{RQ4}. 
+In Chapter 2, I examine how supportive communities evolve and sustain over a long period of time. I show presence of an anti-rich club effect on these support groups, which implies that experienced users are more interested in helping new comers rather than forming a clique of their own. I define a quantitative metric for ``expertise'' and show that as one becomes adept, one becomes more willing to help. All these original insights point towards answers for \textbf{RQ1} and \textbf{RQ2}. In Chapter 3, I look at global(macro-) and local(meso-) structures of supportive conversations. I show that mapping the conversation exchanges onto a topological structure exhibits keen preference for local supportive motifs, which I call ``anchored motifs''. I discuss the utility of such a model of support conversation and draw parallels with the offline model of community support(Chapter 4) as per the mandate of \textbf{RQ3} and \textbf{RQ4}. 
 
 In the second study, I investigate utility of perceptions of real world places through a crowd sourced rating of google street view images. As per \textbf{RQ5}, I develop models to extract the perception of the crowds using data driven inference methods(Chapter 4). 
 I then show that a general pattern of beauty in urban spaces can be learnt through a crowd sourced opinion and based on this finding, I develop a generative model to simulate beautification of urban spaces by using deep learning(Chapter 5). I validate the quantification of perception of real-world beauty using crowd validation. I contribute a way to use computer vision techniques to abstract out beautification process into explainable metrics used by architects and urban planners. The final contribution is a demo web application, that allows practitioners to examine and validate the utility of such a end to end system that captures citizen perceptions for urban design. These contributions are motivated by \textbf{RQ5} and \textbf{RQ7}. 

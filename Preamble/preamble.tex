@@ -70,16 +70,22 @@
 \usepackage{amssymb}
 \usepackage{siunitx} % use this package module for SI units
 
+\usepackage{hyperref}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+
 
 \usepackage{subfig}
 
 \usepackage{balance}
 \usepackage{longtable}
 %
-%\newtheorem{thm}{Theorem}
-%\newtheorem{corr}{Corollary}
-%\newtheorem{lemma}{Lemma}
-%\newtheorem{pty}{Property}
+\newtheorem{thm}{Theorem}
+\newtheorem{corr}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{pty}{Property}
 \usepackage{array}
 
 \newcommand{\addpic}{\includegraphics[width=10em height=10em]{example-image}}
@@ -89,6 +95,18 @@
 \newcommand{\note}[1]{\red{#1}}
 
 \newcommand*{\thead}[1]{\multicolumn{1}{c}{\bfseries #1}}
+
+
+
+\newtheorem{definition}{}
+% https://tex.stackexchange.com/questions/17619/common-per-section-numbering-of-theorems-lemmas-etc
+%\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proof}{Proof}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{example}[definition]{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{question}{Question}
 
 
 \hyphenpenalty 10000
