@@ -1,291 +1,486 @@
-%*******************************************************************************
-%****************************** Second Chapter *********************************
-%*******************************************************************************
+\chapter{PART1 : Signatures of support: From Macro to Meso}
+\label{chap:structure_support}
+\newcounter{row}
+\makeatletter
+\@addtoreset{subfigure}{row}
+\makeatother
+% **************************** Define Graphics Path **************************
 
-\chapter{Macrosopic View: Perceived social support }
+\graphicspath{{Chapter3/plots/}{Chapter3/plots/figures/}{Chapter3/plots/Zscore/}}
 
-\label{chap:Utility_support}
-\graphicspath{{Chapter3/plots/} {Chapter3/plots}}
-\begin{quote}
-    \textit{''The original idea of the web was that it should be a collaborative space where you can communicate through sharing information... In an extreme view, the world can be seen as only connections, nothing else.``} - Tim Berners Lee\cite{berners2001weaving} 
-\end{quote}
-Attention budgets pretty much govern how we as consumers interact with online social networks. It has been shown that the dearth of this budget, promotes an engagement behaviour that prioritizes perceptive features and immediacy in the content~\cite{joglekar2017like}. The scrolling user interface of platforms like Instagram and Facebook, allow mere seconds to decide whether a particular content is worth the user's attention~\cite{eikelboom2017irresistible}. 
+The global structure of social support communities, allude to the fact that these communities are exhibiting some mechanisms different than generic communities. They also seem to have an effect on how people perceive support when in distress. In the past chapter, we saw the behavioural signatures of support groups. The utility of `rich' users who are the most active and promiscuous when it comes to responding. The dynamic of evolution of users from support seekers to support givers. We also saw the way brokerage works in providing closures in the conversation threads, adding more closed triangles between people as `rich' or expert users contribute. These results make it relevant for us to investigate the signatures of social support when it comes to individual conversations on the web. Quantifying how support manifests in terms of structure in conversation, might gives us more insights in how online support can be utilised properly for health care. This may also point to the features to look at, if we need to automate the process of quashing online toxic behaviour.
+Inspired from the DIKW pyramid, we have now experienced the transformation of raw social network interaction data, into abstractions that bring out peer to peer interaction patters as well as the structure of dialogue between users. We have also extracted the knowledge about emergent behaviours of users using topological metrics. In this chapter we will look into the the macro and the micro signatures of a supportive dialogue on these communities.
 
-However, there is a whole breed of online social networks, which aim at bringing the offline sense of networking, online. These networks are mostly designed around a specific purpose like technical discussions\footnote{\url{www.stackoverflow.com}}, subject specific questions\footnote{\url{www.stackexchange.com}} or simply around hobbies like knitting\footnote{\url{www.ravelry.com}} or art\footnote{\url{www.artween.com/}}. These communities embody the true essence~\cite{berners2001weaving} of the internet, in that they strive at making geographical distance secondary, to the act of social networking and information sharing.
-\begin{definition}
-    According to the seminal work by Shumaker and Brownell~\cite{shumaker1984toward}, social support is defined as \textsl{``an exchange of resources between two individuals perceived by the provider or the recipient to be intended to enhance the well-being of the recipient.''}
-    \label{def:support}
-\end{definition}
+A valid criticism of the results from Chapter \ref{chap:Utility_support} is that the results were driven by a support community which is highly moderated. This sort of moderation is often absent on more popular open platforms. One such popular and open platform is Reddit\footnote{\url{http://reddit.com/}}. Reddit offers its users, anonymity and very limited moderation. The limited amount of moderation comes from volunteers appointed by a particular community, or in the case of Reddit, a sub-reddit. A sub-reddit is a sub-section of Reddit, which is a topical community, where only topical conversation threads can be posted. Any user can subscribe and post to such a topical sub-reddit, provided they abide by the simple rules of the sub-reddit. For example, if a sub-reddit deals with politics, like r/politics, one must make sure that the threads posted on this subreddit deals with political subject matters. There are several sub-reddits on this platform that deal with peer to peer support. A few examples include r/SuicideWatch\footnote{\url{https://www.reddit.com/r/SuicideWatch/}} , r/Depression\footnote{\url{https://www.reddit.com/r/Depression/}},r/Bipolar\footnote{\url{https://www.reddit.com/r/Bipolar/}}. Utility of these communities in providing a support, and a place to vent have been explored before~\cite{DeChoudhury2014,DeChoudhury2016}. However, in the context of my dissertation, I want to understand how such peer to peer support mechanisms are manifested in the dialogue structure. To do so, I need to look at these conversation threads from a over-all structural perspective(macro) as well as from a user-centric local perspective(meso). 
 
-Under this construct , these communities are apt Petri dishes to study the signatures of the online social support. Once you could quantify the social support signatures in terms of computable metrics, platforms could then empower the participants of these communities and design interventions to curb negative behaviour like trolling.
+\section{An argument for studying mental health forums}
+The new platforms like facebook and reddit have become so ubiquitous, that some research suggests that they might be affecting our broader psychological state \cite{d20122}. But on the positive side, studies have also proposed different ways in which this medium could be used for measuring and intervening in the matters of mental health~\cite{DeChoudhury2016,DeChoudhury2014}. These platform define the way humans interact in the present age, and developing an understanding of their effects and utility is of high importance. Reddit is one of the largest online communities which contains a number of topical sub-communities. On this platform, several subreddits are specifically tailored to mental health-related topics, such as \emph{depression}, \emph{anxiety} or \emph{alcoholism}. These fora offer a unique opportunity to study the way people describe or discuss their problems in their own voice. This has motivated several researchers to probe the different aspects of support online, like language~\cite{languageChoudhury}, anonymity in social support~\cite{DeChoudhury2014} or risk factors~\cite{gkotsis2017characterisation}. Recent studies have shown promising results in modelling and measuring signals and patterns in reddit communities related to mental health. For instance, statistical relations of mental health and depression communities with suicidal ideation have been studied \cite{DeChoudhury2014,DeChoudhury2016}. The authors explored linguistic and social characteristics that evaluate user's propensity to suicidal ideation. Approaches to classify reddit posts as related to certain mental health conditions have also been successfully developed, showing that there are certain characteristics specific to mental health-related topics in posts that can be automatically captured\cite{gkotsis2017characterisation}. Furthermore, in a study focused on reddit posts related to anxiety, depression and post-traumatic stress disorder, the authors show that these online communities exhibit themes of supportive nature, e.g. gratitude for receiving emotional support\cite{park2018examining}. Positive effects in participation in such fora have also been shown by improvements in members' written communication\cite{info:doi/10.2196/jmir.8219}. The supportive nature of comments in the SuicideWatch forum has also been studied by automatic identification and classification of helpful comments with promising results\cite{Kavuluru:2016:CHC:2975167.2975170}.
 
-In the context of this dissertation, I wanted to know how signatures of a perceived entity like social support,  manifests on these formal social networks. More specifically I  develop methods and frameworks, to extract the signatures of perceived \textsl{social support} on communities designed around users who have underwent or are undergoing physical or mental distress. These methods and frameworks could bear significant potential impact on the health and utility of these forums. The first step us to understand the structure and utility of these communities. More over, having a primer on these communities would help the reader get an idea about the methods developed over the course of this dissertation. 
+One of the most challenging, and devastating, global mental health concerns is suicide. Suicidal behaviour includes any thoughts, plans or acts someone makes towards ending their life. In health care services, preventing death by suicide is a priority, but accurately predicting whether or not someone is at risk of committing suicide is difficult. Moreover, a large proportion of deaths by suicide occur in populations that have never been seen by health service providers. Several online platforms are used for expressing suicidal thoughts and reaching out for support. On Reddit, the subreddit \emph{SuicideWatch} currently\footnote{As of 27th June 2018} has almost 94k subscribers, and is a lightly moderated forum that is intended to offer peer support for people at risk of, or are worried about others', suicidal behaviour. The moderators take the intent of peer support seriously, and are governed by guidelines that prohibits false promises, abuse, tough love and other clinically frowned upon methods of conversations\footnote{\url{https://bbc.in/24rJYQH} }
+This setup gives us an ideal petri-dish to measure what constitutes a supportive conversation. More specifically, owing to the results from Chapter\ref{chap:Utility_support}, we would like to develop methods that would allow us to understand the macroscopic and mesoscopic signatures of support. Formulating this problem needs to follow the methodological framework discussed in Chapter ~\ref{chap:Intro}, whereby we collect the necessary data and device appropriate abstraction/s, to quantify how the macroscopic and mesoscopic signatures of support in these conversations manifests. These signatures could be captured using different metrics that signify a particular behaviour of interaction.
 
-\section{Primer on online health communities}
-\label{sec:primer}
-Recent work has proposed that online communities have the potential to influence health and health care sectors. Recent studies have suggested that the participation of people with long-term conditions (LTCs) in online communities (1) improves illness self-management~\cite{allen2016long}, (2) produces positive health-related outcomes\footnote{\url{https://bit.ly/2FLcs1F}}~\cite{mo2012developing,pendry2015individual} , (3) facilitates shared decision-making with health care professionals~\cite{bartlett2011investigation,izuka2017stroke}, and (4) may even reduce mortality~\cite{hobbs2016online}.
-
-There is also evidence that self-management support interventions can reduce health service utilization~\cite{panagioti2014self,taylor2014rapid}. This is especially a crucial point as the world health services are facing the brunt of an ageing population.
-
-Online communities have experienced an upsurge in popularity among people with chronic respiratory conditions such as cystic fibrosis~\cite{kirk2016exploration}, asthma~\cite{stewart2011online}, pulmonary hypertension~\cite{matura2013virtual} and chronic obstructive pulmonary disease (COPD)~\cite{wentzer2013narratives}. More than 15 million people in England suffer from a long-term condition or disability, and they account for at least 50 percent of all general practitioner appointments\footnote{\url{https://bit.ly/2EVFs9v}}. Thus, assessing how these online communities function, evolve and provide perceived support, can have important implications for health care sector. More so, understanding the dynamics of these online communities, have actual repercussions on how the platforms that host them, could become a better resource of self-management of LTCs.
-
-On average, one in four people with an LTC who use the Internet tries to engage online with others with similar health-related concerns~\cite{fox2011social}. In particular, it has been suggested that the value of participating in an online community lies in the possibility of gaining access to a range of people and resources quickly, easily~\cite{armstrong2000real}, and anonymously~\cite{pendry2015individual}, as well as obtaining tailored information and emotional support~\cite{ali2015online,de2017adolescents,shoebotham2016therapeutic,coulson2005receiving,de2016stroke}. However, most of this evidence comes from qualitative studies, whereas only recent years have witnessed an increasing interest in quantitative assessments of online communities as intervention mechanisms. 
-
-The potential future integration of online health support systems with formal health care provision should be underpinned by a better understanding of how they are used and by evidence of their effectiveness. Indeed, as suggested by the Medical Research Council~\cite{Craiga1655}, integrating online support systems with the more traditional health care provision would require the identification and comparative assessment of potential alternative intervention mechanisms.
-
-In this chapter, I aim to uncover and understand how these communities function,evolve, and operate in the role of a supportive entity, from a macroscopic perspective.
-Further it is worth knowing if there exists any particular mechanism, by which individual users evolve into the role of support givers.
-
-Ultimately, once we understand the mechanisms of peer support, we can proceeded in looking for discriminative signatures of these supportive exchanges.
-In this chapter, we would illuminate the answers for \textbf{RQ1} and \textbf{RQ2} using a large scale dataset of a pulmonary illness support group. The questions are: 
+\subsection{Research questions}
+Most previous studies have aimed at studying the \emph{content} of posts and their characteristics in relation to other posts. One important aspect of online communities is its supportive \emph{function} --- users turn to these platforms not only to express their thoughts and concerns, but also to receive support (instrumental or perceived) from the community. In the previous chapter, we looked at how this received support, manifests in the network structure in the short term and long term users. What remains to be explored is how these supportive conversations themselves look on a macro as well as local (meso) scale. More specifically, in this chapter we would like to arrive at answers to the following two research question, discussed in Chapter~\ref{chap:Intro}
 
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
-        \textbf{RQ1} \textsl{How do support communities thrive?}   
-
-        \textbf{RQ2} \textsl{How do we quantify support on these communities?}   
+        \textbf{RQ3} \textsl{Are there any macroscopic signatures of supportive conversations?}   
 \end{minipage}}
+\noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+        \textbf{RQ4} \textsl{Are there any mesoscopic signatures of supportive conversations?}   
+\end{minipage}}
+\vspace{1cm}
 
+To model the network topology in an online community, we represent each conversation happening over these forums using graph-based abstractions (users and replies) as described in Section \ref{Sec:Abstractions}. 
+To measure global structure of these conversations, we user network topological metrics such as centrality: which measures importance of nodes in a network in terms of relaying information, branching factor: which measures how a conversation fans our over time, return distance: which measures how soon do users return back to the conversation and symmetric edges: which measures reciprocity of users in a conversation. To measure measure local interactions, we measure inter response times: which measure urgency of response to a message, semantic alignment between messages and local interaction motifs known as Triadic motifs : which gives an idea about how distinctive are interactions between subgroups of users. 
 
-\section{Dataset and properties}
-\label{sec:dataset}
-The data was collected from HealthUnlocked\footnote{\url{http://www.webcitation.org/70Y10rppl}}, the online platform provider of the Asthma UK and British Lung Foundation communities. Registered users can choose to either write posts publicly or send private posts to one another. In the latter case, posts are shared between 2 users only, whereas when posts are written publicly, a large number of users can become connected through threads of posts. A thread is a series of posts made on one root post, as a response to the root, or as a response to one of the responses to the root. This tree-like structure of posts can evolve indefinitely between posters. 
-Only posts that were shared publicly were collected and analyzed. For this study, user identifiers (IDs) were anonymized by the HealthUnlocked platform, and no demographic information was collected. 
-The data set included posts and their metadata (ie, the anonymized user ID numbers), user roles (eg, user, administrator, or moderator), date of posting, the hierarchical level of the post within the corresponding thread, and the dates in which the users joined and left the community. Both communities were moderated, and HealthUnlocked moderators (identified through metadata linked to posts) were included in the analysis to assess their contribution and compare it with other users. Online communities on the HealthUnlocked platform benefit from additional functionalities compared to other online forums, such as built-in patient groups that moderate the content. In particular, the content accessed by users is tailored to their interests, and profiles highlight users’ condition, chosen community, medications and treatments they use or find interesting. No data were collected on participants’ characteristics, though only people declaring themselves to be older than 16 years were permitted to create an account and take part in the online communities. Table \ref{table:jmirData} summarizes the salient features of the dataset used for this work. 
-
-
-\begin{table}[htb!]
-\centering
-\begin{tabular}{ |p{5cm}|p{5cm}|p{5cm}| }
-    \hline
-    \multicolumn{3}{|c|}{Dataset Properties} \\
-    \hline
-    \hline
-     \textbf{Property} & \textbf{AsthmaUK} & \textbf{British Lung Foundation} \\
-    \hline
-    \hline
-     Time span of data   	& 02/03/2006-06/09/2016    	& 13/04/2012-06/09/2016 \\
-    \hline
-     Total Time (weeks)  	& 548						& 230 \\
-    \hline
-     Total number of posts	& 32,780					& 875,151 \\
-    \hline
-     Percentage of posts with at-least 1 reply & 87.3\%			& 93.1 \% \\
-    \hline
-     Total number of users &	3345					& 19,837 \\
-    \hline
-     Users who contributed > 1 posts (\%n) & 1053 (31.5)  & 7814 (39.4) \\
-    \hline
-     Users who contributed exactly 1 post(\%n) & 331 (31.4) 722 & 1186 (15.2) \\
-    \hline
-     Registered users who never posted (ie, lurkers), n (\%) & 2292 (68.5) & 12,023 (60.6) \\
-    \hline
-     Number of posts per user, $\mu(\sigma)$ & 14.2 (55.0) & 66.9 (75.1) \\
-    \hline
-    Number of posts per users who posted >1, median (min - max) & 5.1 (2-1068) & 8.0 (2-8947) \\
-    \hline 
-    Number of posts per users who posted >1, mean (SD) & 20.4 (65.6) & 88.1 (458.6) \\
-    \hline
-    Posts contributed by top 1\% users by activity, n (\%) & 10,457 (31.9) & 426,198 (48.7) \\
-    \hline 
-    
-    \hline
-\end{tabular}
-\caption{The summary of salient attributes of the data used for this work}
-\label{table:jmirData}
+\begin{table}
+    \resizebox{0.5\linewidth}{!}{
+        \begin{tabular}{l|p{8cm}}
+            \textbf{Terminology} & \textbf{stands for}\\
+            $RP$   & Root post which begins a new thread on a subreddit \\
+            $OP$  & Original poster who posts the Root post for a thread \\
+            $SW$ & The suicide watch Subreddit \\
+            $FP$  & Front page of Reddit. \\
+    \end{tabular}}
+    \caption{Notations and Terms.}
+    \label{notations}
 \end{table}
 
-The data sets span, respectively, 10 years for the Asthma UK and 4 years for the BLF communities (see Table 1).
 
-Despite the shorter time span, as a result of the larger number of users, the number of posts in the BLF community was higher than in Asthma UK, namely 875,151 compared to 32,780 respectively. Moreover, BLF users wrote a higher number of posts per user and were connected with a higher number of other users when compared with people in the Asthma UK forum (see Figure 2). In both communities, 60\%-70\% of registered users wrote no posts (ie, they were lurkers). Users who wrote more than one post contributed with a median of 8 (range 2-8947) and 5 (range 2-1068) posts in the BLF and Asthma UK communities, respectively.
+\section{Data}
 
-The number of official moderators among the highly active users was negligible; there were no moderators in the top 5\% contributors to BLF and only 2 in the top 5\% for Asthma UK. Thus, our network analysis predominantly reflects content originated from registered users. This also means that moderators on these forums have more of an observatory role and do not engage in active support. 
+Reddit is a platform where a user can create a post on a subreddit, and other reddit users can interact by posting at different levels of the thread or by up or down voting posts. We analyzed root posts in the SuicideWatch subreddit (SW)\footnote{\url{https://www.reddit.com/r/SuicideWatch/}}, building on the work of Gkotsis et al. \cite{gkotsis2017characterisation}.
+We crawled SW to get hierarchical threaded conversations,
+by iteratively pursuing each conversation at progressively deeper levels until the whole thread had been obtained. \footnote{The code to crawl reddit for threads can be found at \textit{https://github.com/sagarjoglekar/redditTools}}. This resulted in a dataset of over 50k SW threads totaling around 500k individual posts. 
 
-When classified according to posting activity (ie, number of posts written to the forum), the top 5\% users contributed to a substantial proportion of all posts: 58\% and 79\% in the Asthma UK and BLF communities, respectively. In the context of this thesis, \textsl{Superusers} were those who made high number of connections with other users across the lifetime of the community.
+To provide a baseline against which to compare the hypothesized supportive nature of the SW sub-reddit, we acquired 50k baseline posts from any other subreddit popular enough to land on the frontpage.
+
+We crawl the Frontpage posts for 2 weeks accumulating over 50 thousand reddit threads in the process. 
+% For the sake of comparison, we also crawl another sub-reddit besides suicide watch, which could help us ground out metrics. We crawl all the threads posted for the year 2017 on the subreddit r/Depression, which is another support community that aims at giving supportive feedback to reddit users suffering from depression. 
+Comparing the suicide watch threads with the baseline, gives us confidence over our network metrics, and any claims made there forth. 
+The two conversation datasets from r/SuicideWatch and Frontpage are very similar in terms of pure macro statistics. E.g. the median amount of responses for a Suicide watch thread were 6 and for baseline Frontpage posts were 8. The median conversation depth (the depth of the hierarchy of the responses) is 2 for all the datasets. The median amount of unique authors participating in a post are 2. 
+Owing to the long tailed nature of the datasets, we perform our analysis on threads which have been conversed on at least 5 times. Which means we consider graphs which have more than 5 posts on the root post. This results in our datasets to shrink to 25k threads for suicide watch and 30k threads for Baseline. We further clean the dataset, by removing threads where the root author has deleted their user account, which is a common practice to preserve anonymity in more controversial posts. The resulting dataset has 20k threads in Suicide watch and 23k threads in the baseline. 
+% We perform similar curating on the r/Depression threads, resulting in 4k threads to analyse. 
 
 
-\section{Interaction Graphs}
-\label{sec:graphs}
-To understand the reason behind how these communities thrive and in order to quantify the conversation structures, I convert all the message exchanges into graphs, where users are represented by nodes and messages are represented by edges between users. 
-More formally imagine a directed graph $G(V,E)$ involving a set of users $V_i\forall i \in N$ where N is the total number of users interacting on a health community. For every message exchanged between a user $i$ and a user $j$ we create an edge $E_{ij}$. The complete community would form a global graph based off total interactions between all pairs of users which we call a global graph $G_g$. Similarly we may decide to only consider the users and messages exchanged across one particular thread discussing a particular issue. Such a graph is called a thread graph $G_t$.
+\section{Abstractions}
+\label{Sec:Abstractions}
+To understand the dynamics of supportive conversations, we first need to formalize the abstraction of networked conversations as well as the content posted in these conversations. In case of forum based platforms where users interact in a nested dialogue fashion, and original poster or $OP$ posts a start of a thread. This thread is then open for comments by all the community users. In case of Reddit, such a community is called a Subreddit, which is a moderated collection of users who subscribe to it. These users may post new threads onto the subreddit as far as the post follows the subreddit rules. Enforcement of these rules is the responsibility of the moderators. The user who starts a thread is called the Original Poster or \textbf{OP} and the headlining post which the $OP$ begins with is called the Root Post or $RP$. 
+
+
+\label{Sec:network}
 
 \begin{figure*}[!ht]
     \centering
     % \hspace*{-5mm}
     \subfloat[]{
-        \includegraphics[width=0.5\textwidth ]{BLFWhole.png}
-        \label{fig:BLF_graph}
+        \includegraphics[width=0.45\textwidth, height = 5cm ]{ReplyGraphSW}
+        \label{fig:rGraphSW}
     }
     \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{AsthamaWhole.png}
-        \label{fig:Asthma_graph}
-    }
-    \caption{Global graphs prepared from Asthama UK community\ref{fig:Asthma_graph} and BLF community\ref{fig:BLF_graph}. The size of the node corresponds to the degree of the node and the color corresponds to the community membership }
-\end{figure*}
-
-These graphs are the abstractions of how users interacted on the community either around a particular query (Thread graphs) or over all as a part of the bigger community (Gobal graph). To understand the behaviour of these users, I evaluate several metrics on these graphs to understand the utility of these communities in terms of activity of sharing and support. This abstraction also makes it feasible for us to investigate how a particular community grows with time and how particular users evolve with time.
-
-\section{How do support communities thrive ?}
-This question sets the primer about the peculiarity of support communities. Do these communities have enough interest and activity, to sustain over long periods of time? Are all users equally involved in the vitality of the community or is this a group of users? How important are these users?  
-
-\subsection{Activity Metrics}
-\label{sec:activity}
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=\textwidth ]{Activity.png}
-    \caption{Cumulative distributions of the number of posts as a function of time (weeks) within the Asthma UK (A) and the British Lung Foundation (B) communities. Calendars dates are reported below as week numbers (since the inception of the community). Panels C and D illustrate the average number of posts per user per week within Asthma UK and British Lung Foundation, respectively}        \label{fig:activity}
-\end{figure}
-To calculate the activity patterns of users on these forum, we first work with the most basic of proxies, which is the weekly/daily activity. We arrive at it by calculating the amount of messages exchanged in a community across the whole life cycle of the data. This metric would expose how much activity is happening on a daily or weekly basis on a particular community. It is worth noting that this activity pattern, would also shed light on how users are engaging with the community. A continuous engagement is good for the vitality of a community, however if a community revolves around purely functional interactions, then you may see a bursty nature of communication~\cite{panzarasa2015emergence}. From these basic analysis, it was quite evident that the BLF community was more active of the two, in that, the community exhibits a consistent engagement of the users across the lifetime of the data. Asthma forum however shows a bursty activity, despite being more than twice as old as the BLF community. The trends can be see in Figure \ref{fig:activity}.
-
-\begin{remark}
-    It is worth noting that as the activity on the community increases, you do see an increase in fragmented reply networks, which means concurrent discussions are happening with disjoint set of users interacting. 
-\end{remark}
-
-
-
-\subsection{Community resilience}
-\label{sec:resilience}
-The activity patterns does not tell the real story about the cohesiveness of any particular community. To answer the \textbf{RQ1}, it is first worth asking how the user interactions bind the community together. We would like to know if the user activity is highly concentrated or is it covering a large fraction of the user base. More so, it is worth asking if there are any special users who bear the mantle of providing support. This can be observed from the topological properties of the interaction graph. 
-From table\ref{table:jmirData}, it is evident that a minority of users are generating a bulk of data on these communities. E.g. the top 1\% users by activity contributed 32\% posts to AsthamaUK community. Such level of activity makes these users extremely important in understanding the dynamics of support on these communities. 
-
-\subsubsection{Cohesive conversations}
-
-\begin{figure}[!ht]
-    \centering
-    % \hspace*{-5mm}
-    \subfloat[]{
-        \includegraphics[width=0.5\textwidth ]{ConnectedComponent_weekly_ashtma.png}
-        \label{fig:lcc_asthma}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{weekly_largest_component_BLF.png}
-        \label{fig:lcc_blf}
+        \includegraphics[width=0.45\linewidth, height = 5cm ]{UserGraphSW}
+        \label{fig:uGraphSW}
     }
     
-    \caption{Fraction of users that are part of the largest component as a function of time (weeks) for Asthma UK \ref{fig:lcc_asthma} and the British Lung Foundation \ref{fig:lcc_blf}.}
-\end{figure}
-
-To understand the first aspect of the community's resiliance, I examine how is the coverage of communications between the users, on a weekly basis, given that messages are exchanged between the most active users within that week. 
-To do so, imagine a sorted list of message interactions over a particular time period $T_k$, sorted in chronological order defined as $L_k=[E_{ij} \forall i,j \in N]$ , where $E_{ij}$ is a message between user $i$ and user $j$, with $N$ total users being active in a given time period $T_k$. Now imagine this time period $T_k$ is of 7 days . I calculate such $K$ lists for the $K$ weeks the community has been active. For each such list, I induce a graph $G_k(V,E)$ such that the nodes in $V$ are the active users in that particular list, and the edges in $E$ are corresponding to the messages exchanged in the list $L_k$ between any two users. 
-\begin{definition}
-\textbf{Largest Connected component} : A largest connected component of a Graph $G(V,E)$ is the largest possible subgraph $G_L(V_L,E_L)$ of $G$, such that each node in $G_L$ has at least one valid connected path to every other node in $G_L$
-\end{definition}
-Now for each such graph $G_k$ I calculate the largest connected subgraph $G_{\theta_k}(N_k,E_k)$ such that all nodes in $N_k$ have at least one path between them. Calculating the fraction $\frac{N_k}{N}$ would give us the total fraction of users who are part of the same conversation network for a given week. After calculating and plotting these fractions across a total of 250 weeks for each community, we see that whenever there is an activity on these networks, almost always, the active nodes belong to the largest connected sub graph. This implies that activity on support forums is cohesive and even if bursty at times, is all encompassing with the users. 
-
-\subsubsection{Fragile communication structure}
-\label{sec:fragility}
-\begin{figure}[!ht]
-    \includegraphics[width=\textwidth]{jmirSensitivity.png}
-    \caption{Results of progressive removal of nodes based on connectivity. Both communities collapse drastically, in terms of connectivity, with BLF showing a little more resilience }
-    \label{fig:sense_asthma}
-\end{figure}
-Despite the exchange on a weekly basis is quite cohesive, it is pertinent to understand the resilience in terms of user responsibility in helping, in order to examine the health of such a community. Moreover, I want to know if the conversation network is held together by a more or less uniform contribution of nodes, or if there is a skew in the responsibility of nodes. 
-This can be tested by using the sensitivity analysis methods, popular in the network science~\cite{braunstein2016network,albert2000error}, which measures the network's capacity to diffuse information as you remove nodes based on certain property. In our case, we want to understand the importance of the \textsl{Superusers}, or the users who are disproportionately more active. Hence we begin by first sorting all the nodes in the macroscopic graph $G(V,E)$ in order of their degrees. The degree of a node in the global graph is proportional to the diverse set of users that node has communicated with, over the period if the community's lifetime. We then start removing nodes from the top, by progressively removing nodes in increments of 1\%. I then compute the size of the largest connected component $G_k$ and compute the ration of number of nodes in $G_k$ as compared to the original global undisturbed network.  Figure \ref{fig:sense_asthma} shows the performance of global graphs of both the communities to this attack. It is worth noting, that what we observe is that a top 10\% nodes by activity are responsible for most of the cohesive connectivity of the community. This also means that the top 10\% of these nodes have the most diverse connections in terms of number of users contacted. This gives hope to health care industry, since these nodes can act like efficient information diffusers, if used in a targeted fashion. 
-
-\subsubsection{Anti-rich conversations}
-\label{sec:richclub}
-\begin{figure}[!ht]
-    \centering
-    % \hspace*{-5mm}
+    
     \subfloat[]{
-        \includegraphics[width=0.5\textwidth ]{RichClub_asthma_truncated.png}
-        \label{fig:rich_asthma}
+        \includegraphics[width=0.45\linewidth, height = 5cm ]{ReplyGraphTD}
+        \label{fig:rGraphFP}
     }
     \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{RichClub_BLF_truncated.png}
-        \label{fig:rich_blf}
+        \includegraphics[width=0.45\linewidth, height = 5cm ]{UserGraphTD}
+        \label{fig:uGraphFP}
     }
-    \caption{ Plots of rich-club coefficients for each viable degree in the respective communities. }
-\end{figure}
-The “rich-club” coefficient is a metric designed to measure the extent to which well-connected users tend to connect with one another to a higher degree than expected by chance~\cite{colizza2006detecting}. To this end, for each value k of a node’s degree (ie, the number of other users a given user is connected with), we computed the ratio between the number of actual connections between nodes with degree k or larger and the total possible number of such connections~\cite{opsahl2008prominence}. We then divided this ratio by the one obtained on a corresponding random network with the same number of nodes and degree distribution (ie, the probability distribution of the degrees over the whole network) as the real network, but in which links were randomly reshuffled between nodes. 
+    \caption{ Example User graphs and their corresponding Reply graphs, Figure \ref{fig:rGraphSW} shows a random thread from the Suicide Watch sub-reddit along with the preserved structure of posts in the thread and \ref{fig:uGraphSW} shows the corresponding user graph that arises by capturing the user to user interaction in the thread from the reply graph. In comparison we have user graph Fig \ref{fig:uGraphFP} and its corresponding reply graph Fig \ref{fig:rGraphFP} from one of the Front page threads }
+    \label{Fig:GraphExamples}
+\end{figure*}
 
-Formally let $G(V,E)$ be a global graph representation of the community. Let $V_{>k}$ be the set of vertices in the graph having degree higher than $k$. Let there be $N_{>k}$ such vertices having $E_{>k}$ edges between them. In such case, the rich club coefficient for degree $k$ in the graph $G$ is given by 
-\begin{equation}
- \phi(k) = \frac{2E_{>k}}{N_{>k}(N_{>k} - 1)}
- \label{eq:rich_club}
-\end{equation}
-In this equation $\frac{N_{>k}(N_{>k} - 1)}{2}$ represents the maximum number of edges possible between $N_{>k}$ nodes. These coefficients are highly dependent on the size of the network, which makes them hard to compare. So I normalize the network by comparing against a random null model of rich-club coefficients $\phi_{rand}(k)$. This is obtained by generating an ensemble of random networks, each having the same degree distribution as that of $G$, but with links randomly placed. The ratio $\frac{\phi(k)}{\phi_{rand}(k)}$, gives us an un-correlated trend about the rich-club effect in $G$. 
+\subsubsection{Reply Graphs}
+\label{Sec:Reply_graphs}
+The first abstraction mimics directly the structure of conversation threads on Reddit. These abstractions are called Reply Graphs. We formulate a reply graph $R\{P,E,W\}$ as a thread of multi-layered posts in a thread in response to the root post $RP$ in the sub-reddit. Each graph $R$ consists of posts $P_i , P_j , i,j \in N$ , where N+1 is the total number of responses in the thread and edges $E_{ij}$ such that and edge $E_{ij}$ exists $iff$ post $P_i$ was in response to post $P_j$ in the hierarchy of responses.  The weight of the edge $E_{ij}$ is found by calculating the cosine similarity between semantic vector $V_i$ for post $P_i$ and the semantic vector $V_j$ of post $P_j$.  This abstraction works well in modeling the conversational nature of these forums.  For convenience of the reader, we present a couple of example pairs from SW and Frontpage baseline datasets in Figure \ref{Fig:GraphExamples}
 
-Thus, the rich-club coefficients may take values lower or higher than 1, depending on whether the real network has a higher or lower tendency to coalesce into rich clubs than randomly expected. In particular, networks that display a high rich-club coefficient (ie, greater than 1, are also said to show a “rich-club effect,” namely the tendency to organise into a hierarchical structure in which highly connected nodes preferentially create tightly knit groups with one another ~\cite{mcauley2007rich}. .
-
-\begin{remark}
-    It is worth noting that most previous studies in base lining rich-club effect in technical and real world networks have shown a propensity to create rich-clubs. Thus these networks exhibit exclusive clubs of (topologically) rich nodes, as illustrated in previous work~\cite{zhou2004rich,colizza2006detecting}
-\end{remark}
-What we observe from this analysis is that communities in general have a less than 1 rich-club co-efficient value for a spectrum of degrees $k$. This means, rich nodes are exhibiting an anti-rich behaviour, where nodes which have a higher degree, prefer engaging with new nodes with lower degree. This implies an active information exchange from a well connected node to a sparsely connected node, which follows according to the definition of social support(definition \ref{def:support}).
+\subsubsection{User interaction Graphs}
+\label{Sec:Interaction_graphs}
+In this method, we represent each thread as a directed graph $G\{V,E,W\}$ where $V$ is the set of all users participating in a particular thread and $E$ are the directed  edges which correspond to interactions between two users $V_i , V_j  \in V$. The weight of each directed edge $E_{ij}$ corresponds to the average of all the edge weights between $V_i , V_j  \in V$ in the corresponding reply graph $R\{P,E,W\}$ as described above. This means that each reply graph is then mapped to a User graphs where the nodes are users rather than posts. Another salient distinction between the two abstractions is that reply graphs resemble an n-ary tree and user graphs are directed cyclic graphs. 
 
 
-%Following Zhang et al [36], the “z-score” was used as a proxy for users’ expertise. According to this measure, replying to many questions suggests one’s expertise, while asking questions indicates lack of expertise. In our analysis, we treated anyone starting a thread as a help-seeker, and anyone commenting on the thread as a help-giver [36]. Accordingly, the proposed z-score aims to capture the combined help-seeking and help-giving patterns. To this end, for each user, we measured how many standard deviations the observed total number of the user’s help-giving posts lies above or below the expected number of help-giving posts for the whole system. We extended the approach proposed by Zhang et al by empirically assessing the probability of posting and answering a question across all users over the entire observation period. In the BLF community, we found that the probability of answering is Pa=2/3, while the probability of posting is Pq=1/3. We assumed a Bernoulli process of posting an answer or a question to the forum, with probabilities defined as above. The z-score for a given user i was calculated according to equation (a) in Figure 1, where ai refers to the total number of answers user i posted to the forum, qi is the total number of questions user i asked in the forum, and ni=ai +qi is the total number of messages posted by user i.
-%To obtain $Zscore_i$, let us define a random user that posts the same total number of messages nrandom to the forum as user i (ie, nrandom=ni). We would expect this random user to post an average number of answers to the forum given by equation (b). Plugging in the value of $Pa=2/3$, we obtained equation (c). Similarly, we would expect the random user to post answers with a standard deviation given by equation (d). Plugging in the value of $Pa=2/3$, we obtained equation (e). To measure how many standard deviations above or below the expected random value a user i lies, we then computed Zscorei according to equation (f). Plugging in the values of $\mu_{random}$ and $\sigma_{random}$, we obtained equation (g). Finally, by substituting $ni=ai +qi$, we obtained equation (h). 
+\subsection{Network characteristics}
+Figure \ref{fig:depthDist} shows the distribution of maximum depths across all Reply graphs for SW and Baseline subreddits. The SW threads depths have a median depth of 2 and mean of 4 compared to median depth of 2 for BL and a mean of 2.5. This shows that statistically the depths of Suicide watch and baseline graphs are quite similar.
 
-
-\section{How do we quantify support on these communities?}
-\label{sec:support}
-Once I establish that these support communities are thriving and are providing what seems to be an active supportive environment for the patrons, it is worth delving into the analytical methods for quantifying these supportive interactions. More so we would like to have concrete metrics that characterize a given community as a supportive one. To do so we need to understand how are the users on these communities driven to help each other, and whether there is a correlation between the ``richness'' of a user, as defined in previous section, and its propensity to help. More so we would like to know how consistent are these so called ``rich'' users in providing support. 
-
-\subsection{Propensity to help} 
-We would like to understand how users on support communities, as a group behave as they become more seasoned. Fortunately, there is an approximate way for us to capture a user's role as a support seeker and as a support giver. As described in Section \ref{sec:dataset}, the forum activity consists of a root poster, asking a question to the forum board, and the members responding to that question in a cascaded fashion. These responses, along with the original question constitute what is called as a \textsl{thread}.
-To that end, we define the following two roles on these communities\footnote{There are other ways to qualify someone as support giver/seeker, mainly using language sturcture, but here we consider only the bare minimum requirement to be considered as one, using the position in conversation structure}
-\begin{definition}
-    Support seeker: a user who begins a thread by posting on the forum, a question, or a query, to which others may respond to.
-\end{definition}
-
-\begin{definition}
-    Support giver: a user who responds to any post by a support seeker.
-\end{definition}
-
-Using these definitions I aim at modelling the statistical propensity of someone being a support giver or a seeker, as a function of their ``richness''. 
-We first begin by calculating across the dataset, the average number of questions per user and answers per user, by finding the mean number of questions or answers posted by any user on the forum. 
-We consider an expected probability of answering a question by a user as $P_a$ as 2/3 and the probability of posting a question as $P_q$ as 1/3. 
-With this information we modify the definition of ``Z-score'' to quantify the expertise, used by Adamic. et. al ~\cite{zhang2007expertise} to arrive at the expression of expertise in the context out our support community. 
-\begin{proof}
-    Consider a Bernoulli process for a user to choose to answer or post a question on the forum, with asymmetric probabilities for answering ($P_a$) and posting a question ($P_q$). 
-    For any user $i$ the total number of posts $n_i$ are the sum of total number of questions posted $q_i$ and answers posted $a_i$ and $n_i = a_i + q_i$
-    For a Bernoulli process the variance for the whole forum is given as: 
-     $$\sigma_{forum} = \sqrt{nP_a(1-P_a)}$$     $$\sigma_{forum} = \frac{\sqrt{2n}}{3}$$
-    Similarly the mean for this process can be written as : 
-    $$ \mu_{forum} = nP_a = \frac{2n}{3} $$
-    $Z_{score}$ of a random variable $X$ is defined as 
-    $$Z_{score} = \frac{X - \mu}{\sigma}$$
-    Substituting the values for $\sigma_{forum}$ and  $\mu_{forum}$ inside the expression for $Z_{score}$ we arrive at the modified Z-score as 
-    \begin{equation}
-        Z_{score} = \frac{a-2q}{\sqrt{2(a+q)}}
-    \label{eq:zscore}
-    \end{equation}    
-\end{proof}
-Equation \ref{eq:zscore} depicts the modified notion of Z-score for the question answering process of our support community. I calculate this particular metric for each user in both the communities based on their posting history. 
-\begin{figure}[!ht]
-    \centering
-    % \hspace*{-5mm}
-    \subfloat[]{
-        \includegraphics[width=0.5\textwidth ]{ModifiedZScore_asthma.png}
-        \label{fig:zscore_asthma}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{Modified_ZScore.png}
-        \label{fig:zscore_blf}
-    }
-    \caption{  }
-\end{figure}
-
-I then find the correlation between a users Z-score and the total number of posts a user has done in their lifetime on the forum. Figure \ref{fig:zscore_asthma} and Figure \ref{fig:zscore_blf} shows the results of this analysis for both the communities. It is quite evident, that as the users become more seasoned and post more actively, they are more likely to answer on questions rather than post new ones. This also implies that based on the rich club results from Section \ref{sec:richclub}, these communities are thriving not only for the ``rich'' users, but also for the sparse users. Users on these communities are more open to new members and provide active support to them. 
-
-\section{ Key takeaways, possible interventions }
 
 \begin{figure}[!ht]
     \centering
     % \hspace*{-5mm}
     \subfloat[]{
-        \includegraphics[width=8cm ]{LowOPActivityGraph.png}
-        \label{fig:noTri_op}
+        \includegraphics[width=0.4\textwidth]{ConvDepth.png}
+        \label{fig:depthDist} }	
+    \subfloat[]{
+        \includegraphics[width=0.4\linewidth ]{AuthorParticipation.png}
+        \label{fig:uniqAuthors}
+    }
+    
+    
+    \subfloat[]{
+        \includegraphics[width=0.4\textwidth ]{UserDegDist.png}
+        \label{fig:degUgraph}
     }
     \subfloat[]{
-    \includegraphics[width=8cm ]{HighOPActivityGraph.png}
-    \label{fig:Tri_op}
+        \includegraphics[width=0.4\linewidth]{ReplyDegDist.png}
+        \label{fig:degRgraph}
     }
-    \caption{  }
+    \caption{\textsl{ Fig \ref{fig:depthDist} shows the distribution of maximum depths of Reply Graphs for Subreddit r/SuicideWatch and the baseline Frontpage conversations. Fig \ref{fig:uniqAuthors} shows the distribution of unique authors per thread in the two datasets. Fig \ref{fig:degRgraph} shows Distribution of degrees for Reply Graphs,  r/SuicideWatch and FrontPage. Fig \ref{fig:degUgraph} shows the degree distributions for the reply graphs}}
 \end{figure}
 
+\section{Metrics}
+
+Once you are able to develop abstractions from the data, it becomes possible to develop metrics on these abstractions so as to derive insights about the mechanics of support. These metrics are then used to validate structural differences between supportive conversations and generic casual conversations from our baseline set, and come up with a theory for links between supportive conversations and the structure of the conversation, if we find any.
+
+
+
+\subsubsection{Semantic Alignment}
+\label{Sec:Semantic}
+We use a popular word embedding method called \textit{Word2Vec} \cite{mikolov2013distributed} which learns representations of a set of words from a corpus of text, which in our case is the text from Suicide Watch and baseline fora. These representations can be used to extract text embedding vectors for each post which belong to a $N$ dimensional space $R^N$. These vectors are tested for their alignment using cosine distance in $R^N$, which from literature is shown to correspond to the semantic similarity in the textual space. This method is quite popular and used in community based question answering\cite{mihaylov2016semanticz}, Medical semantic similarity \cite{de2014medical} and other medical informatics applications\cite{zhu2017semantic}.
+We first train two independent word2vec models on the Suicide watch and Front page post corpora. 
+We then extract the word embedding vectors for each post using Doc2Vec\cite{le2014distributed}, which extends the word embeddings to represent a whole document or paragraph. We extract these embedding vectors for each post in $R^N$ for all the posts across the complete hierarchy of threads. We then quantify the edge weights of each interaction amongst the reply tree as the cosine distance between the response post and the hierarchically higher post, to which the responder has posted to. This captures the semantic alignment between the hierarchically adjacent responses. 
+More formally, if user $V_i$ has responded with post $P_i$ to a post $P_j$ by user $V_j$, the edge weight of of edge $E_{ij}$ in the corresponding reply graph would be
+
+$$ W_{ij} = \frac{V_i . V_j}{\|V_i\|_2 \|V_j\|_2} $$
+
+
+This metric standardizes all edge weights between 0.0 and 1.0, 1.0 implying that the posts $P_i$ and $P_j$ are most aligned, and 0.0 implying the post have least semantic similarity. 
+This metric abstracts out the content of the post, in terms of semantics which can then be used as edge weights in the graph abstractions.
+
+
+
+\subsubsection{Centrality}
+\label{Sec:Centrality}
+For this metric we use the User Graphs. Node centrality is a metric that measures how central a node is in a network. It directly reflects the importance of the node when it comes to membership of the shortest connecting paths between all the nodes in the graph. More formally, we use betweenness centrality of a node which is defined as 
+$$
+g(v) = \sum_{s \neq v \neq t}\frac{\sigma_{st}(v)}{\sigma_{st}}
+$$
+where $\sigma_{st}(v)$ is the total number of shortest paths from node $s$ to node $t$ and $\sigma_{st}$ is the number of those paths that pass through $v$. To understand whether the thread starters ($OP$) have a special place in the network, we evaluate both centrality of the node corresponding to the $OP$, as well as median centrality across all the nodes in a user graph.
+
+\subsubsection{Symmetrical users}
+We define a symmetric user and a symmetric edges for user graphs. For a user $V_i$ in the user graph $G\{V,E,W\}$ as described in Section
+, a symmetric user is a user who interacts with any user $V_o$ or the $OP$ and receives a response back from that user or the $OP$. We find the fraction 
+$$
+U_{sym}=\frac{\textit{total number of symmetric users }}{\textit{Total users in a thread}}
+$$
+
+\subsubsection{Urgency}
+To understand the urgency in how Suicide watch subreddit users responds to the $OP$ and each other, compared to the baseline threads on the Frontpage, we calculate differences between the posting times between consecutive response messages in a reply graph. We then compute the median response times per thread, for posts in response to any $OP$ authored posts and in general across all other post responses. 
+
+\subsubsection{Branching Factor}
+\label{Sec:Branching}
+Branching factor is a quantity that reflects the fan out of a conversation as it evolves.
+To measure this phenomena, we use the reply graphs, which resemble a n-ary tree, to evaluate the branching factor. The branching factor is formally described as 
+$$\tau = \frac{1}{|D|} \sum_{d \in D}^{} \frac{1}{|N_d|} \sum_{n\in N_d}^{} \textit{InDeg}(n)$$
+
+\subsubsection{Median semantic alignments}
+\label{Sec:Semantic_alignment}
+This metric quantifies the overall semantic alignment between response posts across a particular conversation thread. For any reply graph $R\{P,E,W\}$, we compute The median of all the edge weights calculated using the definition of semantic alignment 
+This metric quantifies the overall semantic alignment in a conversation. We also do the same calculation between responses to any post authored by the $OP$ to test whether responses to $OP$ demonstrate any special pattern of all alignment in supportive vs generic threads.
+
+
+
+\section{Macroscopic analysis: at conversational level}
+
+Through our analysis we find several discriminatory factors among Suicide watch conversations and generic front page conversation. We show that some of these factors are archetypal of suicide watch conversations such that they are over-expressed in suicide watch conversations to a very high degree. We also show that certain properties of these conversations can be backed by sociological theories of real life support conversations. 
+
+\subsection{Peculiarity of threads of Support}
+We begin by characterizing the two networked abstractions, namely Reply Graphs and Interaction graphs as described in Section \ref{Sec:Abstractions}. We do so by first comparing these two abstractions with a baseline control conversation threads using certain macroscopic network properties. 
+
+\subsubsection{Responses to $OP$ are very urgent in supportive setting}
+Understanding the inter message times can act as a good proxy for the urgency in a conversation. To understand how Suicide watch subreddit users responds to a $OP$ and other users as compared to other sub-reddit threads on the frontpage, we calculate differences between the posting times between consecutive messages in a reply graph. Figure \ref{fig:urgency} shows comparison using CDFs of inter-message response times for SW and FP threads. It can be seen that SW $OP$ are responded with the highest urgency amongst the 4, especially compared to either the $OP$ or any other users or sub-reddits. 
+
 \begin{figure}[!ht]
-\includegraphics[width=0.5\linewidth ]{SUParticipationTriangles.png}
-\label{fig:TriCorr}
+    \centering
+    % \hspace*{-5mm}
+    \subfloat[]{
+        \includegraphics[width=0.4\textwidth ]{Urgency.png}
+        \label{fig:urgency}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.4\linewidth ]{SymUsers.png}
+        \label{fig:sym}
+    }
+    
+    \subfloat[]{
+        \includegraphics[width=0.4\linewidth ]{centrality.png}
+        \label{fig:centrality}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.4\linewidth ]{topicalAlignment.png}
+        \label{fig:topical}
+    }
+    
+    \subfloat[]{
+        \includegraphics[width=0.4\linewidth ]{branchingFactor.png}
+        \label{fig:branching}
+    }
+    
+    
+    \caption{Panel shows CDFs of different network metrics. Fig.\ref{fig:urgency} shows the response time distributions, Fig.\ref{fig:sym} shows symmetrically engaged users, Fig.\ref{fig:topical} shows topical similarities across posts and \ref{fig:branching} shows the branching factors of reply graphs. }
 \end{figure}
+
+\subsubsection{Interactions on suicide watch forums are statistically more symmetric}
+Despite signs of urgency and engagement, we ask the question: what percentage of conversations happening on these subreddits are symmetric in nature ? 
+For this The median value for $U_{sym}$ for SW is 20\% where as for AS is 0\%. This shows that SW subreddit engages is a lot more symmetric conversation that the baseline threads.
+If we define a set of users who engage in symmetric activity with the $OP$ , it would be worth while to investigate how much of the total message activity on the thread is carried out by these set of symmetric users . To calculate this we find the fraction of messages on each thread written as part of this symmetric conversation. Figure \ref{fig:sym} shows the trend. It can be see that SW threads contain a higher prevalence of symmetric message exchanges compared to the baseline Frontpage threads. This shows a higher engagement from the $OP$s side when participating in a supportive conversations
+
+\subsubsection{ $OP$ is the most central user in supportive conversations}
+To understand how embedded is the $OP$ in a conversation thread, we compare the betweenness centralities of $OPs$ in the $SW$ dataset with the baseline $FP$ dataset. 
+Betweenness centrality is a good proxy of understanding how closely linked is a node with the rest of the network. When we calculate this metric for the user graphs we see that Suicide watch $OP$s tend to have highest centralities compared to generic $FP$ threads moth in terms of $OP$ centrality as well as median centrality across all the users. The high centrality of $OP$s in $SW$ conversations implies a high level of embedded-ness as well as a $OP$ centric approach by other participants in the conversation. The Figure \ref{fig:centrality} shows the Empirical CDFs of centralities. 
+
+\subsubsection{Supportive responses are semantically aligned, more so when they are in response to the $OP$}
+We measure semantic alignment based on word embeddings of the source post and the reply post, at every edge of the reply graph. The detailed method of extracting semantic alignment along a post and its response is described in Section \ref{Sec:Semantic}. Extracting such similarity metrics, we compare the trend in response text being in semantic alignment with the parent text in the reply graphs. 
+
+
+\subsubsection{Supportive conversations branch out considerably less compared to baseline}
+Branching in a conversation thread could be either a sign of digression or a sign interestingness resulting in more people joining in. To measure this phenomena, we use the reply graphs, that mimic the conversation structure of the threads. By using the method described in Section \ref{Sec:Branching}, we found that Suicide watch threads, tend to branch less as compared to our baseline conversations. This implies that suicide watch threads tend to remain on topic and more often than not, a one-on-one conversation. Albeit many such dialogues may emerge with many participants, and hence that explains the high centrality of the $OP$ in all user interaction graphs. If the participants on a thread seldom interact amongst themselves, the corresponding interaction graph will have the $OP$ as the most central node.
+
+
+
+\section{Mesoscopic analysis: Anchored triadic motifs. }
+\label{Sec:motif}
+
+\begin{figure*}[!ht]
+    \centering
+    % \hspace*{-5mm}
+    \subfloat[]{
+        \includegraphics[width=\textwidth]{AnchoredMotifs_2.pdf}
+        \label{fig:motifs}
+    }
+    
+    \caption{ Figure \ref{fig:motifs} shows the 36 different types of Anchored Triadic motifs that are looked for in the user graph data. The motifs with \textbf{green boxes} are \textbf{over expressed in the baseline dataset} by significant amount. The motifs with \textbf{red boxes} are \textbf{over-expressed in the Suicide watch dataset} by significant amount. The motifs with \textbf{grey boxes} are present in significant numbers in both datasets, but neither over nor under expressed in any datasets based on their Z scores. The motifs in \textbf{grey hatched boxes} are very rare in both the baseline and suicide watch datasets, with less than 5 mean occurrences per graph per bin. 
+    }
+    \label{Fig:motifs}
+\end{figure*}
+
+
+Network motifs are local sub-networks between 2 or 3 nodes. Such local patterns are highly useful in quantifying local interactions and the resulting macro structure of the network\cite{milo2002network}. They have been used in a variety of applications and networks, from economics \cite{zhang2014dynamic} to cellular protein-protein interaction networks \cite{yeger2004network}. These local interaction patterns have been studied before, and have been fundamental in the study of social structural processes\cite{faust20077}. They help social scientists quantify the type of hierarchies in the social network\cite{davis1967clustering,davis1967structure}. 
+But in the setup of a typical support community network like r/SuicideWatch, the conversation shows clear distinction between the users who respond to a call for help and the user/s who are asking for help. In the case of Reddit we define the former as the $OP$ who starts the conversation thread. For this reason, we changed the definition of the triadic motifs to accommodate the role of a node around which the motif is developed in the due course of the conversation. 
+In conventional literature, the local interactions are measured in terms of census of 16 triadic motifs\cite{faust20077}, which cover all possible patterns of non-isomorphic graphs, or graphs which cannot be mapped or morphed into each other. In this method, there is no special treatment to any node, and positional parity of all nodes is treated equally. This means, role of a node in the conversation cannot be incorporated in this analysis. For this reason, we build on top of this methodology but by introducing anchors, or nodes with special importance. This is because, we would like to know how a graph evolves around the person in distress or the $OP$ in our case. A symmetric link with the $OP$ implies that the $OP$ is part of a to and fro communication, however a triad with a symmetric link between two non-$OP$ nodes implies that the conversation does not involve the $OP$. 
+By fixing a role for a node in a motif, each of the 16 triadic motifs as seen and developed in the field\cite{faust20077, holland1977method}, can be unravelled into 36 sub-variants of these motifs by varying the anchored node, as seen in Fig \ref{Fig:motifs}. Each sub-variant is different from the other from the perspective of the anchored node. The resulting motifs to measure grow from 16 to 36, since some anchored motifs are iso-morphic, which means they look identical to some other motif from the perspective of the anchor. These motifs are then counted using custom tweaked census methods based on Bataglej et.al's work\cite{Batagelj2001}.
+Each motif as seen in Figure \ref{fig:motifs} is named using a particular recipe. The first three letters, follow a M-A-N pattern which signifies the number of "\textbf{M}utual" , "\textbf{A}symmetric" or "\textbf{N}ull" edges present in that particular triad. E.g. the motif 030 has 0-Mutual(bi-directional), 3-Asymmetric(unidirectional) and 0-Null(disconnected) edges. There are some motifs with an added letter modifier attached, to signify the flow of information in the triad. The naming is done in accordance with Holland et. al's work\cite{doi:10.1177/104649647100200201}.
+
+
+To methodically understand the over or under expression of these anchored triadic motifs in the suicide watch community, we use the user interaction graphs for the Front page baseline posts as a control group. We analyse 10,000 user interaction graphs each for the baseline and the suicide watch datasets.
+We progressively select graphs with variable sizes i.e. number of users present in the interaction graphs. We do so by binning each dataset in ranges of graph sizes in increments of 5 nodes per bin. The resulting graphs would fall in the following 7 bins, with increasing number of nodes present : 1 - 5 , 6 - 10 , 11 - 15 , 16 - 20 , 21 - 25, 26 - 30, 31 - 35 and 36 - 40. We stop sampling above 40 nodes per graph, as the population of conversations that contain more than 40 unique users participating is extremely scarce for both the datasets.
+We then do the census for the 36 unrolled motifs for each of these bins, for both the datasets. 
+Once the census is done, we calculate $Z_{scores}$ for the Suicide watch conversations, using Baseline conversations as the null model, to understand over or under expressions of certain motifs. 
+For any given bin $B_I$, let there be $k$ baseline graphs that fall in that particular bin noted by $G_{BL}$ , and let there be $n$ suicide watch graphs falling in the same bin signified by $G_{SW}$. For such a setup, let $M_{BL}$ signify a vector of $k$ elements, where each element is the total number of occurrences of particular motif $m$ in each graph from the set $G_{BL}$. With this sample of graphs as the null model, the mean would be $\mu_{null} = \frac{1}{k}\sum_{m_i \in M_{BL}}^{}m_i$ , where $m_i$ is the count of motif $m$ in the $i^{th}$ graph in  $G_{BL}$. The standard deviation $\sigma_{null}$ is $std(M_{BL})$
+Once we have the null model parameters for the baseline graphs for a particular bin, we calculate $Z_{scores}$ for all the graphs from suicide watch samples $G_{SW}$ from the same corresponding bin as random variable $Z$ where the $i^{th}$ element is the $Z_{score}$ for graph $i$ in $G_{SW}$. The score is calculated by the following formula 
+
+$$ Z_i = \frac{m_i^{sw} - \mu_{null}}{\sigma_{null}} $$ 
+
+where $m_i^{sw}$ is the total number of occurrences for motif $m$ in the $i^{th}$ graph for the suicide watch samples. We then plot the mean of random variable $Z$ and the standard error in $Z$ to understand the over/under expression trends.
+
+
+\subsection{Patterns in local interactions}
+It is often useful to express large interaction graphs, as the sum of local interactions between two or three nodes at a time. This method is quite prevalent in the Social sciences, for studying social structures by looking at local interaction between agents\cite{faust20077}. Such analysis is quite useful in expressing local structures in the graphs and has been used in several network analysis works\cite{wang2014triadic,shizuka2015network}.
+For this reason we conduct a census of the 36 Anchored triadic motifs (described in Section \ref{Sec:motif}) across all the selected graphs. From the amount of over or under expression of the network motifs, researchers have made inferences about the nature of local interaction. They do so by comparing the amount of density of each triad in a real network as against the expected quantity in a null model based on the number of edges\cite{faust20077}. 
+We perform binning of user graphs as described before in Section \ref{Sec:motif}, and perform over or under expression analysis in comparison with the baseline null model, using Z-scores of the motif occurrences.
+
+
+
+\begin{figure*}[!ht]
+    \centering
+    
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{021U-a_SW.png}
+        \label{fig:021U-a}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{021U-b_SW.png}
+        \label{fig:021U-b}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{111D-b_SW.png}
+        \label{fig:111D-b}
+    }
+    
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{111D-c_SW.png}
+        \label{fig:111D-c}
+    }    
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{201-a_SW.png}
+        \label{fig:201-a}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{201-b_SW.png}
+        \label{fig:201-b}
+    }
+    
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{012-b_BL.png}
+        \label{fig:012-b}
+    }	
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{021C-c_BL.png}
+        \label{fig:021C-c}
+    }
+    \caption{This panel shows the Z-scores of the abundant and over expressed Anchored motifs found in both datasets. There are variants which are over expressed in Suicide watch (Like figures \ref{fig:021U-a},\ref{fig:021U-b},\ref{fig:111D-b},\ref{fig:111D-c}, \ref{fig:201-a},\ref{fig:201-b}), which form the top six plots. The bottom 2 plots show motifs which are over expressed in the Baseline over Suicide watch, as their Z-scores are negative.  Figure \ref{fig:012-b} and Figure \ref{fig:021C-c}.
+    }
+    \label{Fig:motif_expressed}
+\end{figure*}
+
+
+\begin{figure*}[!ht]
+    \centering
+    
+    \subfloat[]{
+        \includegraphics[width=0.4\linewidth]{motifLifetimes}
+        \label{fig:motifDist}
+    }
+
+    \subfloat[]{
+        \includegraphics[width=0.4\linewidth]{Conversation_progress}
+        \label{fig:convProgress}
+    }
+     \caption{\textsl{ Figure ~\ref{fig:motifDist} shows the plot for mean motif life times as a fraction of the entire thread life. The lifetime is measured as the time at which the latest edge of motif is formed. The Figure ~\ref{fig:convProgress} shows a toy example of what sort of dialogue exchange could lead to the motif lifetime distributions seen in Figure~\ref{fig:motifDist}}}
+     
+\end{figure*}
+     
+
+
+
+We find that anchored motif variants \textbf{021U-a, 021U-b, 111D-b, 111D-c, 201-a and 201-b} are significantly over expressed in suicide watch conversations across all sizes of graphs as seen from figures \ref{fig:021U-a},\ref{fig:021U-b},\ref{fig:111D-b},\ref{fig:111D-c}, \ref{fig:201-a},\ref{fig:201-b}. Similarly anchored motif variants \textbf{012-b and 021C-c} are significantly over expressed in the null model(baseline) graphs across all sizes.
+
+From previous studies on triadic structure, it was inferred that transitive triads are naturally more common than expected in social structures of . Interestingly, our analysis shows that transitive triads are rarer in Suicide watch, as against the baseline conversations. 
+
+These patterns in local interactions indicate that conversations in suicide watch tend to be more $OP$ centric, with non-transitive dialogues between users who respond to a call for help. More so, the $OP$ tends to be highly central in the conversation as well as part of several mutual interactions. These behaviours are highly particular to r/Suicidewatch when compared with the baseline conversations.
+
+
+\section{Conclusions and Outlook}
+
+\begin{figure}[htb]
+    \renewcommand{\thesubfigure}{\arabic{row}.\alph{subfigure}}%
+    \centering
+    \setcounter{row}{1}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{030C-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{300-s.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{012-a.png}
+    }
+    
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{012-c.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{102-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{102-b.png}
+    }
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{021D-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{021D-b.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{021C-a.png}
+    }
+    
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{021C-b.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{111D-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{111U-a.png}
+    }
+    
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{111U-b.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{111U-c.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{120U-a.png}
+    }
+\end{figure}
+
+
+\begin{figure}[htb]\ContinuedFloat
+    \renewcommand{\thesubfigure}{\arabic{row}.\alph{subfigure}}%
+    \centering
+    
+    \setcounter{row}{6}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{030T-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{030T-b.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{030T-c.png}
+    }
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth]{120D-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{120D-b.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{120U-a.png}
+    }
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{120U-b.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{120C-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{120C-b.png}
+    }
+    
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\textwidth ]{120C-c.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{210-a.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{210-b.png}
+    }
+    
+    \stepcounter{row}%
+    \subfloat[]{
+        \includegraphics[width=0.33\linewidth ]{210-c.png}
+    }
+    
+    \label{fig:Rare_motifs}
+    \caption{ This figure lists out all the insignificant Anchored motifs, either by the virtue of rare occurance (<5 mean motifs per bin) or by account of low Z-score. }
+\end{figure}
+
+
+
+
+
+
+
+
 

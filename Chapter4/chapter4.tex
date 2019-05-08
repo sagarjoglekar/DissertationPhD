@@ -1,486 +1,555 @@
-\chapter{Mesoscopic View: Perceived social support}
-\label{chap:structure_support}
+\chapter{Part 2: Perceptions in real spaces}
+\label{chap:quant_perception}
 
 % **************************** Define Graphics Path **************************
 
-\graphicspath{{Chapter4/plots/}}
+\graphicspath{{Chapter4/plots/} {Chapter4/plots/examples/} {Chapter4/plots/GAN_examples/}}
+    
+There has been an explosive growth of deep learning technologies and their competency in the recent years, resulting in cross disciplinary use cases of deep learning enabled tools. In the area of computer vision and urban informatics, deep learning techniques have recently been used to predict whether urban scenes are likely to be considered beautiful, and it turns out that these techniques do so quite accurately. However, the technology falls short when it comes to generating actionable insights for AI assisted urban design. To support urban interventions, one needs to go beyond \emph{predicting} beauty, and tackle the challenge of \emph{recreating} beauty and \emph{explaining} the predictors of beauty.  Unfortunately, deep learning techniques have not been designed with that challenge in mind. Given their ``black-box nature'', they cannot even explain why a scene has been predicted to be beautiful. To partly fix that, we propose a deep learning framework (which we name  FaceLift) that is able to both \emph{beautify} existing Google Street views and \emph{explain} which urban elements make those transformed scenes beautiful. To quantitatively evaluate our framework, we cannot resort to any existing metric (as the research problem at hand has never been faced before) and need to  formulate new ones. These new metrics should ideally capture the presence (or absence) of elements that make urban spaces great. Upon a review of the urban planning literature, we identify four main metrics: walkability, green, openness, and visual complexity.  For all the four metrics, the beautified scenes meet the expectations set by the literature on what great spaces tend to be made of. The transformations and their explanations are also found to be very helpful in understanding interventions for beautification, which we validate using a 20-participant expert survey. These results suggest that, in the future, as our framework's components are further researched and become better and more sophisticated, it is not hard to imagine technologies that will be able to accurately and efficiently support architects and planners in the design of the spaces we intuitively love.
+
 
 \section{Introduction}
 
-The world has become more connected over the past decades thanks to the networked nature of the technologies of the day. It is seldom possible to spend a whole day without single interaction on the Internet. The Internet gives platforms where we can not only connect with our social counterparts but also exchange ideas and express opinions. These new mediums have become so ubiquitous, that some research suggests that they might be affecting our broader psychological state \cite{d20122}. But on the positive side, studies have also proposed different ways in which this medium could be used for measuring and intervening in the matters of mental health\cite{DeChoudhury2016,DeChoudhury2014}.
-Online communities, or fora, offer a platform for users to directly interact with each other. Reddit\footnote{\url{http://reddit.com/}} is one of the largest online communities which contains a number of sub-communities (so called \emph{subreddits}) that can be about almost anything. On this platform, several subreddits are specifically tailored to mental health-related topics, such as \emph{depression}, \emph{anxiety} or \emph{alcoholism}. These fora offer a unique opportunity to study the way people describe or discuss their problems in their own voice.
 
-One of the most challenging, and devastating, global mental health concerns is suicide. Suicidal behaviour includes any thoughts, plans or acts someone makes towards ending their life. In health care services, preventing death by suicide is a priority, but accurately predicting whether or not someone is at risk of committing suicide is difficult. Moreover, a large proportion of deaths by suicide occur in populations that have never been seen by health service providers.\note{you could probably improve the section above...}
-
-Several online platforms are used for expressing suicidal thoughts and reaching out for support. On Reddit, the subreddit \emph{SuicideWatch} currently\footnote{As of 27th June 2018} has almost 94k subscribers, and is a moderated forum that is intended to offer peer support for people at risk of, or are worried about others', suicidal behaviour. The moderators take the message of peer support seriously, and are governed by guidelines that prohibits false promises, abuse, tough love and other clinically frowned upon methods of conversations\footnote{\url{http://www.bbc.co.uk/newsbeat/article/35577626/social-media-and-suicide-what-its-like-being-a-moderator-on-rsuicidewatch} }
-
-As such it is valuable to understand what characteristics supportive communities like SuicideWatch have, and in what aspects such communities are similar or dis-similar from other casual subreddit conversations. 
-
-%\st{Also given that several of these subreddits that deal with mental health have been studied and proven to help\footnote{https://gizmodo.com/reddit-is-helping-some-people-deal-with-their-mental-he-1825364592}} \cite{Kavuluru:2016:CHC:2975167.2975170,park2018examining}, \st{it is important to dissect and characterize these online conversation threads to understand major differences in terms of structure.}
-%\remSVi{Another relevant paper mentioned in the gizmodo piece: \cite{info:doi/10.2196/jmir.8219}}
-Recent studies have shown promising results in modeling and measuring signals and patterns in reddit communities related to mental health. For instance, statistical relations of mental health and depression communities with suicidal ideation have been studied \cite{DeChoudhury2014,DeChoudhury2016}. The authors explored linguistic and social characteristics that evaluate user's propensity to suicidal ideation. Approaches to classify reddit posts as related to certain mental health conditions have also been successfully developed, showing that there are certain characteristics specific to mental health-related topics in posts that can be automatically captured\cite{gkotsis2017characterisation}. Furthermore, in a study focused on reddit posts related to anxiety, depression and post-traumatic stress disorder, the authors show that these online communities exhibit themes of supportive nature, e.g. gratitude for receiving emotional support\cite{park2018examining}. Positive effects in participation in such fora have also been shown by improvements in members' written communication\cite{info:doi/10.2196/jmir.8219}. The supportive nature of comments in the SuicideWatch forum has also been studied by automatic identification and classification of helpful comments with promising results\cite{Kavuluru:2016:CHC:2975167.2975170}.
+Whether a street is considered beautiful is subjective, yet research has shown that there are specific urban elements that are universally considered beautiful: from greenery, to small streets, to memorable spaces~\cite{alexander1977pattern, quercia2014aesthetic,salesses2013collaborative}. These elements are those that contribute to the creation of what the urban sociologist Jane Jacobs called `urban vitality'~\cite{jacobs1961death}. 
 
 
-%\st{One aspect of this is measuring} \sv{measure} signals and patterns in the data that are predictors of certain distresses. A good example\cite{DeChoudhury2014,DeChoudhury2016} looked at statistical relations of mental health and depression community with suicidal ideation. In their work, the authors explore linguistic and social characteristics that evaluate user's propensity to suicidal ideation. 
-%Another crucial and related work was carried out by \cite{gkotsis2017characterisation}, where they characterized mental health related posts on sub-reddit, and developed models to accurately predict type of condition based of informed language models.
+Given that, it comes as no surprise that computer vision techniques can automatically analyse pictures of urban scenes and accurately determine the extent to which these scenes are considered, \emph{on average}, beautiful.  Deep learning has greatly contributed to increase these techniques' accuracy~\cite{dubey2016deep}.
 
-Most previous studies have aimed at studying the \emph{content} of posts and their characteristics in relation to other posts. One important aspect of online communities is its supportive \emph{function} --- users turn to these platforms not only to express their thoughts and concerns, but also to receive support from the community. 
-\note{More references to be added in the introduction. Also, we need to add something about the Online disinhibition effect somehow.}
+However, urban planners and architects are interested in urban interventions and, as such, they wish to go beyond technologies that are only able to predict beauty scores. They have often called for technologies that would make easier to recreate beauty in urban design~\cite{de2008architecture}. Deep learning, by itself, is not fit for purpose. It is not meant to recreate beautiful scenes, not least because it cannot provide any explanation on why a scene is deemed beautiful, or which urban elements are predictors of beauty.
 
-To our knowledge, there are no studies that have specifically focused on modeling the supportive \emph{nature} of online fora related to mental health. This work takes a macroscopic perspective, to quantitatively characterise and model the nature of supportive conversations. SuicideWatch is particularly interesting because of its purpose to offer peer support to people with suicidal thoughts, and also because of the complexity of this clinical construct.
 
-Our aims in this study are to 
-\begin{itemize} 
-    \item Understand similarities and differences between a Suicide watch conversation and a generic conversation using these abstraction. 
-    \item Study global properties of these conversations in comparison with control conversations. 
-    \item User network metrics to reason about global differences in terms of local interactions between users. 
+To partly fix that, we propose a deep learning framework (which we name  FaceLift) that is able to both \emph{generate} a beautiful scene (or, better, \emph{beautify} an existing scene) and \emph{explain} why that scene is beautiful. In so doing, we make two main contributions:
+
+\begin{itemize}
+    \item We propose a deep learning framework that is able to learn whether a particular set of Google Street Views (urban scenes) are beautiful or not, and based on that training, the framework is then able to both \emph{beautify} existing views and \emph{explain} which urban elements  make them beautiful (Section~\ref{sec:framework}). These explanations are automatically extracted with computer vision tools. 
+    
+    \item We quantitatively evaluate whether the framework is able to actually produce beautified scenes (Section~\ref{sec:evaluation}). We do so by proposing a family of five urban design metrics that we have formulated based on a thorough review of the literature in urban planning. For all these five metrics, the framework passes with flying colors: with minimal interventions, beautified scenes are twice as walkable as the original scenes, for example. Also, after building an interactive tool with ``FaceLifted'' scenes in Boston and presenting it to twenty experts in architecture,  we found that the majority of them agreed on three main areas of our work's impact: decision making, participatory urbanism, and the promotion of restorative spaces.
 \end{itemize}
 
-% 1) understand the nature of the posts and replies that are posted in this forum from a clinical perspective, and 2) study the supportive nature of the forum on a global level. We do this by 1) performing a qualitative analysis of a random subset of posts [this needs to be explained somehow], 2) Develop a method of representing conversations on these forums in a computationally measurable format and 3) operationalizing a theory of community support\cite{minkler2005improving} in a data-driven approach using network topology and content feature approaches, and comparing these against a control dataset.
 
-To model the network topology in an online community, we represent conversations in a forum using graph-based abstractions (users and replies) as described in Section \ref{Sec:Abstractions}. 
-To measure global structure of these conversations, we user network topological metrics such as centrality: which measures importance of nodes in a network in terms of relaying information, branching factor: which measures how a conversation fans our over time, return distance: which measures how soon do users return back to the conversation and symmetric edges: which measures reciprocity of users in a conversation. To measure measure local interactions, we measure inter response times: which measure urgency of response to a message, semantic alignment between messages and local interaction motifs known as Triadic motifs : which gives an idea about how distinctive are interactions between subgroups of users. 
+\section{Related Work}
+\label{sec:related}
+%\ns{This needs more work.}
+Previous work has focused on collecting ground truth data about how people perceive urban spaces, on predicting urban qualities from visual data, and on generating synthetic images that enhance a given quality (e.g., beauty). 
 
-%We propose a set of metrics for network topology analysis that capture the supportive nature of online communities like SuicideWatch: thread engagement, response times, symmetric responses, centralities, topical alignment, branching factors, return distance and \sj{local user interaction structure \cite{holland1976local}}. \st{triadic motifs [not sure if we should mention these here - if we do, maybe they need brief introductions/explanations or pointers to the details in the methods section]. This method provides a means to systematically analyze these types of online communities. [We need a sentence on the main contributions too here.]}
+%\mbox{}\\
+\vspace{4pt}\noindent
+\textbf{Perception of physical spaces.} From Jane Jacobs's seminal work on urban vitality~\cite{jacobs1961death} to Christopher Alexander's cataloging of typical ``patterns'' of good urban design~\cite{alexander1977pattern}, there has been a continuous effort to understand what makes our cities livable and enjoyable.  In the fields of psychology, environmental design and behavioral sciences, research has studied the relationship between urban aesthetics~\cite{real2000classification} and a variety of objective measures  (e.g.,  scene complexity~\cite{kaplan1972rated}, presence of nature~\cite{kaplan1989experience}) and subjective ones (e.g., people's affective responses~\cite{ulrich1983aesthetic}).  
+
+%All this work showed that human perceptions of urban spaces are predictable, and that had made it possible to study cities at scale with modern statistical tools. 
+%\mbox{}\\
+
+%\mbox{}\\
+\vspace{4pt}\noindent
+\textbf{Ground truth of urban perceptions.} So far, the most detailed studies of perceptions of urban environments and their visual appearance have relied on personal interviews and the observation of city streets: for example, some researchers relied on annotations of video recordings by experts~\cite{sampson04seeing}, while others have used participant ratings of simulated (rather than existing) street scenes~\cite{lindal2012}. The Web has recently been used to survey a large number of individuals. Place Pulse is a website that asks a series of binary perception questions (such as `Which place looks safer [between the two]?') across a large number of geo-tagged images~\cite{salesses2013collaborative}. In a similar way, Quercia \emph{et al.} collected pairwise judgments about the extent to which urban scenes are considered quiet, beautiful and happy~\cite{quercia2014aesthetic} to then recommend pleasant paths in the city~\cite{quercia2014shortest}. They were then able to analyze the scenes together with their ratings using image-processing tools, and found that the amount of greenery in any given scene was associated with all three attributes and that cars and fortress-like buildings were associated with sadness. Taken all together, their results pointed in the same direction: urban elements that hinder social interactions were undesirable, while elements that increase interactions were the ones that should be integrated by urban planners to retrofit cities for happiness. Urban perceptions translate in concrete outcomes. Based on 3.3k self-reported survey responses,  Ball et al.~\cite{ball2001perceived} found that urban scenes with positive aesthetics properties  not only are visually  pleasurable but also promote walkability. Similar findings were obtained by Giles et al. \cite{giles2005increasing}.
+%\mbox{}\\
+
+\vspace{4pt}\noindent
+\textbf{Deep learning and the city.} Computer vision techniques have increasingly become more sophisticated. Deep learning techniques, in particular, have been recently used to accurately predict urban beauty~\cite{dubey2016deep,seresinhe2017using}, urban change~\cite{naik2017computer}, and even crime~\cite{DeNadai16,arietta2014city}.  Recent works have also showed the utility of deep learning techniques in predicting house prices from urban frontages~\cite{frontage}, and from a combination of satellite data and street view images~\cite{law2018take}.
+%\mbox{}\\
+
+%\mbox{}\\
+\vspace{4pt}\noindent
+\textbf{Generative models.} Since the introduction of Generative Adversarial Networks (GANs)~\cite{goodfellow2014generative}, deep learning has been used not only to analyze existing images but also to generate new ones altogether. This family of deep networks has evolved into various forms, from super resolution image generators~\cite{ledig2017photo} to fine-grained in-painting technologies~\cite{pathak2016context}. Recent approaches have been used to generate images conditioned on specific visual attributes~\cite{yan2015attribute2image}, and these images range from faces~\cite{taigman2016unsupervised} to people~\cite{ma2018disentangled}. In a similar vein, Nguyen \emph{et al.}~\cite{nguyen2016synthesizing} used generative networks to create a natural-looking image that maximizes a specific neuron. This method was used to bring out the latent representation of an image, that maximizes its probability of a particular class. In theory, the resulting image is the one that ``best activates'' the neuron under consideration. In practice, it is still a synthetic template that needs further processing to look realistic.   Finally, with the recent advancement in Augmented Reality, the application of GANs to generate urban objects in simulated urban scenes have also been successfully shown~\cite{alhaija2018augmented}. 
+%\mbox{}\\
+
+%\mbox{}
+\vspace{4pt}
+To sum up, a lot of work has gone into collecting ground truth data about how people tend to perceive urban spaces, and into building accurate predictions models of urban qualities. However,  little work has gone into models that generate realistic urban scenes and that offer human-interpretable explanations of what they generate. 
 
 
 
 
-\begin{table}
-    \resizebox{0.5\linewidth}{!}{
+\section{FaceLift Framework}
+\label{sec:framework}
+
+\begin{table}[t]
+    \resizebox{0.7\linewidth}{!}{
         \begin{tabular}{l|p{8cm}}
-            \textbf{Terminology} & \textbf{stands for}\\
-            $RP$   & Root post which begins a new thread on a subreddit \\
-            $OP$  & Original poster who posts the Root post for a thread \\
-            $SW$ & The suicide watch Subreddit \\
-            $FP$  & Front page of Reddit. \\
+            \textbf{Symbol} & \textbf{Meaning}\\
+            $I_i$    & Original urban scene \\
+            $Y$    & Set of annotation classes for urban scenes (e.g., beautiful, ugly)\\
+            $y_i$    & Annotation class in $Y$ (e.g., beautiful) \\
+            $\hat{I_j}$ & Template scene (synthetic image) \\
+            $I'$ & Target Image \\
+            $C$ & Beauty Classifier \\
+            %$R$ & Images acquired by rotating Street view camera \\
+            %$T$ & Images acquired by translating street view camera\\
+            %$\rho$ & Similarity bound below which smart augmentation chooses translated images \\
+            & \\
+            %			\textbf{term} & \textbf{stands for}\\
+            %			\textit{Template Image} $\hat{I_j}$    & A synthetic transformation of input image $I$ towards the class $y_j$ \\
+            %			\textit{Target Image} $I'$    & The natural image which is most visually similar to the template image \\
+            %		%	\textit{ Data Clustering}    & A process which groups images in $X$ according to visual similarity (e.g urban vs rural)\\
+            %			\textit{Data Augmentation}    & A process of data expansion which looks for images taken in the surroundings of the georeferenced images in $X$\\
+            %			\textit{Classifier}   & A deep-learning framework that is able to classify images into one of the classes in $Y$\\
+            %			\textit{Generator} $(GAN)$    & A deep-learning based image generator \\% framework to produce images similar to the ones in  $X$\\
+            %			$DGN-AM$    & A framework that, given the GAN and the Classifier, transforms an input image into the template image.\\
     \end{tabular}}
-    \caption{Notations and Terms.}
-    \label{notations}
+    \caption{Notations}\label{notations}
 \end{table}
 
-% \st{In this work we measure the phenomenon of social support in online communities that deal with suicidal thoughts and suicidal expressions. We do this by a data driven study of Suicide Watch sub-reddit and baseline it using a large random collection of reddit threads from the Front page of the Reddit website. We in the process of measuring, try to ope rationalize a well establish theory on off-line support from literature \cite{minkler2005improving} using network topology and content features and show that the measures developed off-line hold true for this particular supportive community}
-
-
-%% SV: to add: condense the punchline and the main methods and contributions. 5 main steps - network structure would be the typical network analysis which actually doesn't show anything in these datasets, but with the subsequent methods proposed here, significant differences are shown, and they provide a means to systematically analyze these types of communities
-
-% This work takes a macroscopic perspective, it shows the nature of supportive conversations. This could be used to find conversations that seem to be supportive and this could be used to study the content of these to better understand - also to automatically create datasets for - precurated - for analysis and annotation of content. How is this useful for someone like Rina? Could this (motifs) be used to inform the design of therapy groups? (Put in discussion) There are certain motif structures that are important in supportive conversation - would this translate to online conversations? 
-% this is a way to elicit something that has been done qualitatively previously
-% group support online
-% follow-up studies: are specific motif structures particularly supportive? 
-% real-time graphical display? evolving communication structure that could be used by moderators? how does the moderation work today?
-
-
-
-\section{Results}
-Particularly Suicide watch community consists of over 78k subscribers and reader, however is supported by mere 12 Moderators according to the latest count. The moderators are mainly present to prevent any kind of abuse, trolling or non-clinical or non-productive advices. These moderators do not have any form of formal training. However through several accounts they have confessed to learn through interactions and mentorship from more senior moderators on the site\footnote{\url{https://bbc.in/24rJYQH}} All the moderators have been in that role for at least 3 years and the oldest goes as far as December 2008. 
-
-Our study is based on all conversations on SuicideWatch.
-We represent these conversations through networked abstractions as described in \ref{Sec:Abstractions}.
-
-Through our analysis we find several discriminatory factors among Suicide watch conversations and generic front page conversation. We show that some of these factors are predictive of suicide watch conversations to a very high degree. We also show that certain properties of these conversations can be backed by sociological theories of real life support conversations. 
-
-\subsection{Peculiarity of threads of Support}
-We begin by characterizing the two networked abstractions, namely Reply Graphs and Interaction graphs as described in Section \ref{Sec:Abstractions}. 
-We do so by first comparing these two abstractions with a baseline control conversation threads using certain macroscopic network properties. 
-We first compare the number of unique users per thread. The two communities exhibit considerable difference. SW Sub-Reddit has a median of 5 users per thread and a mean of 6.7 users and BL threads have a median of 25 users and mean of 50 unique users. So this off the bat indicates that Suicide watch conversations are more intimate and involve less participants. Authors tend to participate on a similar level, with a median participation per author of Suicide Watch to be 5 and for baseline conversations to be 3.
-
-\subsubsection{How urgent are user responses?}
-Understanding the inter message times can act as a good proxy for the urgency in a conversation. To understand how Suicide watch subreddit users responds to a $OP$ compared to other sub-reddit threads on the frontpage, we calculate differences between the posting times between consecutive messages in a reply graph. Figure \ref{fig:urgency} shows comparison using CDFs of inter-message response times for SW and FP threads. It can be seen that SW $OP$ are responded with the highest urgency amongst the 4, especially compared to either the $OP$ or any other users or sub-reddits. 
-
-\begin{figure}[!ht]
+\begin{figure*}[ht]
     \centering
-    % \hspace*{-5mm}
-    \subfloat[]{
-        \includegraphics[width=0.4\textwidth ]{respTimeDist.png}
-        \label{fig:urgency}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth ]{SymUsers.png}
-        \label{fig:sym}
-    }
-    
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth ]{AllCentralities.png}
-        \label{fig:centrality}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth ]{medianTA.png}
-        \label{fig:topical}
-    }
-    
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth ]{meanBranchingFactor.png}
-        \label{fig:branching}
-    }
-    
-    
-    \caption{Panel shows CDFs of different network metrics. Fig.\ref{fig:urgency} shows the response time distributions, Fig.\ref{fig:sym} shows symmetrically engaged users, Fig.\ref{fig:topical} shows topical similarities across posts and \ref{fig:branching} shows the branching factors of reply graphs. }
+    \includegraphics[width=\linewidth]{facelift-pipeline-2x.png}
+    \caption{An illustration of the FaceLift framework.}
+    \label{fig:framework}
+\end{figure*}
+
+%****************************************
+The main goal of FaceLift is to beautify an existing urban scene. To meet that goal, it performs five steps: 
+\begin{description}
+    \item \textbf{Step 1 Curating urban scenes.} Deep learning systems need considerable amounts of training data. To augment our initial set of data, we develop a new way of curating and augmenting the number of annotated images.  
+    \item \textbf{Step 2 Training a beauty classifier.} We design and train a deep learning model that is able to distinguish beautiful urban scenes from non-beautiful ones. 
+    \item \textbf{Step 3 Generating a synthetic beautified scene.} Based on our classifier's learned representation of beauty, we train a generative model that is able to generate a  beautified version 
+    of an urban scene in input. 
+    \item \textbf{Step 4 Retrieving a realistic beautified scene.} The generated image has a ``synthetic look'' and, as such, does not look realistic (Figure\ref{fig:framework}). To fix that, we retrieve the image in our set  most similar to the generated image. 
+    \item \textbf{Step 5 Identifying the urban elements characterizing the beautified scene.} In the final step, the framework explains changes introduced in the transformation process in terms of addition and removal of specific urban elements. 
+\end{description}
+%1) curating urban scenes; 2) training a beauty classifier; 3) generating a synthetic beautified scene; 4) returning a realistic beautified scene; and 5) identifying the urban elements characterizing the beautified scene. 
+%\ns{You need a bit more detail here. First sentence says what you are going to achieve. But you need to motivate why these specific five steps will achieve this goal.}
+
+
+%****************************************
+\subsection*{Step 1 Curating Urban Scenes}
+\label{Sec:dataset}
+To begin with, we need highly curated training data with labels reflecting urban beauty. We start with the  Place Pulse dataset that contains 100k Google Street Views across 56 cities around the world~\cite{dubey2016deep}. These scenes are labeled in terms of whether the corresponding places are likely to be perceived beautiful, depressing, rich, and safe. We focus only on those scenes that are labeled in terms of beauty and that have at least three judgments. This leave us with roughly  20,000 scenes. To transform judgments into beauty scores, we use the TrueSkill algorithm~\cite{herbrich2007trueskill}, which gives us a way of partitioning the scenes into two sets (Figure \ref{fig:Trueskill}): one containing beautiful scenes, and the other containing ugly scenes. The resulting set of scenes is too small for training any deep learning model without avoiding over-fitting though. As such, we need to augment such a set. 
+
+We do so in two ways. First, we feed each scene's location into the Google Streetview API to obtain  the snapshots of the same location at different camera angles (i.e., at $\theta \in {-30^{\circ}, -15^{\circ} , 15^{\circ} , 30^{\circ} }$). However, the resulting dataset is still too small for robust training. Therefore, again, we feed each scene's location into the Google Streetview API, but we now do so to obtain other scenes at  distance $d \in \{10,20,40,60\}$ meters.  This will greatly expand our set of scenes, but it might do so at the price of introducing scenes whose beauty scores have little to do with the original scene's. To fix that, we take only the scenes that are \emph{similar} to the original one (we call this way of augmenting ``conservative translation''). To compute the similarity between a pair of scenes, we represent the two scenes with visual features derived from the FC7 layer of PlacesNet and compute the similarity between the two corresponding feature vectors~\cite{zhou2014learning}. For all scenes at increasing distance $d \in \{10,20,40,60\}$ meters,  we take only those whose similarity scores with the original scene is above a threshold. In a conservative fashion, we choose that threshold to be the median similarity between rotated and original scenes (those of the first augmentation step). 
+
+To make sure this additional augmentation has not introduced any unwanted noise, we consider  two sets of scenes: one containing those that have been taken during this last step, i.e., the one with high similarity to the original scenes (\emph{taken-set}), and the other containing those that have been filtered away (\emph{filtered-set}). Each scene is then scored with PlacesNet~\cite{zhou2014learning} and is represented with the five most confident scene labels. We then aggregate labels at set level by computing each label's frequency on the \emph{taken-set} %minus that on the 
+and on the \emph{filtered-set}. Finally, we characterize each label's propensity to be correctly augmented as: 
+$ \textrm{prone}(label)= fr(label,\textrm{\emph{taken-set}}) - fr(label,\textrm{\emph{filtered-set}}).$
+This reflects the extent to which a scene with a given label is prone to be augmented or not. From Figure~\ref{fig:augmentationSimilarity}, we find that, as one would expect, scenes that contain highways, fields and bridges can be augmented at increasing distances while still showing resemblances to the original scene; by contrast, scenes that contain gardens, residential neighborhoods, plazas, and skyscrapers cannot be easily augmented, as they are often found in high density parts of the city in which diversity within short distances might well be experienced. 
+
+%\ns{You probably want to reword this: It is amenable to augmentation, not prone to. Also why is this being done at a set level? If you always find bridges next to viaducts and viaducts next to bridges, and if your translation step moves from one to another, then the set-level score will not detect this. If instead you check whether the placesnet\_label of the translated image is the same as that of the original, then you are OK, as long as placesnet\_label can be be believed.}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.7\columnwidth]{Trueskill.png}
+    \caption{Frequency distribution of beauty scores. The red and green lines represent the thresholds below and above which images are considered ugly and beautiful. Conservatively, images in between are discarded.}
+    \label{fig:Trueskill}
 \end{figure}
 
-\subsubsection{How symmetric are the interactions?}
-Despite signs of urgency and engagement, we ask the question: what percentage of conversations happening on these subreddits are symmetric in nature ? 
-For this The median value for $U_{sym}$ for SW is 20\% where as for AS is 0\%. This shows that SW subreddit engages is a lot more symmetric conversation that the baseline threads.
-If we define a set of users who engage in symmetric activity with the $OP$ , it would be worth while to investigate how much of the total message activity on the thread is carried out by these set of symmetric users . To calculate this we find the fraction of messages on each thread written as part of this symmetric conversation. Figure \ref{fig:sym} shows the trend. It can be see that SW threads contain a higher prevalence of symmetric message exchanges compared to the baseline Frontpage threads. This shows a higher engagement from the $OP$s side when participating in a supportive conversations
 
-\subsubsection{How central are the users?}
-To understand how embedded is the $OP$ in a conversation thread, we compare the betweenness centralities of $OPs$ in the $SW$ dataset with the baseline $FP$ dataset. 
-Betweenness centrality is a good proxy of understanding how closely linked is a node with the rest of the network. When we calculate this metric for the user graphs we see that Suicide watch $OP$s tend to have highest centralities compared to generic $FP$ threads moth in terms of $OP$ centrality as well as median centrality across all the users. The high centrality of $OP$s in $SW$ conversations implies a high level of embedded-ness as well as a $OP$ centric approach by other participants in the conversation. The Figure \ref{fig:centrality} shows the Empirical CDFs of centralities. 
-
-\subsubsection{How semantically aligned are the responses?}
-We measure semantic alignment based on word embeddings of the source post and the reply post, at every edge of the reply graph. The detailed method of extracting semantic alignment along a post and its response is described in Section \ref{Sec:Semantic}. Extracting such similarity metrics, we compare the trend in response text being in semantic alignment with the parent text in the reply graphs. 
-
-
-\subsubsection{How branched do conversations become?}
-Branching in a conversation thread could be either a sign of digression or a sign interestingness resulting in more people joining in. To measure this phenomena, use the reply graphs, which resemble a n-ary directed acyclic graph, to evaluate the branching factor. By using the method described in Section \ref{Sec:Branching}, we found that Suicide watch threads, tend to branch in a much less as compared to our baseline conversations. This implies that suicide watch threads tend to remain a one-on-one conversation with the $OP$ albeit many such dialogues may emerge, and hence that explains the high centrality of the $OP$ in all interaction graphs. If the helpers on a thread seldom interact with each other, the corresponding interaction graph will have the $OP$ as the most central node.
-
-%\subsubsection{How often do users come back to respond ? }
-%This measurement is important as it helps us quantify the average attention of a participant in a conversation, if the participant chooses to remain engaged. 
-
-\subsection{Patterns in local interactions}
-It is often a useful tool to express large interaction graphs, as the sum of local interactions between two or three nodes at a time. Such analysis is quite useful in expressing local structures in the graphs and has been used in several network analysis works 
-For this reason we use a method more commonly known as network motif analysis (described in Section \ref{Sec:motif}) to understand triads, or groups of three nodes, and the patterns of edges that exist between them. 
-
-\begin{figure*}[!ht]
+\begin{figure*}[t!]
     \centering
-    % \hspace*{-5mm}
-    % 	\subfloat[]{
-    % 		\includegraphics[width=0.5\textwidth, height = 6cm ]{Figures/RevisedFeatureRegression.png}
-    % 		\label{fig:feats}
-    % 	}
-    % 	\subfloat[]{
-    % 		\includegraphics[width=0.5\linewidth, height = 6cm ]{Figures/normalized_corr.png}
-    % 		\label{fig:corrs}
-    % 	}
-    
+    \hspace*{-5mm}
     \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{111D.png}
-        \label{fig:111D_over}
+        \includegraphics[width=0.5\textwidth, height = 8cm ]{rotationalSim.png}
+        \label{fig:rotSim}
     }
     \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{201.png}
-        \label{fig:201_over}
+        \includegraphics[width=0.5\linewidth, height = 8cm ]{transSim.png}
+        \label{fig:transSim}
     }
-    
-    \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{012.png}
-        \label{fig:012_over}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.5\linewidth ]{021U.png}
-        \label{fig:021U_over}
-    }
-    
-    %    \subfloat[]{
-    %		\includegraphics[width=0.5\textwidth, height = 6cm ]{Figures/BoxPlotMotifs_all.png}
-    %		\label{fig:motifOccurance}
-    %	}
-    %	\subfloat[]{
-    %		\includegraphics[width=0.5\linewidth, height = 6cm ]{Figures/CFD_ApexOP.png}
-    %		\label{fig:ApexOPProp}
-    %	}
-    
-    
-    \caption{This panel shows the statistical significance of the three over expressed and one under expressed triadic motif. 
-        %    Figure \ref{fig:motifOccurance} shows the distribution of each of the triadic motif's temporal point of occurrence according to the latest edge, as a proportion of the thread's lifetime. }
-    }
-    \label{Sec:motif}
+    \vspace{-0.4cm}
+    \caption{Two types of augmentation: (a) rotation of the Street Views camera (based on rotation); and (b) exploration of scenes at increasing distances (based on translation).}
+    \vspace{-0.4cm}
 \end{figure*}
 
 
-\section{Methods}
-This section discusses the methodological devices used to extract insights from the fora data.
 
-\subsection{Data}
-We build on dataset that was used in \cite{gkotsis2017characterisation} where they analyze textual content for the root posts in a Subreddit called Suicide Watch\footnote{\url{https://www.reddit.com/r/SuicideWatch/}}. The dataset contains a dump of 53 thousand posts from the suicide watch sub-reddit.
-However the dataset did not contain the threaded conversations for each thread. Reddit is a platform where a user can create a post on a sub-reddit, to which several members of a given sub-reddit can interact with. The array of interactions may range from simple up or down votes or posting at different hierarchy of the thread. This creates a hierarchical threaded structure of posts where the conversations are organized as threads of posts. To understand the deeper structure that is present in these posts,  we crawl Reddit to get the threaded conversations by pursuing each conversation at arbitrary depth. \footnote{The code to crawl reddit for threads can be found at \textit{https://github.com/sagarjoglekar/redditTools}}. This results in a dataset of over 50 thousand threads totaling to around 500,000 individual posts on those threads.  
-
-To baseline our work and compare theorized supportive nature of conversations with the broader community, we also crawl other reddit threads. To avoid any bias towards a particular type of subreddit, which have their own culture, we acquire roughly 50 thousand baseline posts which have been popular enough to land on the front page \footnote{The reddit front page algorithm is a combination of popularity and decay in popularity as a function of time. More can be found here \url{https://goo.gl/uVdHjn}}. We crawl the Frontpage posts for 2 weeks accumulating over 50 thousand reddit threads in the process. The median amount of responses for a Suicide watch thread were 6 and for baseline Frontpage posts were 8. 
-To understand the structure of these two foras, and find discriminating factors between a supportive community like suicide watch and a general thread on Reddit, we need to build abstractions of the thread. 
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\columnwidth]{SimilarityPlacesPrevalence.png}
+    \caption{The types of scene that have greater propensity to be correctly augmented with similar scenes at increasing distances.}
+    \label{fig:augmentationSimilarity}
+\end{figure}
 
 
 
+
+\begin{table}[t!]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Augmentation} & \textbf{Accuracy (Percentage)}\\
+        \hline
+        None & 63 \\
+        \hline
+        Rotation  & 68 \\
+        \hline
+        Rotation + Translation  & 64 \\
+        \hline
+        Rotation + Conservative Translation & 73.5 \\
+        \hline
+    \end{tabular}
+    \caption{Percentage accuracy for our beauty classifier trained on differently augmented sets of  urban scenes.}
+    \label{tab:classifier}
+    \vspace{-10mm}
+\end{table}
+
+
+%****************************************
+\subsection*{Step 2 Training a beauty classifier}
+\label{Sec:Classifier}
+Having this highly curated set of labeled urban scenes, we are now ready to train classifier $C$ with labels reflecting our beauty assessments. 
+
+As for classifier $C$, we use the CaffeNet architecture, a modified version of AlexNet~\cite{krizhevsky2012imagenet,szegedy2015going}. This has a conventional architecture with 5 convolutional layers; interleaved with  max pooling and normalization layers; and terminated by: \emph{(i)} two 4096 dimensional fully connected layers interleaved with dropout layers~\cite{srivastava2014dropout} (the dropout ratio is set to 0.5 to prevent over-fitting), and \emph{(ii)} by a Softmax layer that classifies the input image into one of two classes of beautiful(1) and ugly(0).  
+
+Having $C$ at hand, we now turn to training it. The training is done on a 70\% split of the data, and the testing on the remaining 30\%. All this is done on increasingly augmented sets of data. We start from our 20k images and progressively augment them with  the snapshots obtained with the 5-angle camera rotations, and then with the exploration of scenes at increasing distance $d \in \{10,20,40,60\}$ meters. The idea behind this data augmentation is that the model's accuracy should increase with increasing levels of augmentation. Indeed it does (Table~\ref{tab:classifier}): it goes from 63\% on the set of original scenes to a value as high as  73.5\% on the set of fully augmented scenes, which is a notable increase in accuracy for this type of classification tasks. Furthermore, our results match previous ones: for example,  Dubey et.al's~\cite{dubey2016deep}  model showed an accuracy of 70\%, which is comparable to ours. 
+
+%As a baseline, we compared with the scenic-or-not model developed by Chanuki et.al \cite{seresinhe2017using}. Their model is different than ours because of the fact that their model generates scenic scores on a scale of 10, whereas ours is a binary classifier. Still for the sake of comparison, we measure the Kendall rank correlation, which is what they use for their measurements, between predicted and actual classes. Our model performs with a Kendall rank correlation of 0.43 which is comparable to their elastic net models. In so far, the facelift pipeline is agnostic of the classifier , which can be swapped out with a better performing one or with one trained for a different use case. 
+%\ns{Can you cite a baseline comparison from state of the art? Less important but comment on why is accuracy the right metric? Why not precision for instance?}. 
+
+
+%\begin{figure*}[h]
+%	\centering
+%	\includegraphics[width=0.5\linewidth]{Plot/GanCompare.png}
+%	\caption{Comparison of using the Default ImageNet GAN against Custom trained GAN for Activation maximization. By re-training the GAN on the test dataset, we can see improvement in terms of structure and colours in the generated images}
+%	\label{fig:GanComparison}
+%\end{figure*}
+
+
+%****************************************
+
+
+\subsection*{Step 3 Generating a synthetic beautified scene}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\columnwidth]{AM_arch.pdf}
+    \caption{Architecture of the synthetic beauty generator. This consists of a generator of synthetic scenes concatenated with a beauty classifier. The green block is the beauty maximized template $\hat{I_j}$, which is subject to  forward and backward passes (red arrow) when optimizing for beauty.}
+    \label{fig:AM_arch}
+\end{figure}
+
+\begin{table}\sffamily
+    \begin{centering}
+
+
+    \begin{tabular}{l*2{C}@{}}
+        \toprule
+        & Original & Generated \\ 
+        \midrule
+        & \includegraphics[width=11em]{orig_1} & \includegraphics[width=11em]{gan_1} \\ 
+        & \includegraphics[width=11em]{orig_2} & \includegraphics[width=11em]{gan_2} \\ 
+        & \includegraphics[width=11em]{orig_3} & \includegraphics[width=11em]{gan_3} \\ 
+        
+        \bottomrule 
+    \end{tabular}
+    \caption{Examples of our generator's outputs. The original scenes and the generated ones are shown side by side.}
+    \label{fig:GanExample}
+    
+    \end{centering}
+\end{table} 
+
+
+Having this trained classifier at hand, we can then build a generator of synthetic beautified scenes. To build such a generator, we  retrain the GAN described by Dosovitskiy and Brox~\cite{dosovitskiy2016generating} on our curated urban scene dataset. This network is trained by maximizing the confusion for the discriminator between the generated images $G(f)$ and the original ones $I_f$~\cite{goodfellow2014generative}.  The resulting generator is concatenated with our beauty classifier (Figure~\ref{fig:AM_arch}). As a result, given the two classes ugly $y_i$ and beautiful $y_j$, the end-to-end model  transforms any original scene $I_i$ of class $y_i$ (e.g., ugly scene) into template scene $\hat{I_j}$ that maximizes class $y_j$ (e.g., beautified template scene). 
+
+% able to reproduce synthetic urban scenes (Figure~\ref{fig:GanExample}) 
+%to an impressive level of detail. shows a few examples of how the generator performs by comparing a real world image $I_f$, and the generated image $G(f)$. 
 %
-%\subsection{Semantic similarity}
-%\label{Topic}
-%\sj{Change this, We are using word2vec now}
-%To capture the content features of the reddit posts, we use Topic modeling\cite{Blei2003} to extract topic features from the corpus of posts. LDA converts a document $D$ into a $N$ dimensional vector of probabilities of $N$ topics , where the value of $N$ is selected using maximum variance method\cite{Sievert2014}. We train two LDA topic models one for the Suicide watch Corpus $F_{SW}$ and one for the Baseline corpus $F_{BL}$. The model $F_{SW}$ is trained on a corpus of 800,000 posts on the suicide watch sub-reddit and the model $F_{BL}$ is trained on a baseline of 1.5 million posts on the frontpage threads. These models are then later used to extract semantic information from post text T,  $F(T) \mapsto [t_0 , t_1 \ldots t_n ]$ where $t_k$ is the vector of topics that are present in text $T$
+%
+%The second component is a concatenation of  the trained generator with the beauty classifier described in Section~\ref{Sec:Classifier}, as shown in . This results in 
+
+More specifically, given an input image $I_i$ known to be of class $y_i$  (e.g., ugly), our technique outputs  $\hat{I_j}$, which is a more beautiful version of it (e.g., $I_i$ is morphed  towards the average representation of a beautiful scene) while preserving $I_i$'s details. The technique does so using the ``Deep Generator Network for Activation Maximization'' (\emph{DGN-AM})~\cite{nguyen2016synthesizing}. Given an input image $I_i$, \emph{DGN-AM} iteratively re-calculates the color of $I_i$'s pixels in  a way  the output image $\hat{I_j}$  both maximizes  the  activation of neuron $y_j$ (e.g., the ``beauty neuron'') and looks ``photo realistic'',  which is done by conditioning the maximization to an ``image prior''. This is equivalent to finding the feature vector $f$ that maximizes the following expression:
+\begin{equation}
+\hat{I_j} =G( f ) : \underset{f}{\arg\max}(C_{j}(G(f))-\lambda||f||)
+\end{equation}
+where:
+\begin{itemize}
+    \item $G(f)$ is the image synthetically generated from the candidate feature vector $f$;
+    \item $C_j(G(f))$ is the activation value of neuron $y_j$ in the scene classifier $C$ (the value to be maximized);
+    \item $\lambda$ is a $L_2$ regularization term.
+\end{itemize}
+Here the initialization of $f$ is key. If $f$ were to be initialized with random noise, the resulting $G(f)$ would be the average representation of category $y_j$ (of, e.g., beauty). Instead, since $f$ is initialized with the feature vector corresponding to $I_i$, then the resulting maximized $G(f)$ is $I_i$'s version ``morphed to become more beautiful''.
+
+The input image is also key. It makes little sense to beautify an already beautiful image, not least because such beautification process would result in a saturated template $\hat{I_j}$ in our framework. For this reason, to generate an image that maximizes the beauty neuron in the classifier $C$, we restrict the  corresponding input image to be in class $y_i$ (i.e., ugly scenes as per the divisions in Figure~\ref{fig:Trueskill}). We do the opposite when maximizing the ugly neuron. 
 
 
-%\subsection{Networked conversations}
-% \begin{table}
-% 	\resizebox{0.5\linewidth}{!}{
-% 		\begin{tabular}{l|p{8cm}}
-% 			\textbf{Terminology} & \textbf{stands for}\\
-% 			$RP$   & Root post which begins a new thread on a subreddit \\
-% 			$OP$  & Original poster who posts the Root post for a thread \\
-% 			$BP$   & A Poster who has at-least one symmetric response from the $OP$ after his comment\\
-% 			$AP$   & Asymmetric poster who responds to $OP$ but never gets a response back \\
-% 			$SW$ & The suicide watch Subreddit \\
-% 			$FP$  & Front page of Reddit. \\
-% 	\end{tabular}}
-% 	\caption{Notations and Terms.}\label{notations}
-% \end{table}
+
+%Maximizing beauty of an already beautiful urban scene, would yield in a saturated template $\hat{I_j}$. 
+
+%****************************************
+\subsection*{Step 4 Returning a realistic beautified scene}
+We now have template scene $\hat{I_j}$ (which is a synthetic beautified version of original scene $I_i$) and need to retrieve a realistic looking version of it. We do so by: \emph{i)} representing each of our original scenes in Step 1 (including $\hat{I_j}$) as a 4096 dimensional feature vector derived from the FC7 layer of the PlacesNet~\cite{zhou2014learning}; \emph{ii)} computing the distance (as $L_2$ Norm) between $\hat{I_j}$'s feature vector and each of the original scene's feature vector; and \emph{iii)} selecting the original scene most similar (smaller distance) to $\hat{I_j}$. This results into the selection of the beautified scene $I_j$.
 
 
-\subsection{Abstractions}
-\label{Sec:Abstractions}
-To understand the dynamics of supportive conversations, we first need to formalize the abstraction of networked conversations. In case of forum based platforms where users interact in a nested dialogue fashion, and original poster or $OP$ posts a start of a thread. This thread is then open for comments by all the community users. In case of Reddit, such a community is called a Subreddit, which is a moderated collection of users who subscribe to it. These users may post new threads onto the subreddit as far as the post follows the subreddit rules. Enforcement of these rules is the responsibility of the moderators. The user who starts a thread is called the Original Poster or \textbf{OP} and the headlining post which the $OP$ begins with is called the Root Post or $RP$. 
+%****************************************
+\subsection*{Step 5 Identifying  characterizing urban elements}
+Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of urban elements extracted by computer vision tools such as SegNet and PlacesNet. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. 
 
 
-\label{Sec:network}
+%\begin{figure*}[h]
+%	\centering
+%	\includegraphics[width=\linewidth]{Plot/Example.png}
+%	\caption{Example of ``FaceLifting''.}
+%	\label{fig:BeautyExample}
+%\end{figure*}
 
-\begin{figure*}[!ht]
+
+\begin{table}\sffamily
+    \begin{tabular}{l*3{C}@{}}
+        \toprule
+        & Original ($I_i$) & Latent Beauty representation ($\hat{I_j}$) & Beautified ($I_j$) \\ 
+        \midrule
+        & \includegraphics[width=11em]{u_9.png} & \includegraphics[width=11em]{t_9.png} &  \includegraphics[width=11em]{b_9.png} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_1} & \includegraphics[width=11em]{Plot/examples/t_1} &  \includegraphics[width=11em]{Plot/examples/b_1} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_2} & \includegraphics[width=11em]{Plot/examples/t_2} &  \includegraphics[width=11em]{Plot/examples/b_2} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_3} & \includegraphics[width=11em]{Plot/examples/t_3} &  \includegraphics[width=11em]{Plot/examples/b_3} \\ 
+        & \includegraphics[width=11em]{u_4.jpeg} & \includegraphics[width=11em]{t_4.jpeg} &  \includegraphics[width=11em]{b_4.jpeg} \\ 
+        & \includegraphics[width=11em]{u_5.jpeg} & \includegraphics[width=11em]{t_5.jpeg} &  \includegraphics[width=11em]{b_5.jpeg} \\ 
+        %		& \includegraphics[width=11em]{Plot/examples/u_6} & \includegraphics[width=11em]{Plot/examples/t_6} &  \includegraphics[width=11em]{Plot/examples/b_6} \\ 
+        & \includegraphics[width=11em]{u_7.jpeg} & \includegraphics[width=11em]{t_7.jpeg} &  \includegraphics[width=11em]{b_7.jpeg} \\ 
+        & \includegraphics[width=11em]{u_8.jpeg} & \includegraphics[width=11em]{t_8.jpeg} &  \includegraphics[width=11em]{b_8.jpeg} \\ 
+        \bottomrule 
+    \end{tabular}
+    \caption{Examples of the ``FaceLifting'' process, which tends to add greenery, narrow roads, and  pavements.}
+    \label{fig:BeautyExample}
+\end{table} 
+
+
+
+
+\section{Evaluation}
+\label{sec:evaluation}
+
+The goal of FaceLift is to transform existing urban scenes into versions that: \emph{i)} people perceive more beautiful; \emph{ii)} contain urban elements typical of great urban spaces; \emph{iii)} are easy to interpret; and \emph{iv)} architects and urban planners find useful. To ascertain whether FaceLift meets that composite goal, we answer the following questions next: 
+
+\begin{description}
+    \item{\textbf{Q1}} Do individuals perceive ``FaceLifted'' scenes to be beautiful?
+    
+    \item{\textbf{Q2}}  Does our framework produce scenes that possess urban elements typical of great spaces?
+    
+    \item{\textbf{Q3}}  Which urban elements are mostly associated with beautiful scenes?
+    
+    \item{\textbf{Q4}}  Do architects and urban planners find FaceLift useful?
+    
+\end{description}
+
+
+\subsection*{Q1 People's perceptions of beautified scenes}
+To ascertain whether ``FaceLifted'' scenes are perceived by individuals as they are supposed to, we run a crowd-sourcing experiment on Amazon Mechanical Turk.  We randomly select 200 scenes, 100 beautiful and 100 ugly  (taken at the bottom 10 and top 10 percentiles of the Trueskill's score distribution of Figure~\ref{fig:Trueskill}). Our framework then transforms each ugly scene into its beautified version, and each beautiful scene into its corresponding `uglified'. These scenes are arranged into pairs, each of which contains the original scene and its beautified or uglified version. On  Mechanical Turk, we only select verified masters as our crowd-sourcing workers (those with an approval rate above 90\% during the past 30 days), pay them \$0.1 per  task,  and ask each of them to choose the most beautiful scene for each given pair.  We make sure to have at least 3 votes for each scene pair. Overall, our workers end up selecting the scenes that are actually beautiful 77.5\% of the times, suggesting that ``FaceLifted'' scenes are indeed perceived to be more beautiful by people. 
+
+\subsection*{Q2 Are beautified scenes great urban spaces?}
+To answer that question, we need to understand what makes a space great. After reviewing the literature in urban planning, we identify four factors associated with  great places~\cite{ewing2013measuring,alexander1977pattern} (Table~\ref{tab:Design_metrics}): they mainly tend to be walkable, offer greenery, feel cozy, and be visually rich. 
+
+\begin{table*}[h]
     \centering
-    % \hspace*{-5mm}
-    \subfloat[]{
-        \includegraphics[width=0.45\textwidth, height = 5cm ]{ReplyGraphSW}
-        \label{fig:rGraphSW}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.45\linewidth, height = 5cm ]{UserGraphSW}
-        \label{fig:uGraphSW}
-    }
     
-    
-    \subfloat[]{
-        \includegraphics[width=0.45\linewidth, height = 5cm ]{ReplyGraphTD}
-        \label{fig:rGraphTD}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.45\linewidth, height = 5cm ]{UserGraphTD}
-        \label{fig:uGraphTD}
-    }
-    \caption{ Example UserGraphs and their corresponding Reply graphs, Figure \ref{fig:uGraphSW} shows a random thread from the SW sub-reddit and \ref{fig:rGraphSW} shows the corresponding reply graph that arises from the response structure of the same thread. In comparison we have Usergraph Fig \ref{fig:uGraphTD} and its corresponding reply graph Fig \ref{fig:rGraphTD} from one of the Front page threads }
-    \label{Fig:GraphExamples}
-\end{figure*}
+    \resizebox{\linewidth}{!}{%
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{Metric} & \textbf{Description}\\
+            \hline
+            Walkability  & Walkable streets support people's natural tendency to explore spaces~\cite{ewing2013measuring,quercia15thedigital,speck12}.\\
+            \hline
+            Green Spaces & The presence of greenery has repeatedly been found to impact people's well-being \cite{alexander1977pattern}. Under certain conditions, it could also promote social interactions~\cite{quercia2014aesthetic}. Not all types of greenery have to be considered the same though: dense forests or unkempt greens might well have a negative impact~\cite{jacobs1961death}. \\
+            \hline		
+            Landmarks & Feeling lost is not a pleasant experience, and the presence of landmarks  have been shown to contribute to the legibility and navigability of spaces~\cite{lynch1960image,quercia2014aesthetic,ewing2013measuring,quercia13maps}.\\
+            \hline
+            Privacy-Openness & The sense of privacy conveyed by a place's structure (as opposed to a sense of openness) impacts its perception~\cite{ewing2013measuring}.\\ 
+            \hline
+            Visual Complexity & Visual complexity is a measure of how diverse an urban scene is in terms of design materials, textures, and objects~\cite{ewing2013measuring}. The relationship between complexity and preferences generally follows an  `inverted-U' shape: we prefer places of medium complexity rather than places of low or high complexity~\cite{ulrich1983aesthetic}. \\
+            \hline
+    \end{tabular}}
+    \caption{Urban Design Metrics}
+    \label{tab:Design_metrics}
+    %        \vspace{-5mm}
+\end{table*}
 
 
+To automatically extract visual cues related to these four factors, we select 500 ugly scenes and 500 beautiful ones at random, transform them into their opposite aesthetic qualities (i.e., ugly ones are beautified, and beautiful ones are `uglified'), and compare which urban elements related to the four factors distinguish uglified scenes from beautified ones. 
 
-\subsubsection{Reply Graphs}
-\label{Sec:Reply_graphs}
-The first abstraction mimics directly the structure of conversation threads on Reddit. These abstractions are called Reply Graphs. We formulate a reply graph $R\{P,E,W\}$ as a thread of multi-layered posts in a thread in response to the root post $RP$ in the sub-reddit. Each graph $R$ consists of posts $P_i , P_j , i,j \in N$ , where N+1 is the total number of responses in the thread and Edges $E_{ij}$such that and Edge $E_{ij}$ exists $iff$ post $P_i$ was in response to post $P_j$ in the hierarchy of responses.  The weight of the edge $E_{ij}$ is found by calculating the cosine similarity between topic vector $T_i$ for post $P_i$ and the topic vector $T_j$ of post $P_j$. For a given dataset, the topic vectors are extracted using the model trained on that particular corpus ($LDA_{BL}$, $LDA_{SW}$).  This abstraction works well in modeling the conversational nature of these forums.  For convenience of the reader, we present a couple of example pairs from SW and Frontpage baseline datasets in Figure \ref{Fig:GraphExamples}
+We extract labels from each of our 1,000 scenes using two image classifiers. First, using PlacesNet~\cite{zhou2014learning}, we label each of our scenes according to a classification containing 205 labels (reflecting, for example, landmarks, natural elements), and retain the five labels with highest confidence scores for the scene. Second, using Segnet~\cite{badrinarayanan2015segnet}, we  label each of our scenes according to a classification containing 12 labels. Segnet is trained on dash-cam images, and classifies each scene pixel with one of these twelve labels: road, sky, trees,  buildings, poles, signage, pedestrians, vehicles, bicycles, pavement, fences, and road markings. 
 
-\subsubsection{Interaction Graphs}
-\label{Sec:Interaction_graphs}
-In this method, we represent each thread as a directed graph $G\{V,E,W\}$ where $V$ is the set of all users participating in a particular thread and $E$ are the directed  edges which correspond to interactions between two users $V_i , V_j  \in V$. The weight of each directed edge $E_{ij}$ corresponds to the average of all the edges between $V_i , V_j  \in V$ in the corresponding reply graph $R\{P,E,W\}$ as described above. This means that each reply graph is then mapped to a User graphs where the nodes are Users rather than posts. Another salient distinction between the two abstractions is that reply graphs resemble an n-ary tree and user graphs are directed cyclic graphs. 
-
-
-
-
-
-\subsection{Macro and local metrics}
-The abstractions are used to extract certain structural metrics from the conversation threads. These metrics are then used to validate structural differences between supportive conversations and generic casual conversations from out baseline set.
-
-
-\subsubsection{Centrality}
-\label{Sec:Centrality}
-For this metric we use the User Graphs. Node centrality is a metric that measures how central a node is in a network. It directly reflects the importance of the node when it comes to membership of the shortest connecting paths between all the nodes in the graph. More formally, we use betweenness centrality of a node which is defined as 
-Betweenness centrality of a node $v$ is defined as 
-$$
-g(v) = \sum_{s \neq v \neq t}\frac{\sigma_{st}(v)}{\sigma_{st}}
-$$
-where $\sigma_{st}(v)$ is the total number of shortest paths from node $s$ to node $t$ and $\sigma_{st}$ is the number of those paths that pass through $v$. To understand whether the thread starters ($OP$) have a special place in the network, we evaluate both $OP$ centrality as well as median centrality across all the nodes in a User graph.
-
-\subsubsection{Symmetrical users}
-We define a symmetric user and a symmetric edges for user graphs. For a user $V_i$ in the user graph $G\{V,E,W\}$ as described in Section
-, a symmetric user is a user who interacts with $V_o$ or the $OP$ and receives a response back from the $OP$. We find the fraction 
-$$
-U_{sym}=\frac{\textit{total number of symmetric users }}{\textit{Total users in a thread}}
-$$
-
-\subsubsection{Urgency}
-To understand how Suicide watch subreddit users responds to the $OP$ and each other, compared to other sub-reddit threads on the frontpage, we calculate differences between the posting times between consecutive messages in a reply graph. We compute the median response times per thread, for $OP$'s posts and for all other posts. 
-
-\subsubsection{Branching Factor}
-\label{Sec:Branching}
-Branching factor is a quantity that reflects the fan out of a conversation as it evolves.
-To measure this phenomena, we use the reply graphs, which resemble a n-ary directed acyclic graph, to evaluate the branching factor. The branching factor is formally described as 
-$$\tau = \frac{1}{|D|} \sum_{d \in D}^{} \frac{1}{|N_d|} \sum_{n\in N_d}^{} \textit{InDeg}(n)$$
-
-
-\subsubsection{Response distance}
-A user who interacts frequently with a thread, may contribute at different stages of hierarchy. Intuitively, for a one on one conversation to exist, the user needs to contribute back to the thread at alternate levels of hierarchy. To measure this phenomenon, we assume that a user $U$ contributes in a reply graph at variable depths $d_i \forall i \in [0,D]$. 
-We calculate the average difference between two consecutive contributions $d_{avg}$
-$$ d_{avg} = \frac{\sum_{i=0}^{D} d_{i+1} - d_i }{D}$$
-We calculate the values of $d_{avg}$ for both $OP$ and other users in the thread.
-
-
-\subsubsection{Semantic similarity}
-\label{Sec:Semantic}
-We use a popular word embedding method called \textit{Word2Vec} \cite{mikolov2013distributed} which learns representations of a set of words from a corpus of text, which in our case is the text from Suicide Watch and baseline fora. These representations can be used to extract text embedding vectors for each post which belong to a $N$ dimensional space $R^N$. These vectors are tested for their alignment using cosine distance in $R^N$, which corresponds to semantic similarity in the textual space. This method is quite popular and used in community based question answering\cite{mihaylov2016semanticz}, Medical semantic similarity \cite{de2014medical} and other medical informatics applications\cite{zhu2017semantic}.
-
-
-
-\subsection{Structural metrics}
-\label{Sec:motif}
-Network motifs are local sub-networks between 2 or 3 nodes. Such local patterns are highly useful in quantifying local interactions and the resulting macro structure of the network\cite{milo2002network}. They gave been used in a variety of applications and networks, from economics \cite{zhang2014dynamic} to cellular protein-protein interaction networks \cite{yeger2004network}. Hence we calculate census of 16 distinct \textsl{triadic motif} i.e. possible subgraphs that could be formed between any three chosen nodes. 
-
-\note{This probably needs to be briefly introduced/explained earlier in the manuscript?}
-To understand relation of local structures in interaction networks within a conversation with its , we compare the quantity called \textsl{motif occurrence ratio}. 
-After calculating motif census across the dataset\cite{Batagelj2001}, we select progressive subsets of graphs from both datasets with nodes $n \in [k , k+4]$ $\forall$  $k \in \{1, 6 , 11 , 16 , 21 , 26 , 31 , 36\}$. This segmentation of the dataset is called binning, and it allows us to not only measure the differences in the census between the datasets, but also observe the trend as the size of the interaction graph becomes larger. We stop at 40 because beyond that, we start getting lower and lower number of graphs samples per bin.  
-
-We test each graph for the frequency of occurrence of the 16 possible triadic motifs as shown in Figure\ref{fig:motifs}. We start by selecting the subset of graphs from Suicide watch and Frontpage belonging to a particular bin $k$. 
-%Lets call these sets of graphs $\K_{SW}$ and $\K_{BL}$ respectively. 
-%Let us assume that for a given value of $k$ , $\Kappa_{SW}$ has $K_{SW}$ graphs and $\Kappa_{BL}$ has $K_{BL}$ graphs. We then count for a given motif, number of occurrences in $\Kappa_{SW}$ and $\Kappa_{BL}$ where the graph had at-least one instance of that motif. Let us call the total number of gra phs in $\Gamma_{BL}$ with a given motif as $\gamma_{BL}$ and $\gamma_{SW}$ likewise for the $\Gamma_{SW}$ graphs. 
-We then define the motif occurrence ratio as the fraction values for $\frac{\gamma_{BL}}{K_{BL}}$ and $\frac{\gamma_{SW}}{K_{SW}}$ for all the 16 motifs across all the chosen values of $n$. 
-
-
-\begin{figure*}[!h]
+\begin{figure}[h]
     \centering
-    % \hspace*{-5mm}
-    \subfloat[]{
-        \includegraphics[width=0.7\textwidth]{TriadVariants}
-        \label{fig:motifs}
-    }
-    
-    \subfloat[]{
-        \includegraphics[width=0.7\linewidth, height = 5cm ]{thread}
-        \label{fig:motifStruct}
-    }
-    \caption{ Figure \ref{fig:motifs} shows the 16 different types of motifs that are looked for in the user graph data. Figure \ref{fig:motifStruct} shows how three unique users could produce different motifs. The three shapes represent different users and the dotted line means the message order is irrelevant.}
-    \label{Fig:motifs}
-\end{figure*}
+    \includegraphics[width=\columnwidth]{taxonomyCount.png}
+    \caption{Number of labels in specific urban design categories (on the $x$-axis) found in beautified scenes as opposed to those found in uglified scenes.}
+    \label{fig:taxonomyCount}
+\end{figure}
 
 
-
-
-\section{Appendix}
-
-\subsection{Triadic statistics for twitter conversations}
-
-\begin{figure*}[!h]
+\begin{figure}[h]
     \centering
-    % \hspace*{-5mm}
+    \includegraphics[width=\columnwidth]{walkable_taxonomy.png}
+    \caption{Count of specific walkability-related labels  (on the $x$-axis) found in beautified scenes minus the count of the same labels found in uglified scenes.}
+    \label{fig:WalkableTnomy}
+\end{figure}
+
+
+Having these two ways of labeling scenes, we can now test whether the expectations set by the literature describing metrics of great urban spaces (Table~\ref{tab:Design_metrics}) are  met in the FaceLifted scenes. 
+
+
+%**************************************************
+\mbox{ } \\
+\noindent
+\emph{H1 Beautified scenes tend to be walkable.}
+We manually select only the PlacesNet labels that are related to walkability. These labels include, for example, \textit{abbey, plaza, courtyard, garden, picnic area, \textrm{and} park}. To test hypothesis \emph{H1}, we count the number of walkability-related labels found in beautified scenes as opposed to those found in uglified scenes (Figure~\ref{fig:taxonomyCount}): the former contain twice as many walkability labels than the latter. We then determine which types of scenes are associated with beauty (Figure~\ref{fig:WalkableTnomy}). Unsurprisingly, beautified scenes tend to show gardens, yards, and small paths. By contrast, uglified ones tend to show built environment features such as shop fronts and broad roads. 
+
+
+\mbox{ } \\
+%**************************************************
+\noindent
+\emph{H2 Beautified scenes tend to offer green spaces.}
+We manually select only the PlacesNet labels that are related to greenery. These labels include, for example, \textit{fields, pasture, forest, ocean, and beach}. Then, in our 1,000 scenes, to test hypothesis \emph{H2}, we count the number of nature-related labels found in beautified scenes as opposed to those found in uglified scenes (Figure~\ref{fig:taxonomyCount}): the former contain more than twice as many nature-related labels than the latter.  To test this hypothesis further, we compute the fraction of `tree' pixels (using SegNet's label `tree') in beautified and uglified scenes, and  find that beautification adds  32\% of tree pixels, while uglification removes 17\% of them. 
+
+
+\begin{figure*}[!t]
+    \centering
+    \hspace*{-5mm}
     \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{003}
-        \label{fig:003}
+        \includegraphics[width=0.45\textwidth, height = 5cm ]{BinnedPlot.png}
+        \label{fig:skyBinned}
     }
     \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{102}
-        \label{fig:102}
+        \includegraphics[width=0.45\linewidth, height = 5cm ]{binnedPlot_complexity.png}
+        \label{fig:complexity}
     }
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{021D}
-        \label{fig:021D}
-    }
-    
-    
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{021C}
-        \label{fig:021C}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{111U}
-        \label{fig:111U}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{030T}
-        \label{fig:030T}
-    }
-    
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{030C}
-        \label{fig:030C}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{120D}
-        \label{fig:120D}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.3\textwidth, height = 4.5cm ]{120U}
-        \label{fig:120U}
-    }
-    
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{120C}
-        \label{fig:120C}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{210}
-        \label{fig:210}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.33\textwidth, height = 4.5cm ]{300}
-        \label{fig:300}
-    }
-    
-    \label{fig:MotifOccurance}
     \vspace{-0.4cm}
-    \caption{ The figure shows comparison of occurrence ratios of 9 insignificant motifs. Blue traces are for Suicide watch and Green traces are for Baseline Front page threads}
+    \label{fig:bin_figures}
+    \caption{The percentage of beautified scenes ($y$-axis): (a) having an increasing presence of sky (on the $x$-axis); and (b) having an increasing level of visual richness  (on the $x$-axis). The error bars represent standard errors obtained by random re-sampling of the data for 500 iterations. }
     \vspace{-0.4cm}
 \end{figure*}
 
 
 
+\mbox{ } \\
+%**************************************************
+\noindent
+\emph{H3 Beautified scenes tend to feel private and `cozy'.}
+To  test hypothesis \emph{H3}, we count the fraction of pixels that Segnet labeled  as `sky' and show the results in a bin plot in Figure~\ref{fig:skyBinned}:  the $x$-axis has six bins (each of which represents a given range of sky fraction), and the $y$-axis shows the percentage of beautified \emph{vs.} uglified scenes that fall into each bin.  Beautified scenes tend to be cozier (lower sky presence) than the corresponding original scenes.
 
 
-\subsection{}
-Replication of quantification of the topological metrics for twitter conversations for suicidal ideation and comparison with baseline threads. There are 5k threads for suicidal ideation and 6k for baseline. The baseline threads deal with discussion around westminster and manchester terrorist attacks in the uk.
+\mbox{ } \\
+%**************************************************
+\noindent
+\emph{H4 Beautified scenes tend to be visually rich.}
+To quantify to which extent scenes are visually rich, we measure their visual complexity~\cite{ewing2013measuring} as  the amount of disorder in terms of distribution of (Segnet) urban elements in the scene: 
+\begin{equation}
+H(X) = -\sum p(i)\log p(i)
+\label{eq:entropy} 
+\end{equation}
+where $i$ is the $i^{th}$ Segnet's label. The total number of labels is twelve. The higher $H(X)$, the  higher the scene's entropy, that is, the higher the scene's complexity. It has been suggested that the relationship between complexity and  pleasantness follows an `inverted U' shape~\cite{ulrich1983aesthetic}: we prefer places of medium complexity rather than places of low or high complexity. To test that, we show the percentage of beautified scenes that fall into each complexity bin  (Figure~\ref{fig:complexity}):  we do not find a strong evidence of the `inverted U' shape hypothesis, in that, beautified scenes are of low to medium complexity, while uglified ones are of high complexity.
 
-\begin{figure}[!h]
+
+
+%**************************************************
+\subsection*{Q3 Urban elements of beautified scenes}
+
+\begin{table}[t!]
     \centering
-    % \hspace*{-5mm}
-    \subfloat[]{
-        \includegraphics[width=0.4\textwidth, height = 5cm ]{Twitter_mean_Branching.png}
-        \label{fig:TwitBranch} }	
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth, height = 5cm ]{Twitter_median_centrality.png}
-        \label{fig:TwitCentrality}
+    \resizebox{\linewidth}{!}{%
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            \textbf{Pair of urban elements} & \textbf{$\beta_1$}  & \textbf{$\beta_2$} & \textbf{$\beta_3$}  & Error Rate (Percentage)\\
+            \hline
+            \hline
+            Buildings - Trees & -0.032 & 0.084  & 0.005  & 12.7 \\
+            \hline
+            Sky - Buildings & -0.08 & -0.11 & 0.064 & 14.4 \\
+            \hline
+            Roads - Vehicles  & -0.015  & -0.05 & 0.023  & 40.6 \\
+            \hline
+            Sky - Trees & 0.03 & 0.11 & -0.012 & 12.8  \\
+            \hline
+            Roads - Trees & 0.04  & 0.10 &  -0.031  & 13.5  \\
+            \hline
+            Roads - Buildings & -0.05  & -0.097  &  0.04  & 20.2  \\
+            \hline
+        \end{tabular}
     }
-    
-    
-    \subfloat[]{
-        \includegraphics[width=0.4\textwidth, height = 5cm ]{Twitter_sym_messages.png}
-        \label{fig:TwitSymMessages}
+    \caption{Coefficients of logistic regressions run on one pair of predictors at the time.}
+    \label{tab:regressioncoef}
+    \vspace{-10mm}
+\end{table}
+
+
+To determine which urban elements are the best predictors of urban beauty and the extent to which they are so, we run a logistic regression, and, to ease interpretation, we do so on one pair of predictors at the time: 
+\begin{equation}
+Pr(\textrm{beautiful}) = logit^{-1}(\alpha + \beta_1 * V_1 + \beta_2 * V_2  + \beta_3 * V_{1}.V_{2} )
+\label{eq:regression} 
+\end{equation}
+where $V1$ is the fraction of the scene's pixels marked with one Segnet's label, say, ``buildings'' (over the total number of pixels),  and $V2$ is the fraction of the scene's pixels marked with another label, say, ``trees''. The result consists of three beta coefficients: $\beta_1$ reflects $V1$'s contribution in predicting beauty,  $\beta_2$ reflects $V2$'s contribution, and $\beta_3$ is the interaction effect, that is, it reflects the contribution of the dependency between $V1$ and $V2$ in predicting beauty. We run logistic regressions on the five factors that have been found to be most predictive of urban beauty~\cite{quercia2014aesthetic, ewing2013measuring, alexander1977pattern}, and show the results in Table~\ref{tab:regressioncoef}.
+
+
+Since we are using logistic regressions, the quantitative interpretation of the beta coefficients is eased by the ``divide by 4 rule''~\cite{vaughn2008data}: we can take the $\beta$ coefficients and ``divide them by 4 to get an upper bound of the predictive difference corresponding to a unit difference'' in beauty~\cite{vaughn2008data}. For example, take the results in the first row of Table~\ref{tab:regressioncoef}. In the model $Pr(beautiful) = logit^{-1}(\alpha - 0.032 \cdot buildings + 0.084 \cdot trees + 0.005 \cdot  buildings \cdot trees)$, we can divide - 0.032/4 to get -0.008: a difference of 1 in the fraction of pixels being buildings corresponds to no more than a 0.8\% \emph{negative} difference in the probability of the scene being beautiful. In a similar way, a difference of 1 in the fraction of pixels being trees corresponds to no more than a 0.021\% \emph{positive} difference in the probability of the scene being beautiful. By considering the remaining results in Table~\ref{tab:regressioncoef}, we find that, across all pairwise comparisons, trees is the most positive element associated with beauty, while roads and buildings are the most negative ones. These results match previous literature in urban design of what makes spaces great, adding further external validity to our framework's beautification. 
+
+
+
+
+%**************************************************
+\subsection*{Q4 Do architects and urban planners find it useful?}
+
+\begin{table}[t!]
+    \centering
+    \resizebox{\linewidth}{!}{%
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \hline
+            \textbf{Use case} & \textbf{Definitely Not}  & \textbf{Probably Not} & \textbf{Probably}  & \textbf{Very Probably} & \textbf{Definitely}\\
+            \hline
+            \hline
+            Decision Making & 4.8\% & 9.5\%  & 38\%  &  28.6\% & 19\%\\
+            \hline
+            Participatory Urban Planning & 0\% & 4.8\%  & 52.4\%  &  23.8\% & 19\%\\
+            \hline
+            Promote Green Cities & 4.8\% & 0\%  & 47.6\%  &  19\% & 28.6\%\\
+            \hline
+        \end{tabular}
     }
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth, height = 5cm ]{Twitter_sym_users.png}
-        \label{fig:TwitSynUsers}
-    }
-    
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth, height = 5cm ]{Twitter_urgancy.png}
-        \label{fig:TwitUrgency}
-    }
-    \caption{\textsl{ Fig \ref{fig:TwitBranch} shows the branching factor for twitter threads that talk about suicidal tendencies against baseline threads. Fig \ref{fig:TwitCentrality} shows the distribution of median centralities per thread, for both the twitter crawls. Fig \ref{fig:TwitSymMessages} shows Distribution of symmetric messages in reply graphs for both datasets. Fig \ref{fig:TwitSynUsers} shows the distributions for users participating in a symmetric conversation Fig \ref{fig:TwitUrgency} shows he dustribution of reply urgency for suicide threads against baseline. The suicide median reponse time for suicide threads is 3 min as compared to 18 mins for non-suicide threads}}
+    \caption{Urban experts polled about the extent to which an interactive map of ``FaceLifted'' scenes promotes: (a) decision making; (b) citizen participation in urban planning; and (c) promotion of green cities}
+    \label{tab:useCases}
+    \vspace{-10mm}
+\end{table}
+
+
+%\begin{figure*}[!t]
+%	\centering
+%	\hspace*{-5mm}
+%	\subfloat[]{
+%		\includegraphics[width=0.3\textwidth ]{Plot/DecisionMaking.png}
+%		\label{fig:decision}
+%	}
+%	\subfloat[]{
+%		\includegraphics[width=0.3\linewidth ]{Plot/ParticipationUrbanPlanning.png}
+%		\label{fig:participation}
+%	}
+%	\subfloat[]{
+%		\includegraphics[width=0.3\linewidth ]{Plot/PromoteGreenCities.png}
+%		\label{fig:promotion}
+%	}
+%%	\vspace{-0.4cm}
+%	\caption{Urban experts polled about the extent to which an interactive map of ``FaceLifted'' scenes promotes: (a) decision making; (b) citizen participation in urban planning; and (c) promotion of green cities.\ns{Pie charts are not advisible. The labels are too small. You can perhaps replace this with a table.}}
+%	\label{fig:pies}
+%	\vspace{-0.4cm}
+%\end{figure*}
+
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\columnwidth]{UI.png}
+    \caption{Interactive map of FaceLifted scenes in Boston.}
+    \label{facelift-UI}
 \end{figure}
 
 
+To ascertain whether practitioners find FaceLift potentially useful, we build an interactive map of the city of Boston in which, for  selected points, we show pairs of urban scenes before/after beautification (Figure~\ref{facelift-UI}). We then send that map along with a survey to 20 experts in architecture, urban planning, and data visualization around the world. Questions were asked with a non-neutral response Likert scale (Table~\ref{tab:useCases}). That is because previous work~\cite{Agree2012,moors2008exploring} has shown that such a scale: \emph{(i)} pushes respondents to ``take a stance'', given the absence of a neutral response; and \emph{(ii)} works best if respondents are experts in the subject matter of the survey as responses of the ``I don't know'' type tend to be rare (as it is has been the case for our survey). The experts had to complete tasks in which they rated FaceLift based on how well it supports decision making, participatory urbanism, and the promotion of green spaces. According to our experts (Table~\ref{tab:useCases}), the tool can very probably supports decision making, probably support participatory urbanism, and definitely promote green spaces.  These results are  also qualitatively supported by our experts' comments, which include: ``\textit{The maps reveal patterns that might not otherwise be apparent}'',  ``\textit{The tool helps focusing on parameters to identify beauty in the city while exploring it}'',  and ``\textit{The metrics are nice. It made me think more about beautiful places needing a combination of criteria, rather than a high score on one or two dimensions. It made me realize that these criteria are probably spatially correlated}''.
 
 
-\subsection{Network characteristics}
-Figure \ref{fig:depthDist} shows the distribution of maximum depths across all Reply graphs for SW and Baseline subreddits. The SW threads depths have a median depth of 2 and mean of 4 compared to median depth of 2 for BL and a mean of 2.5. This shows that statistically the depths of Suicide watch and baseline graphs are quite similar.
 
 
-\begin{figure}[!ht]
-    \centering
-    % \hspace*{-5mm}
-    \subfloat[]{
-        \includegraphics[width=0.4\textwidth, height = 5cm ]{DepthConversations.png}
-        \label{fig:depthDist} }	
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth, height = 5cm ]{AuthorParticipation.png}
-        \label{fig:uniqAuthors}
-    }
-    
-    
-    \subfloat[]{
-        \includegraphics[width=0.4\textwidth, height = 5cm ]{degreeDistUgraph.png}
-        \label{fig:degUgraph}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.4\linewidth, height = 5cm ]{degreeDistReplyGraph.png}
-        \label{fig:degRgraph}
-    }
-    \caption{\textsl{ Fig \ref{fig:depthDist} shows the distribution of maximum depths of Reply Graphs for Subreddit r/SuicideWatch and the baseline Frontpage conversations. Fig \ref{fig:uniqAuthors} shows the distribution of unique authors per thread in the two datasets. Fig \ref{fig:degRgraph} shows Distribution of degrees for Reply Graphs,  r/SuicideWatch and FrontPage. Fig \ref{fig:degUgraph} shows the degree distributions for the reply graphs}}
-\end{figure}
 
-Figure\ref{fig:responseDist} shows the CDF for the number of responses a Root post gets on a thread across the whole dataset. 
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.4\linewidth]{responseDistSW}
-    \caption{\textsl{ Distribution of responses per thread on Subreddits r/SuicideWatch and Frontpage }}
-    \label{fig:responseDist}
-\end{figure}
-Figure \ref{fig:responseDist} shows the CDF for number of comments per thread across the r/SuicideWatch subreddit dataset and the crawled frontpage subreddit. 
+
+\section{Conclusion}
+\label{sec:discussion}
+
+FaceLift is a  framework that automatically beautifies urban scenes by combining recent approaches of Generative Adversarial Networks and Deep Convolutional Networks. To make it usable by practitioners, the framework is also able to explain which urban elements have been added/removed during the beautification process. 
+
+There are still important limitations though. One is data bias. The framework is as good as its training data, and more work has to go into collecting reliable ground truth data on human perceptions. This data should ideally be stratified according to the people's characteristics that  impact their perceptions. The other main limitation is that generative models are hard to control, and more work has to go into offering principled ways of fine-tuning the generative process.
+
+Despite these limitations, FaceLift has the potential to support urban interventions  in scalable  and replicable ways: it can be applied to an entire city (scalable), across a variety of cities (replicable). To turn existing spaces into something more beautiful, that will still be the duty of architecture. Yet, with technologies similar to FaceLift more readily available, the complex job of recreating restorative spaces in an increasingly urbanized world will be greatly simplified.  
+
+
+After all, ``we delight in complexity to which genius have lent an appearance of simplicity.''~\cite{de2008architecture} In the context of future work, that genius is represented by future technologies that will help us deal with the complexity of our cities.
+
+
+
+\subsection{Limitations and biases}
+Like any supervised deep learning based framework, this work is only able to learn what is present in the data. Hence the method of acquiring annotations  for urban images can introduce huge biases in the model. The current model is trained on images acquired from the study on streetscore \cite{naik2014streetscore}. However their annotation is open to general public and there is not way we can remove biases that come with culture and location, in a highly subjective effect like beauty. Moreover because the pair wise choice is simply done by clicking one of the two images, the data might have noise introduced by non-serious participants. Such biases are bound to be picked up by the deep learning model. One can argue that the preference of our model for greenery , is a form of bias in the data. Another bias introduced because of data is the model's lack of preference to pedestrians. This bias was established well in advance because Google tries to remove most of the people from their street view images for privacy reasons. Hence people, which make up a major aspect of urban vitality, are completely missing from most dataset images and hence from the facelift transformations. 
+Another Limitation of our work is in the metric formation. The computational metrics developed to capture the real urban design metrics are designed using heuristics. There needs to be more crowd and expert validation to establish the validity of their formulation. 
+%
+\subsection{Future work}
+The framework is generalizable for geotagged and annotated images. The aim of this paper is to propose a framework with uses state of art methods in generative models to understand perception of emotions in urban images and explain them. As an extension, understanding how intervention would look like against outcome variables such as depression, safety or mental well-being in general would be very valuable.
