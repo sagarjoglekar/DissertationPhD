@@ -1,4 +1,4 @@
-\chapter{PART1 : Signatures of support: From Macro to Meso}
+\chapter{PART 1 : Signatures of support: From Macro to Meso}
 \label{chap:structure_support}
 \newcounter{row}
 \makeatletter
@@ -348,10 +348,7 @@ We perform binning of user graphs as described before in Section \ref{Sec:motif}
 
 We find that anchored motif variants \textbf{021U-a, 021U-b, 111D-b, 111D-c, 201-a and 201-b} are significantly over expressed in suicide watch conversations across all sizes of graphs as seen from figures \ref{fig:021U-a},\ref{fig:021U-b},\ref{fig:111D-b},\ref{fig:111D-c}, \ref{fig:201-a},\ref{fig:201-b}. Similarly anchored motif variants \textbf{012-b and 021C-c} are significantly over expressed in the null model(baseline) graphs across all sizes.
 
-From previous studies on triadic structure, it was inferred that transitive triads are naturally more common than expected in social structures of . Interestingly, our analysis shows that transitive triads are rarer in Suicide watch, as against the baseline conversations. 
-
-These patterns in local interactions indicate that conversations in suicide watch tend to be more $OP$ centric, with non-transitive dialogues between users who respond to a call for help. More so, the $OP$ tends to be highly central in the conversation as well as part of several mutual interactions. These behaviours are highly particular to r/Suicidewatch when compared with the baseline conversations.
-
+From previous studies on triadic structure, it was inferred that transitive triads are naturally more common than expected in social structures of human social networks. Interestingly, our analysis shows that transitive triads are rarer in Suicide watch, as against the baseline conversations. But in the defence of previous studies, the networks we study are of human conversations and not of human social ties. Also these conversations are happening with an intent of providing support, which makes one user (the one in distress) the centre of conversation. These conversational preferences make the macro and meso level structural signatures peculiar.
 
 \section{Conclusions and Outlook}
 
@@ -472,11 +469,15 @@ These patterns in local interactions indicate that conversations in suicide watc
         \includegraphics[width=0.33\linewidth ]{210-c.png}
     }
     
-    \label{fig:Rare_motifs}
+    
     \caption{ This figure lists out all the insignificant Anchored motifs, either by the virtue of rare occurance (<5 mean motifs per bin) or by account of low Z-score. }
+    
+    \label{fig:Rare_motifs}
 \end{figure}
 
+These patterns in local interactions indicate that conversations in suicide watch tend to be more $OP$ centric, with non-transitive dialogues between users who respond to a call for help. More so, the $OP$ tends to be highly central in the conversation as well as part of several mutual interactions. These behaviours are highly particular to r/Suicidewatch when compared with the baseline conversations. Further investigation of local structures in graphs show that there is a radically different way the conversation graphs evolve. The difference is not only between supportive conversation graphs and generic conversations, but also overall in supportive conversations and any social graphs. Several studies have looked at the social-tie structures and shown certain triadic motifs to be important in maintaining social hierarchy~\cite{shizuka2015network,shizuka2012social,holland1976local,doi:10.1177/104649647100200201}, but these expected structures are not the ones prevalent in supportive conversations. Transitive triads like \textsl{030T} and \textsl{210C} are shown to be overexpressed in ties that show social hierarchies. These and many of other relevant triads are not even active in supportive conversations as seen from Figure~\ref{fig:Rare_motifs}.  This points of a very different approach at interaction with distressed users, and may have great implications on detection of toxic behaviour and enabling of helpful online conversations. Further work needs to be done in modelling these conversations. With the advances in machine learning, both the language and the network structure could be used in compliment to develop unique embeddings for support. A true inter disciplinary aim is to enable use of such frameworks, to understand at risk individuals online and offline.
 
+In conclusion, quantifying perceived social support is an ongoing effort. But my work has shown that there are computable methods, which could capture the mechanics of support in online conversations.   
 
 
 
