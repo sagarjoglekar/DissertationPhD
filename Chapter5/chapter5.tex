@@ -1,20 +1,62 @@
-\chapter{Part 2: Recreating the urban perceptions}
-\label{chap:recreate_perception}
+\chapter{From crowds: Recreating the urban perceptions}
 \graphicspath{{Chapter4/plots/} {Chapter5/plots/examples/} {Chapter5/plots/GAN_examples/}}
 
-\subsection*{Step 3 Generating a synthetic beautified scene}
+\begin{quote}
+    ``What I cannot create, I do not understand'' -- Richard Feynman
+\end{quote}
+Feynman said this insightful quote in context of understanding deeper concepts in physics. If one cannot teach a concept, one does not understand it deeply. 
+This notion, albeit disconnected with the premise of my thesis, is as relevant as when it comes to building models of any phenomenon. If a model cannot simulate reality, the model has not really captured the essence of what it is trying to learn. 
 
-\begin{figure}[t!]
+In the last chapter, we saw that a large scale crowd poll about perception of urban spaces, can be used to train a machine learning model that can differentiate between an aesthetically pleasing or aesthetically unpleasant urban image. We also showed that despite the challenges, we can enrich urban data, using certain spatial heuristics. This however did not address an important question, that is, what is the validity of the learnt representation of beauty? Can we use the model's understanding of beauty to our benefit? Is the model actually learning what humans perceive to be the signatures of beauty?
+All these questions entail from the final research questions of my thesis: 
+
+\noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+        \textbf{RQ6} \textsl{Can we leverage quantification of the subjective to improve aesthetics of real spaces?}
+        
+        
+        \textbf{RQ7} \textsl{Do humans and experts find the methods realistic?}   
+\end{minipage}}
+\vspace{0.5cm}
+We would try to explore the answers to these questions in this chapter, by dissecting the model of beauty learn't in the previous chapter. This, as per the notion of understanding framed by Feynman, can be done by first using the model to generate what it thinks is the notion of urban aesthetic. These generations can be used as recommendations of possible improvements of any given un-aesthetic place. Next we quantify these recommendations using metrics designed around urban design literature. Finally we validated these metrics and recommendations through a user study.  
+
+
+This approach essentially calls back to the abstract DIKW pyramid approach, where by to derive insights from data, you first create abstractions that come naturally to the structure of data. In this case, the natural abstraction is the structure of the image itself. You are then supposed to represent the knowledge in the abstractions in the form of metrics that could motivate human wisdom. In this case, we believe that the beauty classifier we saw in Chapter~\ref{chap:quant_perception} has some pertinent knowledge learnt by training on the crowd sourced opinions on beauty. In this chapter, we would develop metrics that operate on this knowledge, to arrive at wisdom inducing insights.
+
+
+\section{Related}
+Deep learning has been a hot topic and a tool to explore modelling of large datasets in the recent days. The applications of this has seen a steady expansion in the fields other than computer vision and pattern recognition. To list a few, deep learning has made steady headway in natural science allied fields like drug discovery~\cite{gawehn2016deep}, urban science~\cite{pang2017deepcity,cordts2016cityscapes,li2017deep}, health informatics~\cite{ravi2016deep}. The most common forms of deep learning models have been the convolutional neural nets, which we have seen in action in the previous chapter. These convolutional neural networks are essentially layered hierarchical structures of neurons, which can be trained to extract higher dimensional relationships between features in data. This approach has allowed researchers to not only train models to perform simple tasks like detecting objects~\cite{krizhevsky2012imagenet} or detecting faces~\cite{ranjan2017hyperface}, but it has also enabled researchers to quantify much more subjective and intangible properties from images, such as emotions~\cite{kim2013deep},sentiments~\cite{SentiBank} or ambiance of a place~\cite{redi2015like}.
+
+Since the introduction of Generative Adversarial Networks (GANs)~\cite{goodfellow2014generative}, deep learning has been used not only to analyse existing images but also to generate new ones altogether. This family of deep networks has evolved into various forms, from super resolution image generators~\cite{ledig2017photo} to fine-grained in-painting technologies~\cite{pathak2016context}. Recent approaches have been used to generate images conditioned on specific visual attributes~\cite{yan2015attribute2image}, and these images range from faces~\cite{taigman2016unsupervised} to people~\cite{ma2018disentangled}. In a similar vein, Nguyen \emph{et al.}~\cite{nguyen2016synthesizing} used generative networks to create a natural-looking image that maximizes the activation of a specific neuron in the discriminator. This method was used to bring out the latent representation of an image, that maximizes its probability of a particular class. In theory, the resulting image is the one that ``best activates'' the neuron under consideration. In practice, it is still a synthetic template that needs further processing to look realistic.   Finally, with the recent advancement in Augmented Reality, the application of GANs to generate urban objects in simulated urban scenes have also been successfully shown~\cite{alhaija2018augmented}. 
+
+These approaches motivated my work to use GANs, to further investigate the question ``What makes an urban scene beautiful''. To that extent, I design a framework that utilizes GANs in tandem with the beauty classifier, to reconstruct what the classifier presumes to be beautiful. This is done in a way, that provides an incremental change in a target scene to enhance its beauty. Finally, in accordance with the DIWW framework, I develop metrics to better articulate the knowledge learnt by the model. These metrics are novel and are designed around well known metrics in the literature pertaining to urban design and architecture. 
+Finally, I show that this pipeline indeed adds value in the day to day tasks of practitioners of urbanism and the output suggestions done by the framework, indeed is perceived to be more aesthetic compared to the input images. 
+
+\section{GAN primer}
+A new breed of deep learning algorithms have allowed researchers to generate synthetic data samples, based on knowledge and structure learnt form real data samples ($x$). These family of algorithms are called Generative Adversarial Networks or GANs. GANS work by simultaneously training a Generator $G(z;\theta)$ and a Discriminator $D(x)$ model, who try to out wit each other through training on real samples. The Generator tries to learn to generate the most ``real'' looking synthetic samples by learning the distribution of $x$, and the discriminator $D(x)$ tries to learn to maximize the accuracy on guessing which sample comes from a generator and which comes from the real data. At the peak performance, the generator becomes so good, that the discriminator's accuracy cannot go beyond 50\% mark, implying a totally random guess. This means the Generator 
+
+
+\begin{figure}[ht!]
     \centering
-    \includegraphics[width=\columnwidth]{AM_arch.pdf}
-    \caption{Architecture of the synthetic beauty generator. This consists of a generator of synthetic scenes concatenated with a beauty classifier. The green block is the beauty maximized template $\hat{I_j}$, which is subject to  forward and backward passes (red arrow) when optimizing for beauty.}
-    \label{fig:AM_arch}
+    \includegraphics[width=0.7\columnwidth]{GAN_arch.pdf}
+    \caption{A simplified illustration of the architecture of a Generative Adversarial Network. The red compunets are trained in tandem, one at a time. The discriminator $D$ tries to maximize accuracy to differentiate between $I$ and the generated version $\hat{I}$. And the Generator $G$ tries to minimize accuracy of $D$ to 50\% thereby making $\hat{I}\approx I$}
+    \label{fig:GAN_arch}
 \end{figure}
 
+The training of this arrangements of neural networks happen in a lock step mode. 
+A simplified version of this arrangement can be found in Figure \ref{fig:GAN_arch}.
+The input to the generator $G(z;\theta)$ is initialized using a prior like a gaussian, which essentially creates a codebook of gaussian noise. More formally the discriminator $D(x)$ tries to maximize assigning a correct probability to each sample $x_i$ to be either from the generator $G$ or the real dataset $x$. At the same time, the generator $G$ is trying to minimize the loss$\log(1-D(G(x)))$. Essentially $G$ and $D$ are locked in a two player min-max game with the value function $V(D,G)$ formalized as :
+
+\begin{equation}
+\min _{G} \, \max _{D} \, V(D, G)=\mathbb{E}_{\boldsymbol{x} \sim p_{\text { data }}(\boldsymbol{x})}[\log D(\boldsymbol{x})]+\mathbb{E}_{\boldsymbol{z} \sim p_{\boldsymbol{z}}(\boldsymbol{z})}[\log (1-D(G(\boldsymbol{z})))]
+\end{equation}
+
+For the premise of my dissertation, I train a generator from the works by Dosovitsy et.al ~\cite{dosovitskiy2016generating} on the entire dataset of streetview images obtained in accordance to the strategies discussed in Chapter \ref{chap:quant_perception}. The results of the capacity of this generator to approximate streetview scenes can be see from Table \ref{fig:GanExample}.
+
+
+
+
 \begin{table}\sffamily
-    \begin{centering}
-        
-        
+    \begin{centering} 
         \begin{tabular}{l*2{C}@{}}
             \toprule
             & Original & Generated \\ 
@@ -31,14 +73,33 @@
     \end{centering}
 \end{table} 
 
+\section{Framework Design}
 
-Having this trained classifier at hand, we can then build a generator of synthetic beautified scenes. To build such a generator, we  retrain the GAN described by Dosovitskiy and Brox~\cite{dosovitskiy2016generating} on our curated urban scene dataset. This network is trained by maximizing the confusion for the discriminator between the generated images $G(f)$ and the original ones $I_f$~\cite{goodfellow2014generative}.  The resulting generator is concatenated with our beauty classifier (Figure~\ref{fig:AM_arch}). As a result, given the two classes ugly $y_i$ and beautiful $y_j$, the end-to-end model  transforms any original scene $I_i$ of class $y_i$ (e.g., ugly scene) into template scene $\hat{I_j}$ that maximizes class $y_j$ (e.g., beautified template scene). 
 
-% able to reproduce synthetic urban scenes (Figure~\ref{fig:GanExample}) 
-%to an impressive level of detail. shows a few examples of how the generator performs by comparing a real world image $I_f$, and the generated image $G(f)$. 
-%
-%
-%The second component is a concatenation of  the trained generator with the beauty classifier described in Section~\ref{Sec:Classifier}, as shown in . This results in 
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\columnwidth]{AM_arch.pdf}
+    \caption{Architecture of the synthetic beauty generator. This consists of a generator of synthetic scenes concatenated with a beauty classifier. The green block is the beauty maximized template $\hat{I_j}$, which is subject to  forward and backward passes (red arrow) when optimizing for beauty.}
+    \label{fig:AM_arch}
+\end{figure}
+
+\begin{table}[t]
+    \resizebox{0.7\linewidth}{!}{
+        \begin{tabular}{l|p{8cm}}
+            \textbf{Symbol} & \textbf{Meaning}\\
+            $I_i$    & Original urban scene \\
+            $Y$    & Set of annotation classes for urban scenes (e.g., beautiful, ugly)\\
+            $y_i$    & Annotation class in $Y$ (e.g., beautiful) \\
+            $\hat{I_j}$ & Template scene (synthetic image) \\
+            $I'$ & Target Image \\
+            $C$ & Beauty Classifier \\
+    \end{tabular}}
+    \caption{Notations}\label{notations}
+\end{table}
+
+Having the trained classifier at hand and the trained generator of synthetic beautified scenes, the next step is to reconstruct synthetic images using the generator, that maximize the probability of that image being classified as beautiful. The simulated arrangement of this framework can be see in figure \ref{fig:AM_arch} 
+As a result, given the two classes: ugly $y_i$ and beautiful $y_j$, the end-to-end model  transforms any original scene $I_i$ of class $y_i$ (e.g., ugly scene) into template scene $\hat{I_j}$ that maximizes class $y_j$ (e.g., beautified template scene). 
 
 More specifically, given an input image $I_i$ known to be of class $y_i$  (e.g., ugly), our technique outputs  $\hat{I_j}$, which is a more beautiful version of it (e.g., $I_i$ is morphed  towards the average representation of a beautiful scene) while preserving $I_i$'s details. The technique does so using the ``Deep Generator Network for Activation Maximization'' (\emph{DGN-AM})~\cite{nguyen2016synthesizing}. Given an input image $I_i$, \emph{DGN-AM} iteratively re-calculates the color of $I_i$'s pixels in  a way  the output image $\hat{I_j}$  both maximizes  the  activation of neuron $y_j$ (e.g., the ``beauty neuron'') and looks ``photo realistic'',  which is done by conditioning the maximization to an ``image prior''. This is equivalent to finding the feature vector $f$ that maximizes the following expression:
 \begin{equation}
@@ -54,27 +115,12 @@ Here the initialization of $f$ is key. If $f$ were to be initialized with random
 
 The input image is also key. It makes little sense to beautify an already beautiful image, not least because such beautification process would result in a saturated template $\hat{I_j}$ in our framework. For this reason, to generate an image that maximizes the beauty neuron in the classifier $C$, we restrict the  corresponding input image to be in class $y_i$ (i.e., ugly scenes as per the divisions in Figure~\ref{fig:Trueskill}). We do the opposite when maximizing the ugly neuron. 
 
-
-
-%Maximizing beauty of an already beautiful urban scene, would yield in a saturated template $\hat{I_j}$. 
-
-%****************************************
-\subsection*{Step 4 Returning a realistic beautified scene}
 We now have template scene $\hat{I_j}$ (which is a synthetic beautified version of original scene $I_i$) and need to retrieve a realistic looking version of it. We do so by: \emph{i)} representing each of our original scenes in Step 1 (including $\hat{I_j}$) as a 4096 dimensional feature vector derived from the FC7 layer of the PlacesNet~\cite{zhou2014learning}; \emph{ii)} computing the distance (as $L_2$ Norm) between $\hat{I_j}$'s feature vector and each of the original scene's feature vector; and \emph{iii)} selecting the original scene most similar (smaller distance) to $\hat{I_j}$. This results into the selection of the beautified scene $I_j$.
 
 
 %****************************************
-\subsection*{Step 5 Identifying  characterizing urban elements}
+\section{Motifs of urban beauty}
 Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of urban elements extracted by computer vision tools such as SegNet and PlacesNet. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. 
-
-
-%\begin{figure*}[h]
-%	\centering
-%	\includegraphics[width=\linewidth]{Plot/Example.png}
-%	\caption{Example of ``FaceLifting''.}
-%	\label{fig:BeautyExample}
-%\end{figure*}
-
 
 \begin{table}\sffamily
     \begin{tabular}{l*3{C}@{}}
@@ -116,10 +162,10 @@ The goal of FaceLift is to transform existing urban scenes into versions that: \
 \end{description}
 
 
-\subsection*{Q1 People's perceptions of beautified scenes}
+\subsection{Q1 People's perceptions of beautified scenes}
 To ascertain whether ``FaceLifted'' scenes are perceived by individuals as they are supposed to, we run a crowd-sourcing experiment on Amazon Mechanical Turk.  We randomly select 200 scenes, 100 beautiful and 100 ugly  (taken at the bottom 10 and top 10 percentiles of the Trueskill's score distribution of Figure~\ref{fig:Trueskill}). Our framework then transforms each ugly scene into its beautified version, and each beautiful scene into its corresponding `uglified'. These scenes are arranged into pairs, each of which contains the original scene and its beautified or uglified version. On  Mechanical Turk, we only select verified masters as our crowd-sourcing workers (those with an approval rate above 90\% during the past 30 days), pay them \$0.1 per  task,  and ask each of them to choose the most beautiful scene for each given pair.  We make sure to have at least 3 votes for each scene pair. Overall, our workers end up selecting the scenes that are actually beautiful 77.5\% of the times, suggesting that ``FaceLifted'' scenes are indeed perceived to be more beautiful by people. 
 
-\subsection*{Q2 Are beautified scenes great urban spaces?}
+\subsection{Q2 Are beautified scenes great urban spaces?}
 To answer that question, we need to understand what makes a space great. After reviewing the literature in urban planning, we identify four factors associated with  great places~\cite{ewing2013measuring,alexander1977pattern} (Table~\ref{tab:Design_metrics}): they mainly tend to be walkable, offer greenery, feel cozy, and be visually rich. 
 
 \begin{table*}[h]
@@ -224,7 +270,7 @@ where $i$ is the $i^{th}$ Segnet's label. The total number of labels is twelve. 
 
 
 %**************************************************
-\subsection*{Q3 Urban elements of beautified scenes}
+\subsection{Q3 Urban elements of beautified scenes}
 
 \begin{table}[t!]
     \centering
@@ -268,7 +314,15 @@ Since we are using logistic regressions, the quantitative interpretation of the 
 
 
 %**************************************************
-\subsection*{Q4 Do architects and urban planners find it useful?}
+\subsection{Q4 Do architects and urban planners find it useful?}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{facelift-pipeline-2x.png}
+    \caption{An end to end illustration of the FaceLift framework.}
+    \label{fig:framework}
+\end{figure}
+
 
 \begin{table}[t!]
     \centering
