@@ -121,7 +121,7 @@ We now have template scene $\hat{I_j}$ (which is a synthetic beautified version 
 
 %****************************************
 \section{Motifs of urban beauty}
-Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of urban elements extracted by computer vision tools such as SegNet and PlacesNet. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. 
+Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of urban elements extracted by computer vision tools such as SegNet~\cite{badrinarayanan2015segnet} and PlacesNet~\cite{zhou2014learning}. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. 
 
 \begin{table}\sffamily
     \begin{tabular}{l*3{C}@{}}
@@ -153,13 +153,9 @@ The goal of FaceLift is to transform existing urban scenes into versions that: \
 
 \begin{description}
     \item{\textbf{Q1}} Do individuals perceive ``FaceLifted'' scenes to be beautiful?
-    
-    \item{\textbf{Q2}}  Does our framework produce scenes that possess urban elements typical of great spaces?
-    
-    \item{\textbf{Q3}}  Which urban elements are mostly associated with beautiful scenes?
-    
-    \item{\textbf{Q4}}  Do architects and urban planners find FaceLift useful?
-    
+    \item{\textbf{Q2}}  Does our framework produce scenes that possess urban elements typical of great spaces?  
+    \item{\textbf{Q3}}  Which urban elements are mostly associated with beautiful scenes?    
+    \item{\textbf{Q4}}  Do architects and urban planners find FaceLift's insights useful?    
 \end{description}
 
 
@@ -402,5 +398,6 @@ After all, ``we delight in complexity to which genius have lent an appearance of
 Like any supervised deep learning based framework, this work is only able to learn what is present in the data. Hence the method of acquiring annotations  for urban images can introduce huge biases in the model. The current model is trained on images acquired from the study on streetscore \cite{naik2014streetscore}. However their annotation is open to general public and there is not way we can remove biases that come with culture and location, in a highly subjective effect like beauty. Moreover because the pair wise choice is simply done by clicking one of the two images, the data might have noise introduced by non-serious participants. Such biases are bound to be picked up by the deep learning model. One can argue that the preference of our model for greenery , is a form of bias in the data. Another bias introduced because of data is the model's lack of preference to pedestrians. This bias was established well in advance because Google tries to remove most of the people from their street view images for privacy reasons. Hence people, which make up a major aspect of urban vitality, are completely missing from most dataset images and hence from the facelift transformations. 
 Another Limitation of our work is in the metric formation. The computational metrics developed to capture the real urban design metrics are designed using heuristics. There needs to be more crowd and expert validation to establish the validity of their formulation. 
 %
-\subsection{Future work}
-The framework is generalizable for geotagged and annotated images. The aim of this paper is to propose a framework with uses state of art methods in generative models to understand perception of emotions in urban images and explain them. As an extension, understanding how intervention would look like against outcome variables such as depression, safety or mental well-being in general would be very valuable.
+\subsection{Implications}
+In the works through my Ph.D., the idea of quantifying the subjective has always been the central theme. The subjective is where most of our human existence takes place. As Emanuel Kant instructs, ``Look closely, the beautiful may be small''. And indeed, the insights that drive the quantification of beauty in this part of my work, seem to be almost intuitive. Greenery, walking spaces and open spaces seem drive our perception of the aesthetic, which may be grounded in our natural roots and evolutionary need to be safe and close to nature. Despite of the root causes seeming intuitive, the implications of these simple properties of urban spaces on mental and physical health seem to be far more crucial in today's world. 
+At such a juncture, it is worth while to develop these frameworks to capture human subjective experiences. Thankfully because of the convergence in our online and offline lives, we are generating far more data about our offline experiences, online. Data acquired from how we interact with different on-line services, may very well improve our off-line lives.
