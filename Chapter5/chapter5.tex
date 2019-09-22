@@ -52,7 +52,7 @@ The input to the generator $G(z;\theta)$ is initialized using a prior like a gau
 \min _{G} \, \max _{D} \, V(D, G)=\mathbb{E}_{\boldsymbol{x} \sim p_{\text { data }}(\boldsymbol{x})}[\log D(\boldsymbol{x})]+\mathbb{E}_{\boldsymbol{z} \sim p_{\boldsymbol{z}}(\boldsymbol{z})}[\log (1-D(G(\boldsymbol{z})))]
 \end{equation}
 
-For the premise of my dissertation, I train a generator from the works by Dosovitsy et.al ~\cite{dosovitskiy2016generating} on the entire dataset of streetview images obtained in accordance to the strategies discussed in Chapter \ref{chap:quant_perception}. The results of the capacity of this generator to approximate streetview scenes can be see from Table \ref{fig:GanExample}.
+For the premise of my dissertation, I train a generator based on the structure seen at Dosovitsy et.al ~\cite{dosovitskiy2016generating}, on the entire dataset of streetview images obtained in accordance to the strategies discussed in Chapter \ref{chap:quant_perception}. The results of the capacity of this generator to approximate streetview scenes can be see from Table \ref{fig:GanExample}.
 
 
 
@@ -193,7 +193,7 @@ To answer that question, we need to understand what makes a space great. After r
 
 To automatically extract visual cues related to these four factors, we select 500 ugly scenes and 500 beautiful ones at random, transform them into their opposite aesthetic qualities (i.e., ugly ones are beautified, and beautiful ones are `uglified'), and compare which urban elements related to the four factors distinguish uglified scenes from beautified ones. 
 
-We extract labels from each of our 1,000 scenes using two image classifiers. First, using PlacesNet~\cite{zhou2014learning}, we label each of our scenes according to a classification containing 205 labels (reflecting, for example, landmarks, natural elements), and retain the five labels with highest confidence scores for the scene. Second, using Segnet~\cite{badrinarayanan2015segnet}, we  label each of our scenes according to a classification containing 12 labels. Segnet is trained on dash-cam images, and classifies each scene pixel with one of these twelve labels: road, sky, trees,  buildings, poles, signage, pedestrians, vehicles, bicycles, pavement, fences, and road markings. 
+We extract labels from each of our 1,000 scenes using two image classifiers. First, using PlacesNet~\cite{zhou2014learning}, we label each of our scenes according to a classification containing 205 labels (reflecting, for example, landmarks, natural elements), and retain the five labels with highest confidence scores for the scene. We then manually classify these 205 labels into the 4 built environment types namely \textit{Walkable, Architectural, Natural and Landmark}. These types are inspired by the guidelines for measuring urban design~\cite{ewing2013measuring}. The specifics of their category definitions and the actual labels can be seen in Appendix 2(Chapter ~\ref{chap:app2}).  Second, using Segnet~\cite{badrinarayanan2015segnet}, we  label each of our scenes according to a classification containing 12 labels. Segnet is trained on dash-cam images, and classifies each scene pixel with one of these twelve labels: road, sky, trees,  buildings, poles, signage, pedestrians, vehicles, bicycles, pavement, fences, and road markings. 
 
 \begin{figure}[h]
     \centering
@@ -211,7 +211,7 @@ We extract labels from each of our 1,000 scenes using two image classifiers. Fir
 \end{figure}
 
 
-Having these two ways of labeling scenes, we can now test whether the expectations set by the literature describing metrics of great urban spaces (Table~\ref{tab:Design_metrics}) are  met in the FaceLifted scenes. 
+Having these two ways of labelling scenes, we can now test whether the expectations set by the literature describing metrics of great urban spaces (Table~\ref{tab:Design_metrics}) are  met in the Face-lifted scenes. 
 
 
 %**************************************************
