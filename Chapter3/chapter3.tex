@@ -56,11 +56,9 @@ by iteratively pursuing each conversation at progressively deeper levels until t
 To provide a baseline against which to compare the hypothesized supportive nature of the SW sub-reddit, we acquired 50k baseline posts from any other subreddit popular enough to land on the frontpage.
 
 We crawl the Frontpage posts for 2 weeks accumulating over 50 thousand reddit threads in the process. 
-% For the sake of comparison, we also crawl another sub-reddit besides suicide watch, which could help us ground out metrics. We crawl all the threads posted for the year 2017 on the subreddit r/Depression, which is another support community that aims at giving supportive feedback to reddit users suffering from depression. 
 Comparing the suicide watch threads with the baseline, gives us confidence over our network metrics, and any claims made there forth. 
 The two conversation datasets from r/SuicideWatch and Frontpage are very similar in terms of pure macro statistics. E.g. the median amount of responses for a Suicide watch thread were 6 and for baseline Frontpage posts were 8. The median conversation depth (the depth of the hierarchy of the responses) is 2 for all the datasets. The median amount of unique authors participating in a post are 2. 
 Owing to the long tailed nature of the datasets, we perform our analysis on threads which have been conversed on at least 5 times. Which means we consider graphs which have more than 5 posts on the root post. This results in our datasets to shrink to 25k threads for suicide watch and 30k threads for Baseline. We further clean the dataset, by removing threads where the root author has deleted their user account, which is a common practice to preserve anonymity in more controversial posts. The resulting dataset has 20k threads in Suicide watch and 23k threads in the baseline. 
-% We perform similar curating on the r/Depression threads, resulting in 4k threads to analyse. 
 
 
 \section{Abstractions}
