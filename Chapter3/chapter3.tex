@@ -137,6 +137,16 @@ Once you are able to develop abstractions from the data, it becomes possible to 
 
 \subsubsection{Semantic Alignment}
 \label{Sec:Semantic}
+
+We then extract the word embedding vectors for each post using Doc2Vec\cite{le2014distributed}, which extends the word embeddings to represent a whole document or paragraph. We extract these embedding vectors for each post in $R^N$ for all the posts across the complete hierarchy of threads. We then quantify the edge weights of each interaction amongst the reply tree as the cosine distance between the response post and the hierarchically higher post, to which the responder has posted to. This captures the semantic alignment between the hierarchically adjacent responses. 
+More formally, if user $V_i$ has responded with post $P_i$ to a post $P_j$ written by user $V_j$, we extract the word embedding in $R^N$ for both posts $P_i$ and $P_j$. If these embeddings are represented by $N$ dimensional vectors $\psi_i^N$ and $\psi_j^N$ then the edge weight for the edge $E_{ij}$ in the corresponding reply graph would be
+
+$$ W_{ij} = \frac{\psi_i^N . \psi_j^N}{\|\psi_i^N\|_2 \|\psi_j^N\|_2} $$
+
+This metric standardizes all edge weights between 0.0 and 1.0, 1.0 implying that the posts $P_i$ and $P_j$ are most aligned, and 0.0 implying the post have least semantic similarity. 
+This metric abstracts out the content of the post, in terms of semantics which can then be used as edge weights in the graph abstractions.
+
+
 We use a popular word embedding method called \textit{Word2Vec} \cite{mikolov2013distributed} which learns representations of a set of words from a corpus of text, which in our case is the text from Suicide Watch and baseline fora. These representations can be used to extract text embedding vectors for each post which belong to a $N$ dimensional space $R^N$. These vectors are tested for their alignment using cosine distance in $R^N$, which from literature is shown to correspond to the semantic similarity in the textual space. This method is quite popular and used in community based question answering\cite{mihaylov2016semanticz}, Medical semantic similarity \cite{de2014medical} and other medical informatics applications\cite{zhu2017semantic}.
 We first train two independent word2vec models on the Suicide watch and Front page post corpora. 
 We then extract the word embedding vectors for each post using Doc2Vec\cite{le2014distributed}, which extends the word embeddings to represent a whole document or paragraph. We extract these embedding vectors for each post in $R^N$ for all the posts across the complete hierarchy of threads. We then quantify the edge weights of each interaction amongst the reply tree as the cosine distance between the response post and the hierarchically higher post, to which the responder has posted to. This captures the semantic alignment between the hierarchically adjacent responses. 
