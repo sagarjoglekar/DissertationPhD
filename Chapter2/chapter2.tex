@@ -9,17 +9,22 @@
 \begin{quote}
     \textit{''The original idea of the web was that it should be a collaborative space where you can communicate through sharing information... In an extreme view, the world can be seen as only connections, nothing else.``} - Tim Berners Lee\cite{berners2001weaving} 
 \end{quote}
-Attention budgets pretty much govern how we as consumers interact with online social networks. It has been shown that the dearth of this budget, promotes an engagement behaviour that prioritizes perceptive features and immediacy in the content~\cite{joglekar2017like}. The scrolling user interface of platforms like Instagram and Facebook, allow mere seconds to decide whether a particular content is worth the user's attention~\cite{eikelboom2017irresistible}. 
+Attention budgets pretty much govern how we as consumers interact with online social networks. It has been shown that the dearth of this budget, promotes an engagement behaviour that prioritizes perceptive features and immediacy in the content~\cite{joglekar2017like}. The scrollable user interfaces of platforms like Instagram and Facebook, allow mere seconds to decide whether a particular content is worth the user's attention~\cite{eikelboom2017irresistible}. 
 
 However, there is a whole breed of online social networks, which aim at bringing the offline sense of networking, online. These networks are mostly designed around a specific purpose like technical discussions\footnote{\url{www.stackoverflow.com}}, subject specific questions\footnote{\url{www.stackexchange.com}} or simply around hobbies like knitting\footnote{\url{www.ravelry.com}} or art\footnote{\url{www.artween.com/}}. These communities embody the true essence~\cite{berners2001weaving} of the internet, in that they strive at making geographical distance secondary, to the act of social networking and information sharing.
-\begin{definition}
-    According to the seminal work by Shumaker and Brownell~\cite{shumaker1984toward}, social support is defined as \textsl{``an exchange of resources between two individuals perceived by the provider or the recipient to be intended to enhance the well-being of the recipient.''}
-    \label{def:support}
-\end{definition}
 
-Under this construct , these communities are apt Petri dishes to study the signatures of the online social support. Once you could quantify the social support signatures in terms of computable metrics, platforms could then empower the participants of these communities and design interventions to curb negative behaviour like trolling.
+\section{Introduction to online social support}
 
-In the context of this dissertation, I wanted to know how signatures of a perceived entity like social support,  manifests on these formal social networks. More specifically I  develop methods and frameworks, to extract the signatures of perceived \textsl{social support} on communities designed around users who have underwent or are undergoing physical or mental distress. These methods and frameworks could bear significant potential impact on the health and utility of these forums. The first step us to understand the structure and utility of these communities. More over, having a primer on these communities would help the reader get an idea about the methods developed over the course of this dissertation. 
+According to the seminal work by Shumaker and Browne ~\cite{shumaker1984toward}, social support is defined as \textsl{``an exchange of resources between two individuals perceived by the provider or the recipient to be intended to enhance the well-being of the recipient.''}. In the context of online spaces, the definition prescribes exchange of messages and information, in order to provide support to the recipient.  
+
+This exchange has been explored in detail in the field of computer mediated support~\cite{coulson2005receiving,weinberg1995computer}. The main idea of understanding computer mediated communication is to zoom out from the message level interactions between users, and look at the actual ``tie'' between them. A tie connects a pair of actors by one or more relations. Pairs may maintain a tie based on one relation only, or they may maintain a multiplex tie, based on many relations, such as sharing information, giving financial or psychological support~\cite{garton1997studying}. Thus ties also vary in content, direction and strength. Ties are often referred to as weak or strong, although the definition of what is weak or strong may vary in particular contexts~\cite{marsden1984measuring}. 
+
+A lot of qualitative work has been done on understanding the dynamics~\cite{wright2003health,languageChoudhury} and utility~\cite{nambisan2011information} of online social support. But most, if not all, studies looked at the content and thematic aspects of the supportive posts on these forums. But the key strength of online support communities is their networked collection of users, volunteering to provide online support. Some examples of such communities are  r/SuicideWatch\footnote{\url{www.reddit.com/r/suicidewatch}}, r/Depression\footnote{\url{www.reddit.com/r/depression}}, Elefriends~\footnote{\url{https://www.elefriends.org.uk/}}. These communities are apt Petri dishes to study the structural signatures of the online social support networks. Once you could quantify the social support signatures in terms of computable metrics, platforms could then empower the participants of these communities and design interventions to curb negative behaviour like trolling.
+
+In the context of this dissertation, I wanted to know how signatures of a perceived entity like social support,  manifests on these formal social networks.
+This resulted in a framework that uses a set of network metrics to measure the dynamics of support communities and the importance of individual actors for the health of this community. 
+
+This framework could bear significant potential impact on the problem of measuring health and utility of online forums. 
 
 \section{Primer on online health communities}
 \label{sec:primer}
@@ -33,11 +38,11 @@ On average, one in four people with an LTC who use the Internet tries to engage 
 
 The potential future integration of online health support systems with formal health care provision should be underpinned by a better understanding of how they are used and by evidence of their effectiveness. Indeed, as suggested by the Medical Research Council~\cite{Craiga1655}, integrating online support systems with the more traditional health care provision would require the identification and comparative assessment of potential alternative intervention mechanisms.
 
-In this chapter, I aim to uncover and understand how these communities function,evolve, and operate in the role of a supportive entity, from a macroscopic perspective.
-Further it is worth knowing if there exists any particular mechanism, by which individual users evolve into the role of support givers.
 
-Ultimately, once we understand the mechanisms of peer support, we can proceeded in looking for discriminative signatures of these supportive exchanges.
-In this chapter, we would illuminate the answers for \textbf{RQ1} and \textbf{RQ2} using a large scale dataset of a pulmonary illness support group. The questions are: 
+
+With the clarity on the importance of online health forums for people suffering from LTCs, this chapter investigates the role of individual users and the inter-user exchanges in keeping an online health community functioning. We would like to know whether there are particular users who play crucial roles in the communities. What are some peculiar behaviours which differentiates users on support communities for others?
+
+With this context, we aim to answer the \textbf{RQ1} and \textbf{RQ2}, which are: 
 
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
         \textbf{RQ1} \textsl{What dynamics of support communities help them thrive?}   
@@ -47,9 +52,10 @@ In this chapter, we would illuminate the answers for \textbf{RQ1} and \textbf{RQ
 
 \section{Dataset and properties}
 \label{sec:dataset}
-The data was collected from HealthUnlocked\footnote{\url{http://www.webcitation.org/70Y10rppl}}, the online platform provider of the Asthma UK and British Lung Foundation communities. Registered users can choose to either write posts publicly or send private posts to one another. In the latter case, posts are shared between 2 users only, whereas when posts are written publicly, a large number of users can become connected through threads of posts. A thread is a series of posts made on one root post, as a response to the root, or as a response to one of the responses to the root. This tree-like structure of posts can evolve indefinitely between posters. 
-Only posts that were shared publicly were collected and analyzed. For this study, user identifiers (IDs) were anonymized by the HealthUnlocked platform, and no demographic information was collected. 
-The data set included posts and their metadata (ie, the anonymized user ID numbers), user roles (eg, user, administrator, or moderator), date of posting, the hierarchical level of the post within the corresponding thread, and the dates in which the users joined and left the community. Both communities were moderated, and HealthUnlocked moderators (identified through metadata linked to posts) were included in the analysis to assess their contribution and compare it with other users. Online communities on the HealthUnlocked platform benefit from additional functionalities compared to other online forums, such as built-in patient groups that moderate the content. In particular, the content accessed by users is tailored to their interests, and profiles highlight users’ condition, chosen community, medications and treatments they use or find interesting. No data were collected on participants’ characteristics, though only people declaring themselves to be older than 16 years were permitted to create an account and take part in the online communities. Table \ref{table:jmirData} summarizes the salient features of the dataset used for this work. 
+This study was carried out in collaboration with HealthUnlocked\footnote{\url{http://www.webcitation.org/70Y10rppl}}, the online forum platform that hosts the Asthma UK and British Lung Foundation communities. The data was aggregated, anonymised, and shared after proper Institutional Review Board and ethics approvals were taken to protect user privacy. The data was collected from  registered users, who can choose to either write posts publicly or send private posts to one another. In the latter case, posts are shared between 2 users only, whereas when posts are written publicly, a large number of users can become connected through threads of posts. In this study, I do not consider private posts. 
+A thread is a series of posts made on one root post (RP), as a response to the root, or as a response to one of the responses to the root. This tree-like structure of posts can evolve indefinitely between posters and responders. 
+For this study, user identifiers (IDs) were anonymized by the HealthUnlocked platform, and no demographic information was collected. 
+The data set included posts and their metadata (ie, the anonymized user ID numbers), user roles (eg, user, administrator, or moderator), date of posting, the hierarchical level of the post within the corresponding thread, and the dates in which the users joined and left the community. A sample of one such post can be seen in table \ref{table:sample}. Both communities were moderated, and HealthUnlocked moderators (identified through metadata field "Role") were included in the analysis to assess their contribution and compare it with other users. Online communities on the HealthUnlocked platform benefit from additional functionalities compared to other online forums, such as built-in patient groups that moderate the content. In particular, the content accessed by users is tailored to their interests, and profiles highlight users’ condition, chosen community, medications and treatments they use or find interesting. No data were collected on participants’ characteristics, though only people declaring themselves to be older than 16 years were permitted to create an account and take part in the online communities. Table \ref{table:jmirData} summarizes the salient features of the dataset used for this work. 
 
 
 \begin{table}[htb!]
@@ -72,9 +78,9 @@ The data set included posts and their metadata (ie, the anonymized user ID numbe
     \hline
      Total number of users &	3345					& 19,837 \\
     \hline
-     Users who contributed > 1 posts (\%n) & 1053 (31.5)  & 7814 (39.4) \\
+     Users who contributed > 1 posts (\%n) & 722 (21.6)  & 6628 (33.4) \\
     \hline
-     Users who contributed exactly 1 post(\%n) & 331 (31.4) 722 & 1186 (15.2) \\
+     Users who contributed exactly 1 post(\%n) & 331 (9.8) & 1186 (6.0) \\
     \hline
      Registered users who never posted (ie, lurkers), n (\%) & 2292 (68.5) & 12,023 (60.6) \\
     \hline
@@ -89,17 +95,55 @@ The data set included posts and their metadata (ie, the anonymized user ID numbe
     
     \hline
 \end{tabular}
-\caption{The summary of salient attributes of the data used for this work}
+\caption{Salient statistics for the data acquired from AsthmaUK and BLF forums.}
 \label{table:jmirData}
 \end{table}
 
-The data sets span, respectively, 10 years for the Asthma UK and 4 years for the BLF communities (see Table 1).
+\begin{table}[htb!]
+    \centering
+    \begin{tabular}{ |p{5cm}|p{10cm}| }
+        \hline
+        \textbf{Field} & \textbf{Sample Value}\\
+        \hline
+        Body   	&  \textit{"5 years ago i was diagnosed with emphsyma asthma and copd after being rushed into intensive care.
+        Since then ive had the inhalers and tablets but never really been able to talk to someone about my 
+        experiance so any help or advice would be very much apprieciated i have felt very lonely and frustrated 
+        at times with this complaint as getting used to not being able to do what i could is the worst part.
+        I am 58 and always thought i knew about life but im lost with this.
+        It seems my life is all about thinking of how i am going to be feeling when i get up in a morning."}  \\
+        \hline
+        AuthorId & VVpb (anonymised) \\
+        \hline
+        Title & \textit{"What is breathe easy?And any advice on copd please"} \\
+        \hline
+        SuperRecipientAction & "N/A" \\
+        \hline
+        Action & Level 0 post \\
+        \hline
+        ThreadId & q5XXV \\
+        \hline
+        Date & 2012-06-09 09:53:15 \\
+        \hline
+        PostId & q5XXV \\
+        \hline
+        Recipient & N/A\\
+        \hline
+        Role & N/A\\
+        \hline
+        
+    \end{tabular}
+\caption{An example of a record from Health unlocked British Lung Foundation forum. The fields describe meta data about the post, such as timestamp, PostId, AuthorId etc. The data also contains the main body of the post as well as meta information about the conversation structure. In this case, the post is a root level post. Hence the recipient field is "N/A" and the Action field contains "Level 0 post".}
+\label{table:sample}
+\end{table}
+        
+
+The datasets span, respectively, 10 years for the Asthma UK and 4 years for the BLF communities (see Table ~\ref{table:jmirData}).
 
 Despite the shorter time span, as a result of the larger number of users, the number of posts in the BLF community was higher than in Asthma UK, namely 875,151 compared to 32,780 respectively. Moreover, BLF users wrote a higher number of posts per user and were connected with a higher number of other users when compared with people in the Asthma UK forum (see Figure 2). In both communities, 60\%-70\% of registered users wrote no posts (ie, they were lurkers). Users who wrote more than one post contributed with a median of 8 (range 2-8947) and 5 (range 2-1068) posts in the BLF and Asthma UK communities, respectively.
 
 The number of official moderators among the highly active users was negligible; there were no moderators in the top 5\% contributors to BLF and only 2 in the top 5\% for Asthma UK. Thus, our network analysis predominantly reflects content originated from registered users. This also means that moderators on these forums have more of an observatory role and do not engage in active support. 
 
-When classified according to posting activity (ie, number of posts written to the forum), the top 5\% users contributed to a substantial proportion of all posts: 58\% and 79\% in the Asthma UK and BLF communities, respectively. In the context of this thesis, \textsl{Superusers} were those who made high number of connections with other users across the lifetime of the community.
+When classified according to posting activity (ie, number of posts written to the forum), the top 5\% users contributed to a substantial proportion of all posts: 58\% and 79\% in the Asthma UK and BLF communities, respectively. In the context of this thesis, \textsl{Superusers} were those who made high number of connections (exchange of messages) with other users across the lifetime of the community.
 
 
 \section{Interaction Graphs}
@@ -210,10 +254,6 @@ Thus, the rich-club coefficients may take values lower or higher than 1, dependi
     It is worth noting that most previous studies in base lining rich-club effect in technical and real world networks have shown a propensity to create rich-clubs. Thus these networks exhibit exclusive clubs of (topologically) rich nodes, as illustrated in previous work~\cite{zhou2004rich,colizza2006detecting}
 \end{remark}
 What we observe from this analysis is that communities in general have a less than 1 rich-club co-efficient value for a spectrum of degrees $k$. This means, rich nodes are exhibiting an anti-rich behaviour, where nodes which have a higher degree, prefer engaging with new nodes with lower degree. This implies an active information exchange from a well connected node to a sparsely connected node, which follows according to the definition of social support(definition \ref{def:support}).
-
-
-%Following Zhang et al [36], the “z-score” was used as a proxy for users’ expertise. According to this measure, replying to many questions suggests one’s expertise, while asking questions indicates lack of expertise. In our analysis, we treated anyone starting a thread as a help-seeker, and anyone commenting on the thread as a help-giver [36]. Accordingly, the proposed z-score aims to capture the combined help-seeking and help-giving patterns. To this end, for each user, we measured how many standard deviations the observed total number of the user’s help-giving posts lies above or below the expected number of help-giving posts for the whole system. We extended the approach proposed by Zhang et al by empirically assessing the probability of posting and answering a question across all users over the entire observation period. In the BLF community, we found that the probability of answering is Pa=2/3, while the probability of posting is Pq=1/3. We assumed a Bernoulli process of posting an answer or a question to the forum, with probabilities defined as above. The z-score for a given user i was calculated according to equation (a) in Figure 1, where ai refers to the total number of answers user i posted to the forum, qi is the total number of questions user i asked in the forum, and ni=ai +qi is the total number of messages posted by user i.
-%To obtain $Zscore_i$, let us define a random user that posts the same total number of messages nrandom to the forum as user i (ie, nrandom=ni). We would expect this random user to post an average number of answers to the forum given by equation (b). Plugging in the value of $Pa=2/3$, we obtained equation (c). Similarly, we would expect the random user to post answers with a standard deviation given by equation (d). Plugging in the value of $Pa=2/3$, we obtained equation (e). To measure how many standard deviations above or below the expected random value a user i lies, we then computed Zscorei according to equation (f). Plugging in the values of $\mu_{random}$ and $\sigma_{random}$, we obtained equation (g). Finally, by substituting $ni=ai +qi$, we obtained equation (h). 
 
 
 \section{How do we quantify support on these communities?}
