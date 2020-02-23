@@ -2,7 +2,7 @@
 %****************************** Second Chapter *********************************
 %*******************************************************************************
 
-\chapter{From communities: The actors of social support }
+\chapter{From communities: The actors of online support }
 
 \label{chap:Utility_support}
 \graphicspath{{Chapter2/plots/} {Chapter2/plots}}
@@ -50,12 +50,12 @@ With this context, we aim to answer the \textbf{RQ1} and \textbf{RQ2}, which are
         \textbf{RQ2} \textsl{What differentiates \textbf{users} on support communities from generic ones?}   
 \end{minipage}}
 
-\section{Dataset and properties}
+\section{Dataset}
 \label{sec:dataset}
 This study was carried out in collaboration with HealthUnlocked\footnote{\url{http://www.webcitation.org/70Y10rppl}}, the online forum platform that hosts the Asthma UK and British Lung Foundation communities. The data was aggregated, anonymised, and shared after proper Institutional Review Board and ethics approvals were taken to protect user privacy. The data was collected from  registered users, who can choose to either write posts publicly or send private posts to one another. In the latter case, posts are shared between 2 users only, whereas when posts are written publicly, a large number of users can become connected through threads of posts. In this study, I do not consider private posts. 
 A thread is a series of posts made on one root post (RP), as a response to the root, or as a response to one of the responses to the root. This tree-like structure of posts can evolve indefinitely between posters and responders. 
 For this study, user identifiers (IDs) were anonymized by the HealthUnlocked platform, and no demographic information was collected. 
-The data set included posts and their metadata (ie, the anonymized user ID numbers), user roles (eg, user, administrator, or moderator), date of posting, the hierarchical level of the post within the corresponding thread, and the dates in which the users joined and left the community. A sample of one such post can be seen in table \ref{table:sample}. Both communities were moderated, and HealthUnlocked moderators (identified through metadata field "Role") were included in the analysis to assess their contribution and compare it with other users. Online communities on the HealthUnlocked platform benefit from additional functionalities compared to other online forums, such as built-in patient groups that moderate the content. In particular, the content accessed by users is tailored to their interests, and profiles highlight users’ condition, chosen community, medications and treatments they use or find interesting. No data were collected on participants’ characteristics, though only people declaring themselves to be older than 16 years were permitted to create an account and take part in the online communities. Table \ref{table:jmirData} summarizes the salient features of the dataset used for this work. 
+The dataset included posts and their metadata (ie, the anonymized user ID numbers), user roles (eg, user, administrator, or moderator), date of posting, the hierarchical level of the post within the corresponding thread, and the dates on which the users joined and left the community. A sample of one such post can be seen in table \ref{table:sample}. Both communities were moderated, and HealthUnlocked moderators (identified through metadata field "Role") were included in the analysis to assess their contribution and compare it with other users. Online communities on the HealthUnlocked platform benefit from additional functionalities compared to other online forums, such as built-in patient groups that moderate the content. In particular, the content accessed by users is tailored to their interests, and profiles highlight users’ condition, chosen community, medications and treatments they use or find interesting. No data were collected on participants’ characteristics, though only people declaring themselves to be older than 16 years were permitted to create an account and take part in the online communities. Table \ref{table:jmirData} summarizes the salient features of the dataset used for this work. 
 
 
 \begin{table}[htb!]
@@ -146,10 +146,10 @@ The number of official moderators among the highly active users was negligible; 
 When classified according to posting activity (ie, number of posts written to the forum), the top 5\% users contributed to a substantial proportion of all posts: 58\% and 79\% in the Asthma UK and BLF communities, respectively. In the context of this thesis, \textsl{Superusers} were those who made high number of connections (exchange of messages) with other users across the lifetime of the community.
 
 
-\section{Interaction Graphs}
+\section{Graphs and their metrics}
 \label{sec:graphs}
-To understand the reason behind how these communities thrive and in order to quantify the conversation structures, I convert all the message exchanges into graphs, where users are represented by nodes and messages are represented by edges between users. 
-More formally imagine a directed graph $G(V,E)$ involving a set of users $V_i\forall i \in N$ where N is the total number of users interacting on a health community. For every message exchanged between a user $i$ and a user $j$ we create an edge $E_{ij}$. The complete community would form a global graph based off total interactions between all pairs of users which we call a global graph $G_g$. Similarly we may decide to only consider the users and messages exchanged across one particular thread discussing a particular issue. Such a graph is called a thread graph $G_t$.
+To understand the dynamics of these communities and their interaction structures, I convert the data from all the  exchanges of messages between users into graphs. In these graphs the users are represented by nodes and messages are represented by edges between users. 
+More formally imagine a directed graph $G(V,E)$ involving a set of users $V_i\forall i \in N$ where N is the total number of users interacting on a health community. For every message exchanged between a user $i$ and a user $j$ we create an edge $E_{ij}$. By this method the complete community would form a global graph based off total interactions between all pairs of users, which we call a global graph $G_g$. Similarly we may decide to only consider the users which exchanged messages on one particular thread. Such a graph is called a thread graph $G_t$.
 
 \begin{figure*}[!ht]
     \centering
@@ -165,32 +165,40 @@ More formally imagine a directed graph $G(V,E)$ involving a set of users $V_i\fo
     \caption{Global graphs prepared from Asthama UK community\ref{fig:Asthma_graph} and BLF community\ref{fig:BLF_graph}. The size of the node corresponds to the degree of the node and the color corresponds to the community membership }
 \end{figure*}
 
-These graphs are the abstractions of how users interacted on the community either around a particular query (Thread graphs) or over all as a part of the bigger community (Gobal graph). To understand the behaviour of these users, I evaluate several metrics on these graphs to understand the utility of these communities in terms of activity of sharing and support. This abstraction also makes it feasible for us to investigate how a particular community grows with time and how particular users evolve with time.
+These graphs abstractions ($G_g$ and $G_t$) represent the interaction structures which we intend to dissect. To understand the behaviour of these users, I evaluate several metrics on these graphs in order to understand the utility of these communities in terms of activity of sharing and support.
+
+\subsubsection{Degree distributions and connectivity}
+When you have a collection of nodes, connected to each other by edges, it is worth understanding how connected an average node is. More specifically, we would like to know the distribution of degrees, or the amount of edges a node has, across all the nodes in a graph. This metric is called the degree distribution of a graph, and it has been widely used in the complex networks literature as a measure to characterize types of graphs ~\cite{muchnik2013origins,ahn2007analysis,leskovec2008microscopic,raman2019challenges}.
+We are specifically interested the nodes(users) who belong to the highest 1\% range of degrees. These users are the ones who are most interactive and have established edges with a lot of other users by exchanging messages. These users are called ``superusers''. 
+
+\subsubsection{Largest connected component}
+A largest connected component of a graph $G(V,E)$ )is the largest possible sub-graph $G_L(V_L,E_L)$ of $G$, such that each node in $G_L$ has at least one valid connected path to every other node in $G_L$. By evaluating the largest connected component on $G_g$, we can find the subset of users in the community which form a cohesive community. Furthermore, by measuring the effect of removal of certain ``superusers'' from this sub-graph on the overall size and structure on $G_L$, once can deduce the importance of the said users to the cohesiveness of a community. 
+We can also measure the characteristics of the largest component on a temporal basis. By examining the fraction of users in a given week that belong to the largest connected component, one can estimate the focused and cohesive nature of interactions.
+
+
+\subsubsection{Social capital and triadic closure} According to the literature, social capital is defined as those features of social structures, such as interpersonal trust and norms of reciprocity and mutual aid, which act as resources for individuals and facilitate collective action~\cite{collins1993social,coleman1988social}
+It is common to quantify social capital in the context of social networks, by looking at structural holes, or unmet potential social links in the network. This is where ties between otherwise unconnected neighbours are filled in, sometimes called as closures, thereby benefiting the broker and the two neighbours by adding an extra link for information to diffuse. 
+Such mechanisms have been studied in the sociology literature for decades. Work by Granovetter~\cite{granovetter1977strength} explored these structural holes and proposed that they are detrimental for efficient diffusion of information and resources in social networks. He also at times called these the ``forbidden triad'', referring to their propensity to close up in social networks. Such closures are, according to Ronald Burt~\cite{burt2004structural,burt2009structural}, necessary for information brokerage, and at times directly equate to social capital of these broker nodes.
+In our case, as so much evidence has shown that the brokers of social support are often the superusers, we would certainly want to investigate how these users affect the cohesion and structural holes in the graph.
+
 
 \section{How do support communities thrive ?}
-This question sets the primer about the peculiarity of support communities. Do these communities have enough interest and activity, to sustain over long periods of time? Are all users equally involved in the vitality of the community or is this a group of users? How important are these users?  
+To answer the \textbf{RQ1}, it is first worth asking how the user interactions bind the community together. We would like to know if the messaging activity is highly concentrated around a few sets of users or is it covering a large fraction of the user base. More so, it is worth asking if there are any special users who bear the mantle of providing support. This can be observed from the measured metrics of the interaction graph. 
+From table\ref{table:jmirData}, it is evident that a minority of users are generating a bulk of data on these communities. E.g. the top 1\% users by activity contributed 32\% posts to AsthamaUK community. Such level of activity makes these users extremely important in understanding the dynamics of support on these communities. We term these users as ``Superusers''.
+But before looking at the role of these superusers, it is first worth analysing the overall activity patterns on these communities. Do these communities drive enough engagement and activity to sustain them over long periods of time?  
 
-\subsection{Activity Metrics}
+\subsection{Temporal activity patterns}
 \label{sec:activity}
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth ]{Activity.png}
     \caption{Cumulative distributions of the number of posts as a function of time (weeks) within the Asthma UK (A) and the British Lung Foundation (B) communities. Calendars dates are reported below as week numbers (since the inception of the community). Panels C and D illustrate the average number of posts per user per week within Asthma UK and British Lung Foundation, respectively}        \label{fig:activity}
 \end{figure}
-To calculate the activity patterns of users on these forum, we first work with the most basic of proxies, which is the weekly/daily activity. We arrive at it by calculating the amount of messages exchanged in a community across the whole life cycle of the data. This metric would expose how much activity is happening on a daily or weekly basis on a particular community. It is worth noting that this activity pattern, would also shed light on how users are engaging with the community. A continuous engagement is good for the vitality of a community, however if a community revolves around purely functional interactions, then you may see a bursty nature of communication~\cite{panzarasa2015emergence}. From these basic analysis, it was quite evident that the BLF community was more active of the two, in that, the community exhibits a consistent engagement of the users across the lifetime of the data. Asthma forum however shows a bursty activity, despite being more than twice as old as the BLF community. The trends can be see in Figure \ref{fig:activity}.
+To calculate the activity patterns of users on these forum, we first work with the most basic of proxies, which is the weekly/daily activity. We arrive at it by calculating the amount of messages exchanged in a community across the whole life cycle of the data. This metric would expose how much activity is happening on a daily or weekly basis on a particular community. It is worth noting that this activity pattern would also shed light on how users are engaging with the community. A continuous engagement is good for the vitality of a community, however if a community revolves around purely functional interactions, you may see a bursty nature of user activity across time~\cite{panzarasa2015emergence}. 
 
-\begin{remark}
-    It is worth noting that as the activity on the community increases, you do see an increase in fragmented reply networks, which means concurrent discussions are happening with disjoint set of users interacting. 
-\end{remark}
+Figure ~\ref{fig:activity} shows the activity patterns on both the health communities on a cumulative and weekly basis. It was quite evident that the BLF community was more active of the two, in that, the community exhibits a consistent engagement by the users across the lifetime of the data as well as on a weekly basis. The Asthma forum however shows a bursty nature, despite being more than twice as old as the BLF community. One possible explanation can arise from the nature of these two illnesses. Asthma tends to be an episodic disease, with flare-ups in patients happening from time to time. These flare-ups are also often seasonal in nature, happening in sync with the pollen cycles in the air~\cite{dellavalle2012effects}. On the contrary, the British Lung Foundation forum deals with, alongside Asthma, diseases that are chronic in nature such as Chronic Obstructive Pulmonary Disorder (COPD) and Emphysema. This means these patients are constantly activated and tend to engage with the community on a more frequent basis. 
 
-
-
-\subsection{Community resilience}
-\label{sec:resilience}
-The activity patterns does not tell the real story about the cohesiveness of any particular community. To answer the \textbf{RQ1}, it is first worth asking how the user interactions bind the community together. We would like to know if the user activity is highly concentrated or is it covering a large fraction of the user base. More so, it is worth asking if there are any special users who bear the mantle of providing support. This can be observed from the topological properties of the interaction graph. 
-From table\ref{table:jmirData}, it is evident that a minority of users are generating a bulk of data on these communities. E.g. the top 1\% users by activity contributed 32\% posts to AsthamaUK community. Such level of activity makes these users extremely important in understanding the dynamics of support on these communities. 
-
-\subsubsection{Cohesive conversations}
+\subsection{Cohesive conversations}
 
 \begin{figure}[!ht]
     \centering
@@ -207,24 +215,25 @@ From table\ref{table:jmirData}, it is evident that a minority of users are gener
     \caption{Fraction of users that are part of the largest component as a function of time (weeks) for Asthma UK \ref{fig:lcc_asthma} and the British Lung Foundation \ref{fig:lcc_blf}.}
 \end{figure}
 
-To understand the first aspect of the community's resiliance, I examine how is the coverage of communications between the users, on a weekly basis, given that messages are exchanged between the most active users within that week. 
+To understand the first aspect of the community's resilience, I examine how is the coverage of communications between the users, on a weekly basis, given that messages are exchanged between the most active users within that week. 
 To do so, imagine a sorted list of message interactions over a particular time period $T_k$, sorted in chronological order defined as $L_k=[E_{ij} \forall i,j \in N]$ , where $E_{ij}$ is a message between user $i$ and user $j$, with $N$ total users being active in a given time period $T_k$. Now imagine this time period $T_k$ is of 7 days . I calculate such $K$ lists for the $K$ weeks the community has been active. For each such list, I induce a graph $G_k(V,E)$ such that the nodes in $V$ are the active users in that particular list, and the edges in $E$ are corresponding to the messages exchanged in the list $L_k$ between any two users. 
-\begin{definition}
-\textbf{Largest Connected component} : A largest connected component of a Graph $G(V,E)$ is the largest possible subgraph $G_L(V_L,E_L)$ of $G$, such that each node in $G_L$ has at least one valid connected path to every other node in $G_L$
-\end{definition}
 Now for each such graph $G_k$ I calculate the largest connected subgraph $G_{\theta_k}(N_k,E_k)$ such that all nodes in $N_k$ have at least one path between them. Calculating the fraction $\frac{N_k}{N}$ would give us the total fraction of users who are part of the same conversation network for a given week. After calculating and plotting these fractions across a total of 250 weeks for each community, we see that whenever there is an activity on these networks, almost always, the active nodes belong to the largest connected sub graph. This implies that activity on support forums is cohesive and even if bursty at times, is all encompassing with the users. 
 
-\subsubsection{Fragile communication structure}
+It is worth noting that as the activity on the communities increases, you see an increase in fragmentation of the graph structure with the ration of nodes in the Largest component dropping considerably(See figure \ref{fig:lcc_asthma} and \ref{fig:lcc_blf}). Which means there are concurrent discussions  happening with disjoint set of users. 
+
+
+
+\subsection{Fragile global structure}
 \label{sec:fragility}
 \begin{figure}[!ht]
     \includegraphics[width=\textwidth]{jmirSensitivity.png}
-    \caption{Results of progressive removal of nodes based on connectivity. Both communities collapse drastically, in terms of connectivity, with BLF showing a little more resilience }
+    \caption{Results of progressive removal of superusers. Both communities collapse drastically, in terms of connectivity, with BLF showing a marginally more resilience }
     \label{fig:sense_asthma}
 \end{figure}
 Despite the exchange on a weekly basis is quite cohesive, it is pertinent to understand the resilience in terms of user responsibility in helping, in order to examine the health of such a community. Moreover, I want to know if the conversation network is held together by a more or less uniform contribution of nodes, or if there is a skew in the responsibility of nodes. 
 This can be tested by using the sensitivity analysis methods, popular in the network science~\cite{braunstein2016network,albert2000error}, which measures the network's capacity to diffuse information as you remove nodes based on certain property. In our case, we want to understand the importance of the \textsl{Superusers}, or the users who are disproportionately more active. Hence we begin by first sorting all the nodes in the macroscopic graph $G(V,E)$ in order of their degrees. The degree of a node in the global graph is proportional to the diverse set of users that node has communicated with, over the period if the community's lifetime. We then start removing nodes from the top, by progressively removing nodes in increments of 1\%. I then compute the size of the largest connected component $G_k$ and compute the ration of number of nodes in $G_k$ as compared to the original global undisturbed network.  Figure \ref{fig:sense_asthma} shows the performance of global graphs of both the communities to this attack. It is worth noting, that what we observe is that a top 10\% nodes by activity are responsible for most of the cohesive connectivity of the community. This also means that the top 10\% of these nodes have the most diverse connections in terms of number of users contacted. This gives hope to health care industry, since these nodes can act like efficient information diffusers, if used in a targeted fashion. 
 
-\subsubsection{Anti-rich conversations}
+\subsection{Anti-rich conversations}
 \label{sec:richclub}
 \begin{figure}[!ht]
     \centering
@@ -237,9 +246,9 @@ This can be tested by using the sensitivity analysis methods, popular in the net
         \includegraphics[width=0.5\linewidth ]{RichClub_BLF_truncated.png}
         \label{fig:rich_blf}
     }
-    \caption{ Plots of rich-club coefficients for each viable degree in the respective communities. }
+    \caption{ Plots of rich-club coefficients for each viable degree in the respective communities. Both communities exhibit values less than 1, indicating an anti-rich behaviour by the well connected nodes.  }
 \end{figure}
-The “rich-club” coefficient is a metric designed to measure the extent to which well-connected users tend to connect with one another to a higher degree than expected by chance~\cite{colizza2006detecting}. To this end, for each value k of a node’s degree (ie, the number of other users a given user is connected with), we computed the ratio between the number of actual connections between nodes with degree k or larger and the total possible number of such connections~\cite{opsahl2008prominence}. We then divided this ratio by the one obtained on a corresponding random network with the same number of nodes and degree distribution (ie, the probability distribution of the degrees over the whole network) as the real network, but in which links were randomly reshuffled between nodes. 
+The “rich-club” coefficient is a metric designed to measure the extent to which well-connected users tend to connect with one another, to a higher degree than expected by chance~\cite{colizza2006detecting}. To this end, for each value k of a node’s degree (ie, the number of other users a given user is connected with), we computed the ratio between the number of actual connections between nodes with degree k or larger and the total possible number of such connections~\cite{opsahl2008prominence}. We then divided this ratio by the one obtained on a corresponding random network with the same number of nodes and degree distribution (ie, the probability distribution of the degrees over the whole network) as the real network, but in which links were randomly reshuffled between nodes. 
 
 Formally let $G(V,E)$ be a global graph representation of the community. Let $V_{>k}$ be the set of vertices in the graph having degree higher than $k$. Let there be $N_{>k}$ such vertices having $E_{>k}$ edges between them. In such case, the rich club coefficient for degree $k$ in the graph $G$ is given by 
 \begin{equation}
@@ -250,32 +259,29 @@ In this equation $\frac{N_{>k}(N_{>k} - 1)}{2}$ represents the maximum number of
 
 Thus, the rich-club coefficients may take values lower or higher than 1, depending on whether the real network has a higher or lower tendency to coalesce into rich clubs than randomly expected. In particular, networks that display a high rich-club coefficient (ie, greater than 1, are also said to show a “rich-club effect,” namely the tendency to organise into a hierarchical structure in which highly connected nodes preferentially create tightly knit groups with one another ~\cite{mcauley2007rich}. .
 
-\begin{remark}
-    It is worth noting that most previous studies in base lining rich-club effect in technical and real world networks have shown a propensity to create rich-clubs. Thus these networks exhibit exclusive clubs of (topologically) rich nodes, as illustrated in previous work~\cite{zhou2004rich,colizza2006detecting}
-\end{remark}
-What we observe from this analysis is that communities in general have a less than 1 rich-club co-efficient value for a spectrum of degrees $k$. This means, rich nodes are exhibiting an anti-rich behaviour, where nodes which have a higher degree, prefer engaging with new nodes with lower degree. This implies an active information exchange from a well connected node to a sparsely connected node, which follows according to the definition of social support(definition \ref{def:support}).
+In most previous studies the rich-club coefficient in the technical and real world networks exhibits values larger than 1 as the degree of a node goes up. This shows a propensity to create rich-clubs, with highly connected nodes preferentially connecting with other highly connected nodes. Thus these networks exhibit exclusive clubs of (topologically) rich nodes, as illustrated in previous work~\cite{zhou2004rich,colizza2006detecting}. What we observe however in the cases of support communities is that in general we end up with a less than 1 rich-club co-efficient as the value of degrees $k$ goes up. This means, rich nodes are exhibiting an anti-rich behaviour, where nodes which have a higher degree prefer in engaging with new nodes with lower degree. This implies an active information exchange from a well connected node to a sparsely connected node, which we would expect in a supportive interaction according to the definition of social support.
 
 
-\section{How do we quantify support on these communities?}
+\section{What differentiates \textbf{users} on support communities from generic ones?}
 \label{sec:support}
-Once I establish that these support communities are thriving and are providing what seems to be an active supportive environment for the patrons, it is worth delving into the analytical methods for quantifying these supportive interactions. More so we would like to have concrete metrics that characterize a given community as a supportive one. To do so we need to understand how are the users on these communities driven to help each other, and whether there is a correlation between the ``richness'' of a user, as defined in previous section, and its propensity to help. More so we would like to know how consistent are these so called ``rich'' users in providing support. 
+Once we establish that these support communities are thriving and are providing what seems to be an active supportive environment for the users(anti-rich superusers), it is worth delving into the analytical methods for quantifying these supportive interactions. More so we would like to have concrete metrics that characterize a given community as a supportive one. To do so we need to understand how are the users on these communities driven to help each other, and whether there is a correlation between the ``richness'' of a user, as defined in previous section, and its propensity to help. More so we would like to know how consistent are these so called ``rich'' users in providing support. 
 
 \subsection{Propensity to help} 
 We would like to understand how users on support communities, as a group behave as they become more seasoned. Fortunately, there is an approximate way for us to capture a user's role as a support seeker and as a support giver. As described in Section \ref{sec:dataset}, the forum activity consists of a root poster, asking a question to the forum board, and the members responding to that question in a cascaded fashion. These responses, along with the original question constitute what is called as a \textsl{thread}.
 To that end, we define the following two roles on these communities\footnote{There are other ways to qualify someone as support giver/seeker, mainly using language sturcture, but here we consider only the bare minimum requirement to be considered as one, using the position in conversation structure}
-\begin{definition}
-    Support seeker: a user who begins a thread by posting on the forum, a question, or a query, to which others may respond to.
-\end{definition}
 
-\begin{definition}
-    Support giver: a user who responds to any post by a support seeker.
-\end{definition}
+In the context for support forums, a support seeker is a user who begins a thread by posting on the forum, a question, or a query, to which others may respond to. Similarly a support giver is a user who responds to any post by a support seeker.
 
-Using these definitions I aim at modelling the statistical propensity of someone being a support giver or a seeker, as a function of their ``richness''. 
-We first begin by calculating across the dataset, the average number of questions per user and answers per user, by finding the mean number of questions or answers posted by any user on the forum. 
+With this in mind, I aim to model the behaviour if users on these support communities in terms of being a support giver or a support seeker.
+
+We first begin by calculating the average number of questions per user and answers per user across the dataset, by finding the mean number of questions and answers posted by any user on the forum. 
 We consider an expected probability of answering a question by a user as $P_a$ as 2/3 and the probability of posting a question as $P_q$ as 1/3. 
 With this information we modify the definition of ``Z-score'' to quantify the expertise, used by Adamic. et. al ~\cite{zhang2007expertise} to arrive at the expression of expertise in the context out our support community. 
+
+ A user has two possible actions at any given time, while interacting with the community. They can either post a question on the forum, or answer to existing questions. The probability of doing either actions are $P_a$ and $P_q$ respectively. To that end, we try to model this interaction process as a Bernoulli process with two outcomes, having asymmetric probabilities. 
+ 
 \begin{proof}
+   
     Consider a Bernoulli process for a user to choose to answer or post a question on the forum, with asymmetric probabilities for answering ($P_a$) and posting a question ($P_q$). 
     For any user $i$ the total number of posts $n_i$ are the sum of total number of questions posted $q_i$ and answers posted $a_i$ and $n_i = a_i + q_i$
     For a Bernoulli process the variance for the whole forum is given as: 
@@ -309,18 +315,11 @@ I then find the correlation between a users Z-score and the total number of post
 Developing metrics like this makes quantifying whether a particular community works for the subscribers a tractable problem.
 
 
-\section{ Rich users and structural holes }
+\subsection{ Superusers and structural holes }
 One of the key aspects of utility of any social network is driven from the social capital offered as a result of the subscription. 
 
-\begin{definition}
-    \textbf{Social capital} (Sociology): Social capital is defined as those features of social structures , such as interpersonal trust and norms of reciprocity and mutual aid, which act as resources for individuals and facilitate collective action~\cite{collins1993social,coleman1988social}
-\end{definition} 
 
-It is common to quantify social capital in the context of social networks, by looking at structural holes, or unmet potential social links in the network. This is where ties between otherwise unconnected neighbours are filled in, sometimes called as closures, thereby benefiting the broker and the two neighbours by adding an extra link for information to diffuse. 
-Such mechanisms have been studied in the sociology literature for decades. Work by Granovetter~\cite{granovetter1977strength} explored these structural holes and proposed that they are detrimental for efficient diffusion of information and resources in social networks. He also at times called these the ``forbidden triad'', referring to their propensity to close up. Such closures are, according to Ronald Burt~\cite{burt2004structural,burt2009structural}, necessary for information brokerage, and at times directly equate to social capital of these broker nodes.
-In our case, as so much evidence has shown that the brokers of social support are often the ``rich'' nodes or the super-users, we would certainly want to investigate how these agents affect the local cohesion and structural holes.
-
-Till now we looked at the global macro structural properties of this support graph using the global graphs $G_g$, where we look at the user's interactions with other users across the lifetime of the community. But often the supportive interactions happen in a lifetime of a single thread, revolving around a topic or query. So to examine the effect of the rich users on the social cohesion, we correlate the total number of posts done by super users on any given thread, to the amount of closed triangles found in the corresponding thread graph $G_t$.  
+Till now we looked at the global macro structural properties of this support graph using the global graphs $G_g$, where we look at the user's interactions with other users across the lifetime of the community. But often the supportive interactions happen in a lifetime of a single thread, revolving around a topic or query. So to examine the effect of the superusers on the social cohesion, we correlate the total number of posts done by super users on any given thread, to the amount of closed triangles found in the corresponding thread graph $G_t$.  
 
 \begin{figure*}[!ht]
     \centering
@@ -347,15 +346,15 @@ The resultant scatter plot can be seen in Figure~\ref{fig:TriCorr}, where we can
 \centering
 \includegraphics[width=0.7\linewidth ]{SUParticipationTriangles.png}
 
-\caption{Scatter plot between the number of closed triangles in a conversation thread, with the total number of posts done by rich users in that thread. A positive correlation of 0.44, with a p-value of 0 is observed}
+\caption{Scatter plot between the number of closed triangles in a conversation thread, with the total number of posts done by a superuser in that thread. A positive correlation of 0.44, with a p-value of 0 is observed. This indicates that the presence of a super user in a thread improves the over all cohesion of that thread and closes structural holes}
 \label{fig:TriCorr}
 \end{figure}
 
+\section{Discussion}
+In this chapter, we found that support communities show peculiar temporal and interaction dynamics. \textbf{RQ1} asked about the dynamics of support communities. We find that support communities exhibit a high level of engagement and participation. The communities are held together by the superusers. The removal of these superusers, collapses the network structure of these communities. \textbf{RQ2} asked about differentiating properties of users on support communities. We find that the users exhibit an anti-rich behaviour. This means that the superusers are engaging with less active users and are practising inclusion. We also find that users on support communities progress onto being support givers from support seekers with time. 
+The idea of perceived support stems from the fact that the user in distress is not only getting the crucial information about the disease, but also benefits from the social capital of the allied users. We observe that  superusers tend to have a positive effect on the social capital of a conversation, promoting more social cohesion.
 
+There is immense value in understanding how social support thrives on the internet, especially because of its potential to relieve the load off the ever so burdened health services. 
+The work till now focussed on the global interactions of support givers and seekers on a community. It investigated the dynamics of support communities and looked at individual user's role in the larger scheme of things. 
 
-The research questions asked at the beginning of this chapter, required us to look at these communities from the perspective of its users. It was evident, that these communities do provide a supportive space. 
-When looking at macroscopic structure of a support network, we find that certain groups of users are highly crucial for the vitality and survival of the whole exchange process. But we also observe that these groups are in flux, and users tend to become more supportive with experience. 
-The idea of perceived support stems from the fact that the user in distress is not only getting the instrumental information, but also benefits from the social capital of the allied users. We observe that supportive users tend to have a positive effect on the social capital of a conversation, promoting more social cohesion.
-
-Social support is a multi-dimensional perceived entity, and I am attempting to capture the mechanics of support through online conversations. It has been an active area of study from a sociological and psychological perspective. 
-There is immense value in understanding how social support thrives on the internet, especially because of its potential of relieving some burden from the ever so burdened health services. The work till now did focus on the global interactions of support givers and seekers on a community. However, the actual action of peer support happens over a single thread of conversation. Aggregating these conversations over a period of time, allows us to look at how users behave by and large across different conversations. What is interesting and important to understand is how can we measure the act of peer support in an individual supportive conversation. How does a supportive conversation evolve, and are there any peculiar signatures we could observe in comparison with generic conversations? For this reason, it is important to look at a finer granularity of interaction, what we term as \textsl{mesoscopic} view of the conversation. In the following chapter, we would do exactly that, and unravel the discriminative patterns in meso and macro representations of conversation threads. 
+In the next chapter, we would explore this problem from the scale of the entire conversation(macro) and from the scale of immediate local interactions in the ego network of a user(meso). This goes beyond looking at the individual actors of support, and quantifies the peculiar structure of a supportive conversation on the web.
