@@ -12,9 +12,9 @@ In the last chapter, we saw that a large scale crowd poll about perception of ur
 All these questions entail from the final research questions of my dissertation work: 
 
 \noindent\fbox{\begin{minipage}[t][2\height][c]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
-        \textbf{RQ6} \textsl{Can machine learning models based on crowd opinions help us improve real spaces?}
+        \textbf{RQ5} \textsl{Can machine learning models based on crowd opinions help us improve real spaces?}
         
-        \textbf{RQ7} \textsl{How much do the suggested improvements align with the expectations from the literature or the practitioners?}   
+        \textbf{RQ6} \textsl{How much do the suggested improvements align with the expectations from the literature or the practitioners?}   
 \end{minipage}}
 \\
 
@@ -33,7 +33,7 @@ These approaches motivated my work to use GANs, to further investigate the quest
 Finally, I show that this pipeline indeed adds value in the day to day tasks of practitioners of urbanism and the output suggestions around aesthetics of spaces, indeed is perceived to be more aesthetic compared to the input images. 
 
 \section{GAN primer}
-A new breed of deep learning algorithms have allowed researchers to generate synthetic data samples, based on knowledge and structure learnt form real data samples ($x$). These family of algorithms are called Generative Adversarial Networks or GANs. GANS work by simultaneously training a Generator $G(z;\theta)$ and a Discriminator $D(x)$ model, who try to out wit each other through training on real samples. The Generator tries to learn to generate the most ``real'' looking synthetic samples by learning the distribution of $x$, and the discriminator $D(x)$ tries to learn to maximize the accuracy on guessing which sample comes from a generator and which comes from the real data. At the peak performance, the generator becomes so good, that the discriminator's accuracy cannot go beyond 50\% mark, implying a totally random guess. This means the Generator 
+A new breed of deep learning algorithms have allowed researchers to generate synthetic data samples, based on knowledge and structure learnt form real data samples ($x$). These family of algorithms are called Generative Adversarial Networks or GANs. GANS work by simultaneously training a Generator $G(z;\theta)$ and a Discriminator $D(x)$ model, who try to out wit each other through training on real samples. The Generator tries to learn to generate the most ``real'' looking synthetic samples by learning the distribution of $x$, and the discriminator $D(x)$ tries to learn to maximize the accuracy on guessing which sample comes from a generator and which comes from the real data. At the peak performance, the generator becomes so good, that the discriminator's accuracy cannot go beyond 50\% mark, implying a totally random guess. 
 
 
 \begin{figure}[ht!]
@@ -96,15 +96,19 @@ For the premise of my dissertation, I train a generator based on the structure s
             $I'$ & Target Image \\
             $C$ & Beauty Classifier \\
     \end{tabular}}
-    \caption{Notations}\label{notations}
+    \caption{List of notations}\label{notations}
 \end{table}
 
-Having the trained classifier at hand and the trained generator of synthetic beautified scenes, the next step is to reconstruct synthetic images using the generator, that maximize the probability of that image being classified as beautiful. The generator consists of an $N$ dimensional input layer that accepts an $N$ dimensional code in $R^N$. This code activates a series of fully connected layers and upconvolutional layers. An upconvolutional layer performs a complimentary operation of the input. It upsamples the input and then performs a de-convolution~\cite{dosovitskiy2015learning}. The architecture of this network is taken from ~\cite{dosovitskiy2016generating} and the code for reproducing the generator can be found on the author's page\footnote{ \url{https://lmb.informatik.uni-freiburg.de/resources/binaries/arxiv2016_alexnet_inversion_with_gans/release_deepsim_v0.5.zip}}. I train this generator on the set streetview images curated in Chapter \ref{chap:quant_perception}. In the interest of reproducibility, the trained models for the classifier and the generator, along with the serialized streetview data can be found at~\url{https://dataverse.harvard.edu/dataverse/Facelift}.
+Having the trained classifier before, the next step is to generate synthetic images , that maximize the probability of that image being classified as beautiful. The key aim behind this approach is to leverage the latent abstraction of beauty that the classifier has learn't. 
 
+To achieve this, first we need to train a GAN model that can reliably generate synthetic streetview scenes. A GAN consists of a $N$ dimensional input layer that accepts a $N$ dimensional code. This code activates a series of fully connected and up-convolutional layers. An up-convolutional layer performs an inverse operation of that of a convolutional layer. It upsamples the input and then performs a de-convolution~\cite{dosovitskiy2015learning} on the result. The architecture of this network is based on the work by Dosovitskiy \textit{et.al}~\cite{dosovitskiy2016generating} and the code for reproducing the generator can be found on the author's page\footnote{ \url{https://lmb.informatik.uni-freiburg.de/resources/binaries/arxiv2016_alexnet_inversion_with_gans/release_deepsim_v0.5.zip}}. 
+I then train this generator on the set Streetview images curated in Chapter \ref{chap:quant_perception}. In the interest of reproducibility, the trained models for the classifier and the generator, along with the serialized streetview data can be found at~\url{https://dataverse.harvard.edu/dataverse/Facelift}. The resulting generator is able to generate synthetic streetview images, examples of which can be found in Figure \ref{fig:GanExample}. 
+
+After separately training this generator, which we denote as $G$, is then arranged in tandem with the beauty classifier $C$, such that the output of $G$ is fed directly into the classifier $C$.
 The simulated arrangement of this framework can be see in figure \ref{fig:AM_arch} 
 As a result, given the two classes: ugly $y_i$ and beautiful $y_j$, the end-to-end model  transforms any original scene $I_i$ of class $y_i$ (e.g., ugly scene) into template scene $\hat{I_j}$ that maximizes class $y_j$ (e.g., beautified template scene). 
 
-More specifically, given an input image $I_i$ known to be of class $y_i$  (e.g., ugly), our technique outputs  $\hat{I_j}$, which is a more beautiful version of it (e.g., $I_i$ is morphed  towards the average representation of a beautiful scene) while preserving $I_i$'s details. The technique does so using the ``Deep Generator Network for Activation Maximization'' (\emph{DGN-AM})~\cite{nguyen2016synthesizing}. Given an input image $I_i$, \emph{DGN-AM} iteratively re-calculates the color of $I_i$'s pixels in  a way  the output image $\hat{I_j}$  both maximizes  the  activation of neuron $y_j$ (e.g., the ``beauty neuron'') and looks ``photo realistic'',  which is done by conditioning the maximization to an ``image prior''. This is equivalent to finding the feature vector $f$ that maximizes the following expression:
+More specifically, given an input image $I_i$ known to be of class $y_i$  (e.g., ugly), our framework outputs  $\hat{I_j}$, which is a more beautiful version of the input $I_i$ (e.g., $I_i$ is morphed  towards the average representation of a beautiful scene) while preserving $I_i$'s details. The technique for mutating the input image in order to maximize the classifier's output neuron is based on ``Deep Generator Network for Activation Maximization'' (\emph{DGN-AM})~\cite{nguyen2016synthesizing}. Given an input image $I_i$, \emph{DGN-AM} iteratively re-calculates the color of $I_i$'s pixels in  a way  the output image $\hat{I_j}$  both maximizes  the  activation of neuron $y_j$ (e.g., the ``beauty neuron'') and looks ``photo realistic'',  which is done by conditioning the maximization to an ``image prior''. This is equivalent to finding the feature vector $f$ that maximizes the following expression:
 \begin{equation}
 \hat{I_j} =G( f ) : \underset{f}{\arg\max}(C_{j}(G(f))-\lambda||f||)
 \end{equation}
@@ -123,25 +127,25 @@ We now have template scene $\hat{I_j}$ (which is a synthetic beautified version 
 
 %****************************************
 \section{Motifs of urban beauty}
-Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of urban elements extracted by computer vision tools such as SegNet~\cite{badrinarayanan2015segnet} and PlacesNet~\cite{zhou2014learning}. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. 
+Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  same structural characteristics (e.g., point of view, layout), we can easily compare them in terms of presence or absence of urban elements extracted by computer vision tools such as Segnet~\cite{badrinarayanan2015segnet} and PlacesNet~\cite{zhou2014learning}. That is, we can determine how the original scene and its beautified version differ in terms of urban design elements. 
 
 \begin{table}\sffamily
     \begin{tabular}{l*3{C}@{}}
         \toprule
         & Original ($I_i$) & Latent Beauty representation ($\hat{I_j}$) & Beautified ($I_j$) \\ 
         \midrule
-        & \includegraphics[width=11em]{u_9.png} & \includegraphics[width=11em]{t_9.png} &  \includegraphics[width=11em]{b_9.png} \\ 
+        & \includegraphics[width=10em]{u_9.png} & \includegraphics[width=10em]{t_9.png} &  \includegraphics[width=10em]{b_9.png} \\ 
         %		& \includegraphics[width=11em]{Plot/examples/u_1} & \includegraphics[width=11em]{Plot/examples/t_1} &  \includegraphics[width=11em]{Plot/examples/b_1} \\ 
         %		& \includegraphics[width=11em]{Plot/examples/u_2} & \includegraphics[width=11em]{Plot/examples/t_2} &  \includegraphics[width=11em]{Plot/examples/b_2} \\ 
         %		& \includegraphics[width=11em]{Plot/examples/u_3} & \includegraphics[width=11em]{Plot/examples/t_3} &  \includegraphics[width=11em]{Plot/examples/b_3} \\ 
-        & \includegraphics[width=11em]{u_4.jpeg} & \includegraphics[width=11em]{t_4.jpeg} &  \includegraphics[width=11em]{b_4.jpeg} \\ 
-        & \includegraphics[width=11em]{u_5.jpeg} & \includegraphics[width=11em]{t_5.jpeg} &  \includegraphics[width=11em]{b_5.jpeg} \\ 
+        & \includegraphics[width=10em]{u_4.jpeg} & \includegraphics[width=10em]{t_4.jpeg} &  \includegraphics[width=10em]{b_4.jpeg} \\ 
+        & \includegraphics[width=10em]{u_5.jpeg} & \includegraphics[width=10em]{t_5.jpeg} &  \includegraphics[width=10em]{b_5.jpeg} \\ 
         %		& \includegraphics[width=11em]{Plot/examples/u_6} & \includegraphics[width=11em]{Plot/examples/t_6} &  \includegraphics[width=11em]{Plot/examples/b_6} \\ 
-        & \includegraphics[width=11em]{u_7.jpeg} & \includegraphics[width=11em]{t_7.jpeg} &  \includegraphics[width=11em]{b_7.jpeg} \\ 
-        & \includegraphics[width=11em]{u_8.jpeg} & \includegraphics[width=11em]{t_8.jpeg} &  \includegraphics[width=11em]{b_8.jpeg} \\ 
+        & \includegraphics[width=10em]{u_7.jpeg} & \includegraphics[width=10em]{t_7.jpeg} &  \includegraphics[width=10em]{b_7.jpeg} \\ 
+        & \includegraphics[width=10em]{u_8.jpeg} & \includegraphics[width=10em]{t_8.jpeg} &  \includegraphics[width=10em]{b_8.jpeg} \\ 
         \bottomrule 
     \end{tabular}
-    \caption{Examples of the transformation process, which tends to add greenery, narrow roads, and  pavements.}
+    \caption{Examples of the transformation process, which tends to add greenery, narrow roads, and  pavements. The three columns represent the original input image($I_i$), generated template ($\hat{I_j}$), and the final beautified version ($I_j$)}
     \label{fig:BeautyExample}
 \end{table} 
 
@@ -151,7 +155,7 @@ Since original scene $I_i$ and beautified scene $I_j$ are real scenes with the  
 \section{Evaluation}
 \label{sec:evaluation}
 
-The goal of this framework is to transform existing urban scenes into versions that: \emph{i)} people perceive more beautiful; \emph{ii)} contain urban elements typical of great urban spaces; \emph{iii)} are easy to interpret; and \emph{iv)} architects and urban planners find useful. To ascertain whether the transformation meets that composite goal, we answer the following questions next: 
+The goal of this framework is to transform existing urban scenes into versions that: \emph{i)} people perceive more beautiful; \emph{ii)} contain urban elements typical of great urban spaces; \emph{iii)} are easy to interpret; and \emph{iv)} architects and urban planners find useful. To ascertain whether the transformation meets the aesthetics criteria of people (\textbf{RQ5}) and whether the recommendations from the transformation are useful \textbf{RQ6}, we answer the following granular questions next: 
 
 \begin{description}
     \item{\textbf{Q1}} Do individuals perceive the transformed scenes to be beautiful?
@@ -165,7 +169,7 @@ The goal of this framework is to transform existing urban scenes into versions t
 To ascertain whether the transformed scenes are perceived by individuals as they are supposed to, we run a crowd-sourcing experiment on Amazon Mechanical Turk.  We randomly select 200 scenes, 100 beautiful and 100 ugly  (taken at the bottom 10 and top 10 percentiles of the Trueskill's score distribution of Figure~\ref{fig:Trueskill}). Our framework then transforms each ugly scene into its beautified version, and each beautiful scene into its corresponding `uglified'. These scenes are arranged into pairs, each of which contains the original scene and its beautified or uglified version. On  Mechanical Turk, we only select verified masters as our crowd-sourcing workers (those with an approval rate above 90\% during the past 30 days), pay them \$0.1 per  task,  and ask each of them to choose the most beautiful scene for each given pair.  We make sure to have at least 3 votes for each scene pair. Overall, our workers end up selecting the scenes that are actually beautiful 77.5\% of the times, suggesting that the transformed scenes are indeed perceived to be more beautiful by people. 
 
 \subsection{Q2 Are beautified scenes great urban spaces?}
-To answer that question, we need to understand what makes a space great. After reviewing the literature in urban planning, we identify four factors associated with  great places~\cite{ewing2013measuring,alexander1977pattern} (Table~\ref{tab:Design_metrics}): they mainly tend to be walkable, offer greenery, feel cozy, and be visually rich. 
+To answer that question, we need to understand what makes a space great. After reviewing the literature in urban planning, we identify four factors associated with  great places~\cite{ewing2013measuring,alexander1977pattern,jacobs1961death} (Table~\ref{tab:Design_metrics}): great places mainly tend to be walkable, offer greenery, feel cozy, and be visually rich. Walkable streets are perceived to be safer and have been shown to influence the vitality of a city street~\cite{jacobs1961death}. Greenery too is linked to mental well being, beauty, and closeness to nature~\cite{alexander1977pattern}. Openness, or the feeling of cosiness, is linked to feeling of safety and exploration. Too much openness is linked to our evolutionary need to become alert about dangers. Too little openness makes us weary about line of sights. This means openness is linked to the feeling of safety in an inverted `U' relationship. Finally, visual complexity, or the measure of the diversity of physical objects visible in your perspective, is also linked in an inverted `U' fashion with our sense of beauty. 
 
 \begin{table*}[h]
     \centering
@@ -194,7 +198,9 @@ To answer that question, we need to understand what makes a space great. After r
 
 To automatically extract visual cues related to these four factors, we select 500 ugly scenes and 500 beautiful ones at random, transform them into their opposite aesthetic qualities (i.e., ugly ones are beautified, and beautiful ones are `uglified'), and compare which urban elements related to the four factors distinguish uglified scenes from beautified ones. 
 
-We extract labels from each of our 1,000 scenes using two image classifiers. First, using PlacesNet~\cite{zhou2014learning}, we label each of our scenes according to a classification containing 205 labels (reflecting, for example, landmarks, natural elements), and retain the five labels with highest confidence scores for the scene. We then manually classify these 205 labels into the 4 built environment types namely \textit{Walkable, Architectural, Natural and Landmark}. These types are inspired by the guidelines for measuring urban design~\cite{ewing2013measuring}. The specifics of their category definitions and the actual labels can be seen in Appendix 2(Chapter ~\ref{chap:app2}).  Second, using Segnet~\cite{badrinarayanan2015segnet}, we  label each of our scenes according to a classification containing 12 labels. Segnet is trained on dash-cam images, and classifies each scene pixel with one of these twelve labels: road, sky, trees,  buildings, poles, signage, pedestrians, vehicles, bicycles, pavement, fences, and road markings. 
+We extract labels from each of our 1,000 scenes using two image classifiers. First, using PlacesNet~\cite{zhou2014learning}. PlacesNet is a deep learning framework which is trained to detect the type of place visible in an input image. 
+The framework classifies the input image into one of the 205 place type labels that it is trained on. We label each of our scenes according to a classification containing 205 labels (reflecting, for example, landmarks, natural elements), and retain the five labels with highest confidence scores for a particular scene. 
+We then manually classify each of these 205 labels into the 4 built environment types namely \textit{Walkable, Architectural, Natural, and Landmark}. The definitions of these 4 categories can be found in the Appendix 2 (Chapter ~\ref{chap:app2}). For example the label of `Plaza' is considered a Walkable label, whereas the label of `Cathedral' is considered to be a Landmark. These categories are inspired by the guidelines for measuring urban design~\cite{ewing2013measuring}. At the end of this manual exercise, we are left with 117 PlacesNet labels belonging to the 4 built environment categories (See Table \ref{tab:PlacesLabels}). All the remaining labels are discarded, since they do not fall into any of these 4 categories. Second, using Segnet~\cite{badrinarayanan2015segnet}, we  label each of our scenes according to a classification containing 12 labels. Segnet is trained on dash-cam images, and classifies each scene pixel with one of these twelve labels: road, sky, trees,  buildings, poles, signage, pedestrians, vehicles, bicycles, pavement, fences, and road markings. 
 
 \begin{figure}[h]
     \centering
@@ -219,14 +225,14 @@ Having these two ways of labelling scenes, we can now test whether the expectati
 \mbox{ } \\
 \noindent
 \emph{H1 Beautified scenes tend to be walkable.}
-We manually select only the PlacesNet labels that are related to walkability. These labels include, for example, \textit{abbey, plaza, courtyard, garden, picnic area, \textrm{and} park}. To test hypothesis \emph{H1}, we count the number of walkability-related labels found in beautified scenes as opposed to those found in uglified scenes (Figure~\ref{fig:taxonomyCount}): the former contain twice as many walkability labels than the latter. We then determine which types of scenes are associated with beauty (Figure~\ref{fig:WalkableTnomy}). Unsurprisingly, beautified scenes tend to show gardens, yards, and small paths. By contrast, uglified ones tend to show built environment features such as shop fronts and broad roads. 
+We manually select only the PlacesNet labels that are related to walkability. These labels include, for example, \textit{abbey, plaza, courtyard, garden, picnic area, \textrm{and} park}. To test hypothesis \emph{H1}, we count the number of walkability-related labels found in beautified scenes as opposed to those found in uglified scenes (Figure~\ref{fig:taxonomyCount}): the former contain twice as many walkability labels than the latter. We then determine which types of scenes are associated with beauty (Figure~\ref{fig:WalkableTnomy}). Unsurprisingly, beautified scenes tend to show gardens, yards, and small paths. By contrast, uglified ones tend to show built environment features such as shop fronts and broad roads. Hence walkable scenes are indeed associated with beauty.
 
 
 \mbox{ } \\
 %**************************************************
 \noindent
 \emph{H2 Beautified scenes tend to offer green spaces.}
-We manually select only the PlacesNet labels that are related to greenery. These labels include, for example, \textit{fields, pasture, forest, ocean, and beach}. Then, in our 1,000 scenes, to test hypothesis \emph{H2}, we count the number of nature-related labels found in beautified scenes as opposed to those found in uglified scenes (Figure~\ref{fig:taxonomyCount}): the former contain more than twice as many nature-related labels than the latter.  To test this hypothesis further, we compute the fraction of `tree' pixels (using SegNet's label `tree') in beautified and uglified scenes, and  find that beautification adds  32\% of tree pixels, while uglification removes 17\% of them. 
+We manually select only the PlacesNet labels that are related to greenery. These labels include, for example, \textit{fields, pasture, forest, ocean, and beach}. Then, in our 1,000 scenes, to test hypothesis \emph{H2}, we count the number of nature-related labels found in beautified scenes as opposed to those found in uglified scenes (Figure~\ref{fig:taxonomyCount}): the former contain more than twice as many nature-related labels than the latter.  To test this hypothesis further, we compute the fraction of `tree' pixels (using Segnet's label `tree') in beautified and uglified scenes, and  find that beautification adds  32\% of tree pixels, while uglification removes 17\% of them. This points to the fact that presence of greenery in a scene is indeed associated with the sense of beauty.
 
 
 \begin{figure*}[!t]
@@ -295,9 +301,9 @@ where $i$ is the $i^{th}$ Segnet's label. The total number of labels is twelve. 
     }
     \caption{Coefficients of logistic regressions run on one pair of predictors at the time.}
     \label{tab:regressioncoef}
-    \vspace{-10mm}
 \end{table}
 
+Logistic regression is often used to compute relationships between predictor variables and an outcome variable which maps to $\{0,1\}$. The relationships between outcome variable and the set of predictors can be interpreted through the values of the $\beta$ coefficients.
 
 To determine which urban elements are the best predictors of urban beauty and the extent to which they are so, we run a logistic regression, and, to ease interpretation, we do so on one pair of predictors at the time: 
 \begin{equation}
@@ -307,7 +313,9 @@ Pr(\textrm{beautiful}) = logit^{-1}(\alpha + \beta_1 * V_1 + \beta_2 * V_2  + \b
 where $V1$ is the fraction of the scene's pixels marked with one Segnet's label, say, ``buildings'' (over the total number of pixels),  and $V2$ is the fraction of the scene's pixels marked with another label, say, ``trees''. The result consists of three beta coefficients: $\beta_1$ reflects $V1$'s contribution in predicting beauty,  $\beta_2$ reflects $V2$'s contribution, and $\beta_3$ is the interaction effect, that is, it reflects the contribution of the dependency between $V1$ and $V2$ in predicting beauty. We run logistic regressions on the five factors that have been found to be most predictive of urban beauty~\cite{quercia2014aesthetic, ewing2013measuring, alexander1977pattern}, and show the results in Table~\ref{tab:regressioncoef}.
 
 
-Since we are using logistic regressions, the quantitative interpretation of the beta coefficients is eased by the ``divide by 4 rule''~\cite{vaughn2008data}: we can take the $\beta$ coefficients and ``divide them by 4 to get an upper bound of the predictive difference corresponding to a unit difference'' in beauty~\cite{vaughn2008data}. For example, take the results in the first row of Table~\ref{tab:regressioncoef}. In the model $Pr(beautiful) = logit^{-1}(\alpha - 0.032 \cdot buildings + 0.084 \cdot trees + 0.005 \cdot  buildings \cdot trees)$, we can divide - 0.032/4 to get -0.008: a difference of 1 in the fraction of pixels being buildings corresponds to no more than a 0.8\% \emph{negative} difference in the probability of the scene being beautiful. In a similar way, a difference of 1 in the fraction of pixels being trees corresponds to no more than a 0.021\% \emph{positive} difference in the probability of the scene being beautiful. By considering the remaining results in Table~\ref{tab:regressioncoef}, we find that, across all pairwise comparisons, trees is the most positive element associated with beauty, while roads and buildings are the most negative ones. These results match previous literature in urban design of what makes spaces great, adding further external validity to our framework's beautification. 
+Since we are using logistic regressions, the quantitative interpretation of the $\beta$ coefficients is eased by the ``divide by 4 rule''~\cite{gelman2006data}. This interpretation is based on Gelman's explanation about of relationship between logistic coefficients and the logit outcome variable. This is an approximate way to interpret the relationship between predictors and outcome variable in a logistic regression. 
+We can take the $\beta$ coefficients and ``divide them by 4 to get an upper bound of the predictive difference corresponding to a unit difference'' in the probability of the image being in the beauty class~\cite{gelman2006data}. 
+For example, take the results in the first row of Table~\ref{tab:regressioncoef}. In the model $Pr(beautiful) = logit^{-1}(\alpha - 0.032 \cdot buildings + 0.084 \cdot trees + 0.005 \cdot  buildings \cdot trees)$, we can divide - 0.032/4 to get -0.008: a difference of 1 in the fraction of pixels being buildings corresponds to no more than a 0.8\% \emph{negative} difference in the probability of the scene being beautiful. In a similar way, a difference of 1 in the fraction of pixels being trees corresponds to no more than a 0.021\% \emph{positive} difference in the probability of the scene being beautiful. By considering the remaining results in Table~\ref{tab:regressioncoef}, we find that, across all pairwise comparisons, trees is the most positive element associated with beauty, while roads and buildings are the most negative ones. These results match previous literature in urban design of what makes spaces great, adding further external validity to our framework's beautification. 
 
 
 
@@ -341,7 +349,6 @@ Since we are using logistic regressions, the quantitative interpretation of the 
     }
     \caption{Urban experts polled about the extent to which the interactive map visualization promotes: (a) decision making; (b) citizen participation in urban planning; and (c) promotion of green cities}
     \label{tab:useCases}
-    \vspace{-10mm}
 \end{table}
 
 
